@@ -40,6 +40,16 @@ Phase 0 harness → Phase 1 known fixes → capture v1 → 4 critique agents (pa
 - **Prerequisites on the other machine:** Node 22+, `gh` authenticated as danfking, Ollama with `gpt-oss:20b` pulled (or set the provider env vars to any OpenAI-compatible endpoint / `ANTHROPIC_API_KEY` for the Anthropic path), then `git clone danfking/slipstream && npm install && npm run seed && npx playwright install chromium`.
 - **To resume:** checkout `feat/ui-iteration` if it exists (continue from the last committed phase — phases are labelled in commit messages `ui-iteration: phase N …`), else start at Phase 0. The journey artefacts in `artifacts/` are regenerable (`npm run ui:capture`); only `docs/BRAND.md` and code changes are canonical.
 
+### Machine 2 setup, actual (22 Jul 2026)
+
+Executed on the second PC after a fresh clone. Deltas from the prerequisites above, for whoever clones next:
+
+- `gpt-oss:20b` was **not** pulled locally (only qwen2.5:7b, qwen3:4b, nomic-embed-text) — a ~13 GB `ollama pull` is part of setup, not an assumption. Start it first and let it run in the background.
+- No `ANTHROPIC_API_KEY` and no `.env` (gitignored, so it does not clone). This machine runs the Ollama path for both journey capture and the golden gate.
+- Playwright chromium builds were already cached, but `playwright` was not a dependency — it is now a devDependency, so `npm install` covers it; `npx playwright install chromium` tops up the browser.
+- superpowers was not installed; `claude plugin install superpowers@claude-plugins-official` (v6.1.1), then restart Claude Code so its skills load.
+- Fresh-clone baseline confirmed before any UI change: `npx vitest run` 23/23, `npx tsc --noEmit` clean.
+
 ## Phase 0: Journey harness (inline, ~1 task)
 
 - `npm i -D playwright` + ensure chromium (`npx playwright install chromium` tops up the cached builds).
