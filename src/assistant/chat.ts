@@ -1,0 +1,64 @@
+// Manual tool-use loop over the shared registry. Deliberately not the SDK's
+// beta tool runner: the registry is consumed by more than one surface (web
+// app now, MCP server later), the loop is the demo's architecture exhibit,
+// and avoiding a beta dependency keeps it legible.
+
+import { MAX_LOOP_ITERATIONS, MAX_TOKENS, MODEL } from './config.js';
+import { SYSTEM_PROMPT } from './system.js';
+import { TOOLS, runTool } from '../tools/registry.js';
+
+export interface ChatMessage {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
+export interface ToolEvent {
+  name: string;
+  input: unknown;
+  result: unknown;
+}
+
+export interface ChatClient {
+  create(params: object): Promise<any>;
+}
+
+const apiTools = TOOLS.map(({ name, description, input_schema }) => ({ name, description, input_schema }));
+
+export async function runChat(client: ChatClient, messages: ChatMessage[]) {
+  const convo: any[] = messages.map((m) => ({ role: m.role, content: m.content }));
+  const toolEvents: ToolEvent[] = [];
+
+  for (let i = 0; i < MAX_LOOP_ITERATIONS; i++) {
+    const response = await client.create({
+      model: MODEL,
+      max_tokens: MAX_TOKENS,
+      system: SYSTEM_PROMPT,
+      tools: apiTools,
+      messages: convo,
+    });
+
+    if (response.stop_reason !== 'tool_use') {
+      const reply = response.content
+        .filter((b: any) => b.type === 'text')
+        .map((b: any) => b.text)
+        .join('');
+      return { reply, toolEvents };
+    }
+
+    convo.push({ role: 'assistant', content: response.content });
+    const results = response.content
+      .filter((b: any) => b.type === 'tool_use')
+      .map((b: any) => {
+        try {
+          const result = runTool(b.name, b.input);
+          toolEvents.push({ name: b.name, input: b.input, result });
+          return { type: 'tool_result', tool_use_id: b.id, content: JSON.stringify(result) };
+        } catch (err) {
+          return { type: 'tool_result', tool_use_id: b.id, content: String(err), is_error: true };
+        }
+      });
+    convo.push({ role: 'user', content: results });
+  }
+
+  return { reply: 'I could not complete that within my step limit.', toolEvents };
+}

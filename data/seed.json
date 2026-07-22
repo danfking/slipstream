@@ -1682,7 +1682,10 @@
       ],
       "billableRate": 135,
       "weeklyCapacityHrs": 38,
-      "notes": "Approved leave Oct 12-16"
+      "leave": {
+        "start": "2026-10-12",
+        "end": "2026-10-16"
+      }
     },
     {
       "id": "T03",
@@ -1737,6 +1740,7 @@
   "workOrders": [
     {
       "id": "WO-0001",
+      "source": "staff",
       "boatId": "B001",
       "customerId": "C001",
       "title": "Haul-out & block — Petrel",
@@ -1751,6 +1755,7 @@
     },
     {
       "id": "WO-0002",
+      "source": "staff",
       "boatId": "B002",
       "customerId": "C001",
       "title": "Haul-out & block — Calypso",
@@ -1765,6 +1770,7 @@
     },
     {
       "id": "WO-0003",
+      "source": "staff",
       "boatId": "B003",
       "customerId": "C001",
       "title": "Haul-out & block — Windward",
@@ -1779,6 +1785,7 @@
     },
     {
       "id": "WO-0004",
+      "source": "staff",
       "boatId": "B004",
       "customerId": "C002",
       "title": "Haul-out & block — Halcyon",
@@ -1793,6 +1800,7 @@
     },
     {
       "id": "WO-0005",
+      "source": "staff",
       "boatId": "B005",
       "customerId": "C002",
       "title": "Haul-out & block — Cormorant",
@@ -1807,6 +1815,7 @@
     },
     {
       "id": "WO-0006",
+      "source": "staff",
       "boatId": "B006",
       "customerId": "C002",
       "title": "Haul-out & block — Squall Line",
@@ -1821,6 +1830,7 @@
     },
     {
       "id": "WO-0007",
+      "source": "staff",
       "boatId": "B007",
       "customerId": "C003",
       "title": "Haul-out & block — Blue Heron",
@@ -1835,6 +1845,7 @@
     },
     {
       "id": "WO-0008",
+      "source": "staff",
       "boatId": "B008",
       "customerId": "C003",
       "title": "Haul-out & block — Shearwater",
@@ -1849,6 +1860,7 @@
     },
     {
       "id": "WO-0009",
+      "source": "staff",
       "boatId": "B009",
       "customerId": "C004",
       "title": "Haul-out & block — Bufflehead",
@@ -1863,6 +1875,7 @@
     },
     {
       "id": "WO-0010",
+      "source": "staff",
       "boatId": "B010",
       "customerId": "C004",
       "title": "Haul-out & block — Fair Lead",
@@ -1877,6 +1890,7 @@
     },
     {
       "id": "WO-0011",
+      "source": "staff",
       "boatId": "B011",
       "customerId": "C004",
       "title": "Haul-out & block — Last Call",
@@ -1891,6 +1905,7 @@
     },
     {
       "id": "WO-0012",
+      "source": "staff",
       "boatId": "B012",
       "customerId": "C005",
       "title": "Haul-out & block — Even Keel",
@@ -1905,6 +1920,7 @@
     },
     {
       "id": "WO-0013",
+      "source": "staff",
       "boatId": "B013",
       "customerId": "C006",
       "title": "Haul-out & block — Drift Away",
@@ -1919,6 +1935,7 @@
     },
     {
       "id": "WO-0014",
+      "source": "staff",
       "boatId": "B014",
       "customerId": "C007",
       "title": "Haul-out & block — Meridian",
@@ -1933,6 +1950,7 @@
     },
     {
       "id": "WO-0015",
+      "source": "staff",
       "boatId": "B015",
       "customerId": "C008",
       "title": "Haul-out & block — Restless",
@@ -1947,6 +1965,7 @@
     },
     {
       "id": "WO-0016",
+      "source": "staff",
       "boatId": "B016",
       "customerId": "C009",
       "title": "Haul-out & block — Marlin",
@@ -1961,6 +1980,7 @@
     },
     {
       "id": "WO-0017",
+      "source": "staff",
       "boatId": "B017",
       "customerId": "C010",
       "title": "Haul-out & block — Argo",
@@ -1975,6 +1995,7 @@
     },
     {
       "id": "WO-0018",
+      "source": "staff",
       "boatId": "B018",
       "customerId": "C011",
       "title": "Haul-out & block — Compass Rose",
@@ -1989,6 +2010,7 @@
     },
     {
       "id": "WO-0019",
+      "source": "staff",
       "boatId": "B019",
       "customerId": "C012",
       "title": "Haul-out & block — Sea Change",
@@ -2003,6 +2025,7 @@
     },
     {
       "id": "WO-0020",
+      "source": "staff",
       "boatId": "B020",
       "customerId": "C013",
       "title": "Haul-out & block — Ondine",
@@ -2017,6 +2040,7 @@
     },
     {
       "id": "WO-0021",
+      "source": "staff",
       "boatId": "B021",
       "customerId": "C014",
       "title": "Haul-out & block — Reel Time",
@@ -2029,6 +2053,7 @@
     },
     {
       "id": "WO-0022",
+      "source": "staff",
       "boatId": "B022",
       "customerId": "C015",
       "title": "Haul-out & block — Mistral",
@@ -2041,6 +2066,7 @@
     },
     {
       "id": "WO-0023",
+      "source": "staff",
       "boatId": "B024",
       "customerId": "C017",
       "title": "Haul-out & block — Rum Line",
@@ -2053,6 +2079,7 @@
     },
     {
       "id": "WO-0024",
+      "source": "staff",
       "boatId": "B025",
       "customerId": "C018",
       "title": "Haul-out & block — Bluebill",
@@ -2065,6 +2092,7 @@
     },
     {
       "id": "WO-0025",
+      "source": "staff",
       "boatId": "B026",
       "customerId": "C019",
       "title": "Haul-out & block — Kestrel",
@@ -2077,6 +2105,7 @@
     },
     {
       "id": "WO-0026",
+      "source": "staff",
       "boatId": "B027",
       "customerId": "C020",
       "title": "Haul-out & block — Osprey",
@@ -2089,6 +2118,7 @@
     },
     {
       "id": "WO-0027",
+      "source": "staff",
       "boatId": "B005",
       "customerId": "C002",
       "title": "100hr engine service — Cormorant",
@@ -2104,6 +2134,7 @@
     },
     {
       "id": "WO-0028",
+      "source": "staff",
       "boatId": "B006",
       "customerId": "C002",
       "title": "Alternator replacement — Squall Line",
@@ -2119,6 +2150,7 @@
     },
     {
       "id": "WO-0029",
+      "source": "staff",
       "boatId": "B007",
       "customerId": "C003",
       "title": "Standing rigging inspection — Blue Heron",
@@ -2134,6 +2166,7 @@
     },
     {
       "id": "WO-0030",
+      "source": "staff",
       "boatId": "B008",
       "customerId": "C003",
       "title": "Gelcoat repair, port bow — Shearwater",
@@ -2149,6 +2182,7 @@
     },
     {
       "id": "WO-0031",
+      "source": "staff",
       "boatId": "B009",
       "customerId": "C004",
       "title": "Raw water pump rebuild — Bufflehead",
@@ -2164,6 +2198,7 @@
     },
     {
       "id": "WO-0032",
+      "source": "staff",
       "boatId": "B010",
       "customerId": "C004",
       "title": "Chartplotter install — Fair Lead",
@@ -2179,6 +2214,7 @@
     },
     {
       "id": "WO-0033",
+      "source": "staff",
       "boatId": "B011",
       "customerId": "C004",
       "title": "Fuel system service — Last Call",
@@ -2194,6 +2230,7 @@
     },
     {
       "id": "WO-0034",
+      "source": "staff",
       "boatId": "B012",
       "customerId": "C005",
       "title": "Bottom paint touch-up — Even Keel",
@@ -2209,6 +2246,7 @@
     },
     {
       "id": "WO-0035",
+      "source": "staff",
       "boatId": "B013",
       "customerId": "C006",
       "title": "Windlass repair — Drift Away",
@@ -2224,6 +2262,7 @@
     },
     {
       "id": "WO-0036",
+      "source": "staff",
       "boatId": "B014",
       "customerId": "C007",
       "title": "Transmission fluid service — Meridian",
@@ -2239,6 +2278,7 @@
     },
     {
       "id": "WO-0037",
+      "source": "staff",
       "boatId": "B015",
       "customerId": "C008",
       "title": "Compound & wax topsides — Restless",
@@ -2254,6 +2294,7 @@
     },
     {
       "id": "WO-0038",
+      "source": "staff",
       "boatId": "B016",
       "customerId": "C009",
       "title": "Head replacement — Marlin",
@@ -2269,6 +2310,7 @@
     },
     {
       "id": "WO-0039",
+      "source": "staff",
       "boatId": "B017",
       "customerId": "C010",
       "title": "Nav light rewire — Argo",
@@ -2284,6 +2326,7 @@
     },
     {
       "id": "WO-0040",
+      "source": "staff",
       "boatId": "B018",
       "customerId": "C011",
       "title": "Teak brightwork refresh — Compass Rose",
@@ -2299,6 +2342,7 @@
     },
     {
       "id": "WO-0041",
+      "source": "staff",
       "boatId": "B001",
       "customerId": "C001",
       "title": "Fuel pump replacement — Petrel",
@@ -2314,6 +2358,7 @@
     },
     {
       "id": "WO-0042",
+      "source": "staff",
       "boatId": "B022",
       "customerId": "C015",
       "title": "Impeller service — Mistral",
@@ -2328,6 +2373,7 @@
     },
     {
       "id": "WO-0043",
+      "source": "staff",
       "boatId": "B023",
       "customerId": "C016",
       "title": "Impeller service — Ketch-22",
@@ -2342,6 +2388,7 @@
     },
     {
       "id": "WO-0044",
+      "source": "staff",
       "boatId": "B024",
       "customerId": "C017",
       "title": "Shaft seal replacement — Rum Line",
@@ -2356,6 +2403,7 @@
     },
     {
       "id": "WO-0045",
+      "source": "staff",
       "boatId": "B025",
       "customerId": "C018",
       "title": "Shaft seal replacement — Bluebill",
@@ -2370,6 +2418,7 @@
     },
     {
       "id": "WO-0046",
+      "source": "staff",
       "boatId": "B026",
       "customerId": "C019",
       "title": "House bank replacement (x3) — Kestrel",
@@ -2384,6 +2433,7 @@
     },
     {
       "id": "WO-0047",
+      "source": "staff",
       "boatId": "B009",
       "customerId": "C004",
       "title": "Winterization — Bufflehead",
@@ -2398,6 +2448,7 @@
     },
     {
       "id": "WO-0048",
+      "source": "staff",
       "boatId": "B011",
       "customerId": "C004",
       "title": "Service — Last Call",
@@ -2412,6 +2463,7 @@
     },
     {
       "id": "WO-0049",
+      "source": "staff",
       "boatId": "B013",
       "customerId": "C006",
       "title": "Shrink wrap — Drift Away",
@@ -2426,6 +2478,7 @@
     },
     {
       "id": "WO-0050",
+      "source": "staff",
       "boatId": "B015",
       "customerId": "C008",
       "title": "Service — Restless",
@@ -2440,6 +2493,7 @@
     },
     {
       "id": "WO-0051",
+      "source": "staff",
       "boatId": "B017",
       "customerId": "C010",
       "title": "Winterization — Argo",
@@ -2454,6 +2508,7 @@
     },
     {
       "id": "WO-0052",
+      "source": "staff",
       "boatId": "B019",
       "customerId": "C012",
       "title": "Service — Sea Change",
@@ -2468,6 +2523,7 @@
     },
     {
       "id": "WO-0053",
+      "source": "staff",
       "boatId": "B021",
       "customerId": "C014",
       "title": "Shrink wrap — Reel Time",
@@ -2482,6 +2538,7 @@
     },
     {
       "id": "WO-0054",
+      "source": "staff",
       "boatId": "B023",
       "customerId": "C016",
       "title": "Service — Ketch-22",
@@ -2496,6 +2553,7 @@
     },
     {
       "id": "WO-0055",
+      "source": "staff",
       "boatId": "B025",
       "customerId": "C018",
       "title": "Winterization — Bluebill",
@@ -2510,6 +2568,7 @@
     },
     {
       "id": "WO-0056",
+      "source": "staff",
       "boatId": "B027",
       "customerId": "C020",
       "title": "Service — Osprey",
@@ -2524,6 +2583,7 @@
     },
     {
       "id": "WO-0057",
+      "source": "staff",
       "boatId": "B029",
       "customerId": "C022",
       "title": "Shrink wrap — Slack Tide",
@@ -2538,6 +2598,7 @@
     },
     {
       "id": "WO-0058",
+      "source": "staff",
       "boatId": "B031",
       "customerId": "C024",
       "title": "Service — Tide Runner",
@@ -2549,6 +2610,20 @@
       "technicianId": "T02",
       "estimateHrs": 2,
       "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0059",
+      "source": "blu_voice_agent",
+      "boatId": "B031",
+      "customerId": "C024",
+      "title": "Engine won't start — Tide Runner",
+      "category": "engine",
+      "status": "requested",
+      "priority": "high",
+      "requestedDate": "2026-10-05",
+      "estimateHrs": 3,
+      "requiredSkill": "engine",
+      "notes": "Phoned in overnight via Blu Voice Agent; customer says engine cranks but will not start."
     }
   ],
   "workOrderLines": [
@@ -3627,6 +3702,39 @@
       "dueDate": "2026-10-15",
       "amount": 1074,
       "status": "sent"
+    }
+  ],
+  "reservations": [
+    {
+      "id": "R-001",
+      "customerName": "Walk-up: Meredith Kane",
+      "boatLengthFt": 34,
+      "arrival": "2026-10-07",
+      "nights": 3,
+      "slipId": "C-14",
+      "status": "confirmed",
+      "source": "blu_voice_agent",
+      "createdDate": "2026-10-05"
+    },
+    {
+      "id": "R-002",
+      "customerName": "Walk-up: Gordon Pryce",
+      "boatLengthFt": 41,
+      "arrival": "2026-10-06",
+      "nights": 2,
+      "status": "pending",
+      "source": "blu_voice_agent",
+      "createdDate": "2026-10-05"
+    },
+    {
+      "id": "R-003",
+      "customerName": "Quinn Osman",
+      "boatLengthFt": 28,
+      "arrival": "2026-10-10",
+      "nights": 4,
+      "status": "confirmed",
+      "source": "customer_portal",
+      "createdDate": "2026-10-04"
     }
   ]
 }

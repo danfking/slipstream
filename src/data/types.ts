@@ -56,6 +56,20 @@ export interface Technician {
   leave?: { start: string; end: string }; // inclusive dates
 }
 
+export type RecordSource = 'staff' | 'blu_voice_agent' | 'customer_portal';
+
+export interface Reservation {
+  id: string;
+  customerName: string;
+  boatLengthFt: number;
+  arrival: string;
+  nights: number;
+  slipId?: string;
+  status: 'confirmed' | 'pending';
+  source: RecordSource;
+  createdDate: string;
+}
+
 export type WorkOrderStatus =
   | 'requested'
   | 'estimated'
@@ -89,6 +103,7 @@ export interface WorkOrder {
   estimateHrs: number;
   actualHrs?: number;
   requiredSkill: TechSkill;
+  source: RecordSource;
   notes?: string;
 }
 
@@ -136,4 +151,5 @@ export interface SeedData {
   workOrderLines: WorkOrderLine[];
   parts: Part[];
   invoices: Invoice[];
+  reservations: Reservation[];
 }
