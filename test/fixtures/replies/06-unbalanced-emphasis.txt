@@ -1,0 +1,2 @@
+The total is ** wrong somewhere in this line and never closes.
+A later line is fine.

@@ -1,0 +1,10 @@
+**Financial headline:**
+Unbilled completed work totals **$16,419** – *the amount to bill today*.
+
+**Overnight activity**
+- 3 new slip bookings for 2026‑10‑07–10 (2–3 nights) via the **Blu Voice Agent** and **Customer Portal**.
+- 1 urgent work order, **WO‑0059** "Engine won't start – *Tide Runner*", created overnight on the Blu Voice Agent.
+
+**Biggest operational risk this week**
+Part‑delivery delay for **WO‑0041** "Fuel pump replacement – *Petrel*".
+The Volvo Penta D4 fuel‑pump part (SKU FP‑VP‑D4) is on‑hand 0, PO ETA 2026‑10‑17, 8 days behind the scheduled start (09 Oct).
