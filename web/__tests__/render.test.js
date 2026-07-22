@@ -164,3 +164,43 @@ describe('normalizeMarkdown spacing', () => {
     expect(normalizeMarkdown('total **$16,419**.')).toBe('total **$16,419**.');
   });
 });
+
+describe('normalizeMarkdown repairs model typography', () => {
+  test('tightens a bold marker the model opened with a space, which renders literally', () => {
+    expect(normalizeMarkdown('source ** Blu Voice Agent**.')).toBe('source **Blu Voice Agent**.');
+  });
+
+  test('tightens a trailing space inside a bold marker', () => {
+    expect(normalizeMarkdown('the **total **is high')).toBe('the **total** is high');
+  });
+
+  test('replaces non-breaking hyphens, which render too tight to read on a projector', () => {
+    expect(normalizeMarkdown('haul‑out for 10‑12')).toBe('haul-out for 10-12');
+  });
+
+  test('replaces narrow no-break spaces with ordinary spaces', () => {
+    expect(normalizeMarkdown('54 hrs')).toBe('54 hrs');
+  });
+
+  test('leaves ordinary hyphens and dashes alone', () => {
+    expect(normalizeMarkdown('haul-out, 12 – 18 Oct')).toBe('haul-out, 12 – 18 Oct');
+  });
+});
+
+describe('normalizeMarkdown spacing before bold', () => {
+  test('separates a bold label the model ran onto the end of the previous sentence', () => {
+    expect(normalizeMarkdown('no shortfall.**Next steps:** If we')).toBe('no shortfall. **Next steps:** If we');
+  });
+
+  test('leaves bold at the start of a line alone', () => {
+    expect(normalizeMarkdown('**Headline:** we are short')).toBe('**Headline:** we are short');
+  });
+
+  test('leaves bold that already has a space before it alone', () => {
+    expect(normalizeMarkdown('the **total** is high')).toBe('the **total** is high');
+  });
+
+  test('does not insert a space after an opening bracket', () => {
+    expect(normalizeMarkdown('(**note:** see below)')).toBe('(**note:** see below)');
+  });
+});

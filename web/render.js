@@ -65,9 +65,25 @@ const LIST_ITEM = /^\s{0,3}([-*+]|\d+[.)])\s+\S/;
  * literal asterisks in the briefing, the demo's opening frame.
  */
 export function normalizeMarkdown(text) {
+  const repaired = String(text)
+    // The model writes non-breaking hyphens and narrow no-break spaces
+    // ("haul‑out", "54 hrs"). They render so tight that a date range reads as
+    // a missing separator — a reviewer read "10‑12" as "10 12" off a screenshot.
+    .replace(/‑/g, '-')
+    .replace(/[  ]/g, ' ')
+    // "** Blu Voice Agent**" — a space inside the opening marker is not valid
+    // emphasis, so CommonMark renders the asterisks literally. Same defect
+    // class as the bullet lists, just inline.
+    .replace(/\*\*\s+([^*\n]+?)\s*\*\*/g, '**$1**')
+    .replace(/\*\*([^*\n]+?)\s+\*\*/g, '**$1** ');
+
   // "**Unbilled completed work:**$16,419" — the model omits the space often
   // enough that the headline figure of the money answer runs into its label.
-  const spaced = String(text).replace(/(\*\*[^*\n]+\*\*)(?=[^\s.,;:!?)\]}])/g, '$1 ');
+  const spaced = repaired
+    .replace(/(\*\*[^*\n]+\*\*)(?=[^\s.,;:!?)\]}])/g, '$1 ')
+    // ...and the mirror case: "no shortfall.**Next steps:**" runs a new bold
+    // heading onto the end of the previous sentence.
+    .replace(/([^\s*([{"'])(\*\*[^*\n]+\*\*)/g, '$1 $2');
   const lines = spaced.split('\n');
   const out = [];
   for (const [i, line] of lines.entries()) {
