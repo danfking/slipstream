@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { channelLabel, collectSources, linkifyToolCitations, summarizeInput } from '../render.js';
+import { channelLabel, collectSources, isPartnerChannel, linkifyToolCitations, normalizeMarkdown, summarizeInput } from '../render.js';
 
 describe('channelLabel', () => {
   test('names the Blu voice channel in full', () => {
@@ -92,5 +92,75 @@ describe('linkifyToolCitations', () => {
 
   test('does not chip a tool that was never called this turn', () => {
     expect(linkifyToolCitations('<p><code>get_schedule_load</code></p>', tools)).toBe('<p><code>get_schedule_load</code></p>');
+  });
+});
+
+describe('normalizeMarkdown', () => {
+  test('separates a bullet list from the line above so it parses as a list', () => {
+    expect(normalizeMarkdown('**Overdue total $17,000**\n* $12,400 — Bayline\n* $3,180 — Coastal')).toBe(
+      '**Overdue total $17,000**\n\n* $12,400 — Bayline\n* $3,180 — Coastal',
+    );
+  });
+
+  test('separates a dash list from the line above', () => {
+    expect(normalizeMarkdown('Blocked jobs:\n- WO-0041\n- WO-0042')).toBe('Blocked jobs:\n\n- WO-0041\n- WO-0042');
+  });
+
+  test('separates a numbered list from the line above', () => {
+    expect(normalizeMarkdown('Steps:\n1. First\n2. Second')).toBe('Steps:\n\n1. First\n2. Second');
+  });
+
+  test('leaves a list that is already separated untouched', () => {
+    expect(normalizeMarkdown('Blocked jobs:\n\n- WO-0041')).toBe('Blocked jobs:\n\n- WO-0041');
+  });
+
+  test('does not split consecutive items within one list', () => {
+    expect(normalizeMarkdown('- one\n- two\n- three')).toBe('- one\n- two\n- three');
+  });
+
+  test('leaves a table alone — its rows are not list items', () => {
+    expect(normalizeMarkdown('| A | B |\n|---|---|\n| 1 | 2 |')).toBe('| A | B |\n|---|---|\n| 1 | 2 |');
+  });
+});
+
+describe('summarizeInput with empty values', () => {
+  test('omits arguments the model sent as empty strings rather than showing a bare colon', () => {
+    expect(summarizeInput({ customerName: '', status: '' })).toBe('no arguments');
+  });
+
+  test('keeps the arguments that do have values', () => {
+    expect(summarizeInput({ customerName: '', status: 'open' })).toBe('status: open');
+  });
+});
+
+describe('isPartnerChannel', () => {
+  test('the voice agent is a partner channel — the chip that must stand out', () => {
+    expect(isPartnerChannel('blu_voice_agent')).toBe(true);
+  });
+
+  test('the marina\'s own portal is first-party, not a partner integration', () => {
+    expect(isPartnerChannel('customer_portal')).toBe(false);
+  });
+
+  test('staff entry is not a channel at all', () => {
+    expect(isPartnerChannel('staff')).toBe(false);
+  });
+});
+
+describe('normalizeMarkdown spacing', () => {
+  test('inserts the space a bold label needs when the model runs the value straight on', () => {
+    expect(normalizeMarkdown('**Unbilled completed work:**$16,419')).toBe('**Unbilled completed work:** $16,419');
+  });
+
+  test('leaves a correctly spaced bold label alone', () => {
+    expect(normalizeMarkdown('**Total:** $16,419')).toBe('**Total:** $16,419');
+  });
+
+  test('does not touch bold at the end of a line', () => {
+    expect(normalizeMarkdown('the total is **$16,419**')).toBe('the total is **$16,419**');
+  });
+
+  test('does not insert a space before punctuation that legitimately follows', () => {
+    expect(normalizeMarkdown('total **$16,419**.')).toBe('total **$16,419**.');
   });
 });

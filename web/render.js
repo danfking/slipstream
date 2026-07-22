@@ -23,6 +23,15 @@ export function channelLabel(source) {
 // story: the partner owns the phone, the record owns the truth.
 const UNREMARKABLE_SOURCES = new Set(['staff']);
 
+// Only an outside channel gets the gold chip. The customer portal is the
+// marina's own self-service front door, so badging it identically would blunt
+// the one signal the chip carries: this record came in from beyond the yard.
+const PARTNER_SOURCES = new Set(['blu_voice_agent']);
+
+export function isPartnerChannel(source) {
+  return PARTNER_SOURCES.has(source);
+}
+
 /**
  * Distinct partner channels appearing anywhere in a tool result, in order of
  * first appearance. This is what makes the briefing's overnight items visibly
@@ -46,11 +55,36 @@ export function collectSources(value) {
   return found;
 }
 
+const LIST_ITEM = /^\s{0,3}([-*+]|\d+[.)])\s+\S/;
+
+/**
+ * Insert the blank line a list needs when the model runs it straight on from
+ * the line above. We render with `breaks: true` so single newlines become <br>
+ * (operational answers are written line-per-fact), but that also stops a list
+ * from interrupting a paragraph — so "Overdue total:\n* $12,400" came out with
+ * literal asterisks in the briefing, the demo's opening frame.
+ */
+export function normalizeMarkdown(text) {
+  // "**Unbilled completed work:**$16,419" — the model omits the space often
+  // enough that the headline figure of the money answer runs into its label.
+  const spaced = String(text).replace(/(\*\*[^*\n]+\*\*)(?=[^\s.,;:!?)\]}])/g, '$1 ');
+  const lines = spaced.split('\n');
+  const out = [];
+  for (const [i, line] of lines.entries()) {
+    const previous = i > 0 ? lines[i - 1] : '';
+    if (LIST_ITEM.test(line) && previous.trim() !== '' && !LIST_ITEM.test(previous)) out.push('');
+    out.push(line);
+  }
+  return out.join('\n');
+}
+
 const MAX_VALUE_CHARS = 40;
 
 /** One-line "what was asked of this tool", instead of raw JSON in the panel. */
 export function summarizeInput(input) {
-  const entries = Object.entries(input ?? {});
+  // Models routinely send "" for optional arguments; rendering those as bare
+  // colons made a working call look like a malformed one.
+  const entries = Object.entries(input ?? {}).filter(([, value]) => value !== '' && value !== null && value !== undefined);
   if (!entries.length) return 'no arguments';
   return entries
     .map(([key, value]) => {

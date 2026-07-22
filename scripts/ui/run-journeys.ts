@@ -89,8 +89,12 @@ const sel = {
 /** Settled = no pending bubble left and at least one assistant reply present. */
 async function waitForReply(page: Page, timeoutMs = 180_000) {
   await page.waitForSelector(sel.pending, { timeout: 5_000 }).catch(() => {});
+  // An error card settles a turn just as a reply does — the provider-down
+  // journey ends in one, and waiting only for .msg.assistant hangs there.
   await page.waitForFunction(
-    () => !document.querySelector('.msg.pending') && document.querySelectorAll('.msg.assistant').length > 0,
+    () =>
+      !document.querySelector('.msg.pending') &&
+      (document.querySelectorAll('.msg.assistant').length > 0 || document.querySelector('.error-card') !== null),
     undefined,
     { timeout: timeoutMs },
   );

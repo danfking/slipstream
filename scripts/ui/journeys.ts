@@ -84,6 +84,11 @@ export const JOURNEYS: Journey[] = [
       { action: 'click', selector: '.approval-card .reject' },
       { action: 'wait', ms: 1000 },
       { action: 'screenshot', name: 'rejected' },
+      // Reload before the approve pass. Asking twice in one conversation lets
+      // the model reply "I already drafted those" instead of calling the tool
+      // again — a fresh page clears client history while the server keeps the
+      // un-created drafts, so there is reliably a card to approve.
+      { action: 'goto' },
       { action: 'ask', text: 'Draft invoices for all the unbilled completed work.' },
       { action: 'screenshot', name: 'drafts-card-second-pass' },
       { action: 'click', selector: '.approval-card .approve' },
@@ -98,7 +103,10 @@ export const JOURNEYS: Journey[] = [
     description: 'Empty submit, double-send, long input, huge receipt, provider down',
     steps: [
       { action: 'goto' },
-      { action: 'click', selector: '#send-btn' },
+      // Submitting nothing: the Ask button is disabled while the input is
+      // empty, so this presses Enter instead — the path still reachable — and
+      // captures the dimmed button as the explanation for why nothing happens.
+      { action: 'submit' },
       { action: 'screenshot', name: 'empty-submit' },
       // Double-send: an impatient second question lands while the first is
       // still in flight. Retyping is required — submit clears the input, so

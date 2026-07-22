@@ -1,4 +1,4 @@
-import { channelLabel, collectSources, linkifyToolCitations, summarizeInput } from './render.js';
+import { channelLabel, collectSources, isPartnerChannel, linkifyToolCitations, normalizeMarkdown, summarizeInput } from './render.js';
 
 const messagesEl = document.getElementById('messages');
 const receiptsEl = document.getElementById('receipts');
@@ -20,12 +20,17 @@ fetch('/api/health').then((r) => r.json()).then((h) => {
  * Sanitized because tool results (customer names, note text) reach this string.
  */
 function assistantHtml(text, toolNames) {
-  const dirty = window.marked.parse(text, { breaks: true });
+  const dirty = window.marked.parse(normalizeMarkdown(text), { breaks: true });
   const clean = window.DOMPurify.sanitize(dirty);
   return linkifyToolCitations(clean, toolNames);
 }
 
+function clearEmptyState() {
+  document.getElementById('empty-state')?.remove();
+}
+
 function addMsg(role, text, toolNames = []) {
+  clearEmptyState();
   const div = document.createElement('div');
   div.className = `msg ${role}`;
   if (role === 'assistant') {
@@ -44,6 +49,7 @@ function addMsg(role, text, toolNames = []) {
  * working is a very different message from broken.
  */
 function addPending(label) {
+  clearEmptyState();
   const div = document.createElement('div');
   div.className = 'msg assistant pending';
   div.innerHTML = '<span class="dots"><i></i><i></i><i></i></span><span class="pending-label"></span><span class="elapsed"></span>';
@@ -74,7 +80,7 @@ function receiptRow(ev) {
   // Provenance at panel level: which partner channel this record came through.
   for (const source of collectSources(ev.result)) {
     const chip = document.createElement('span');
-    chip.className = 'src-chip';
+    chip.className = isPartnerChannel(source) ? 'src-chip partner' : 'src-chip';
     chip.textContent = channelLabel(source);
     summary.append(chip);
   }
@@ -141,7 +147,8 @@ function renderApprovalCards(toolEvents) {
     card.className = 'approval-card';
     const total = r.drafts.reduce((s, d) => s + d.amount, 0);
     card.innerHTML = `
-      <h3>Approval required: ${r.drafts.length} invoice draft(s), $${total.toLocaleString()}</h3>
+      <h3>Approval required: ${r.drafts.length} invoice ${r.drafts.length === 1 ? 'draft' : 'drafts'}, $${total.toLocaleString()}</h3>
+      <p class="approval-guarantee">Nothing is created until you approve. Rejecting leaves the record untouched.</p>
       <table>
         <tr><th>Customer</th><th>Description</th><th class="amt">Amount</th></tr>
         ${r.drafts.map((d) => `<tr><td>${d.customerName}</td><td>${d.description}</td><td class="amt">$${d.amount.toLocaleString()}</td></tr>`).join('')}
@@ -155,15 +162,63 @@ function renderApprovalCards(toolEvents) {
       });
       const out = await resp.json();
       card.remove();
-      addMsg('assistant', `Approved. Created ${out.created.length} invoice(s): ${out.created.join(', ')}.`);
+      addMsg('assistant', `Approved. Created ${out.created.length} ${out.created.length === 1 ? 'invoice' : 'invoices'}: ${out.created.join(', ')}.`)
+        .classList.add('outcome', 'outcome-approved');
+      // The write is the step a sceptic examines hardest, and it was the only
+      // one leaving no trace in the panel. Give the approval its own receipt so
+      // creating invoices is as auditable as reading them.
+      addReceiptGroup('Approved — create invoices', [
+        { name: 'create_invoices', input: { drafts: r.drafts.length, approvedBy: 'operator' }, result: out },
+      ]);
     });
     card.querySelector('.reject').addEventListener('click', () => {
       card.remove();
-      addMsg('assistant', 'Drafts rejected. Nothing was created.');
+      addMsg('assistant', 'Drafts rejected. Nothing was created.').classList.add('outcome', 'outcome-rejected');
     });
     messagesEl.appendChild(card);
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
+}
+
+/**
+ * A failed turn is a designed state, not a stack trace. The presenter may show
+ * this one deliberately (provider pulled mid-demo), so it has to read as
+ * "handled" — plain language, the raw error still available for the curious,
+ * and a retry that does not make the operator retype the question.
+ */
+function addErrorCard(detail, retry) {
+  clearEmptyState();
+  const card = document.createElement('div');
+  card.className = 'error-card';
+
+  const heading = document.createElement('h3');
+  heading.textContent = "Slipstream can't reach the model right now";
+  const body = document.createElement('p');
+  body.textContent = 'Your question was not lost, and nothing in the record changed. Try again in a moment.';
+
+  const technical = document.createElement('details');
+  technical.className = 'error-technical';
+  const technicalSummary = document.createElement('summary');
+  technicalSummary.textContent = 'Technical detail';
+  const pre = document.createElement('pre');
+  pre.textContent = String(detail);
+  technical.append(technicalSummary, pre);
+
+  const actions = document.createElement('div');
+  actions.className = 'actions';
+  const retryBtn = document.createElement('button');
+  retryBtn.type = 'button';
+  retryBtn.className = 'retry';
+  retryBtn.textContent = 'Try again';
+  retryBtn.addEventListener('click', () => {
+    card.remove();
+    retry();
+  });
+  actions.append(retryBtn);
+
+  card.append(heading, body, technical, actions);
+  messagesEl.appendChild(card);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
 async function converse(url, options, pendingLabel, question) {
@@ -177,7 +232,7 @@ async function converse(url, options, pendingLabel, question) {
     pending.stop();
     pending.el.remove();
     if (data.error) {
-      addMsg('assistant', `Error: ${data.error}`);
+      addErrorCard(data.error, () => converse(url, options, pendingLabel, question));
       return;
     }
     const toolEvents = data.toolEvents ?? [];
@@ -188,11 +243,11 @@ async function converse(url, options, pendingLabel, question) {
   } catch (err) {
     pending.stop();
     pending.el.remove();
-    addMsg('assistant', `Error: ${err}`);
+    addErrorCard(err, () => converse(url, options, pendingLabel, question));
   } finally {
-    sendBtn.disabled = false;
     briefingBtn.disabled = false;
     input.disabled = false;
+    syncSendState(); // stays dimmed when the input is empty again
     input.focus();
   }
 }
@@ -210,6 +265,12 @@ form.addEventListener('submit', (e) => {
     body: JSON.stringify({ messages: history }),
   }, 'Checking the record', q);
 });
+
+// The Ask button explains its own inertness: dimmed while there is nothing to
+// send, rather than looking live and doing nothing when clicked.
+const syncSendState = () => { sendBtn.disabled = !input.value.trim(); };
+input.addEventListener('input', syncSendState);
+syncSendState();
 
 briefingBtn.addEventListener('click', () => {
   addMsg('user', 'Morning briefing');
