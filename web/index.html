@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Slipstream — Harborview Marina &amp; Boatyard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Slipstream</h1>
+      <p class="sub">Harborview Marina &amp; Boatyard — operations, answerable</p>
+    </div>
+    <div class="meta">
+      <span id="meta-date"></span>
+      <span id="meta-model" class="badge"></span>
+      <span class="badge demo">synthetic demo data</span>
+    </div>
+  </header>
+
+  <main>
+    <section id="chat-pane">
+      <div id="messages"></div>
+      <form id="chat-form">
+        <button type="button" id="briefing-btn" title="Run the morning briefing">☀ Briefing</button>
+        <input id="chat-input" type="text" autocomplete="off"
+               placeholder="Ask about the yard — unbilled work, haul-outs, blocked jobs, overdue accounts…" />
+        <button type="submit" id="send-btn">Ask</button>
+      </form>
+    </section>
+
+    <aside id="receipts-pane">
+      <h2>Receipts</h2>
+      <p class="hint">Every number the assistant gives comes from a tool call listed here. Click one to see the raw result.</p>
+      <div id="receipts"></div>
+    </aside>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+* { box-sizing: border-box; margin: 0; }
+
+:root {
+  --navy: #14304a;
+  --navy-dark: #0d2135;
+  --accent: #0e7a8a;
+  --paper: #f6f8f9;
+  --line: #d8e0e5;
+  --ink: #1c2b36;
+}
+
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  color: var(--ink);
+  background: var(--paper);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background: var(--navy);
+  color: #fff;
+  padding: 14px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header h1 { font-size: 22px; letter-spacing: 0.5px; }
+header .sub { font-size: 13px; opacity: 0.85; }
+.meta { display: flex; gap: 10px; align-items: center; font-size: 13px; }
+.badge {
+  background: var(--accent);
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 12px;
+}
+.badge.demo { background: #7a5b0e; }
+
+main {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+#chat-pane {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-right: 1px solid var(--line);
+}
+
+#messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.msg { max-width: 82%; padding: 12px 16px; border-radius: 10px; line-height: 1.45; white-space: pre-wrap; }
+.msg.user { align-self: flex-end; background: var(--navy); color: #fff; border-bottom-right-radius: 2px; }
+.msg.assistant { align-self: flex-start; background: #fff; border: 1px solid var(--line); border-bottom-left-radius: 2px; }
+.msg.pending { opacity: 0.6; font-style: italic; }
+
+.approval-card {
+  align-self: flex-start;
+  background: #fff8ec;
+  border: 1px solid #e3c98a;
+  border-radius: 10px;
+  padding: 14px 16px;
+  max-width: 92%;
+}
+.approval-card h3 { font-size: 15px; margin-bottom: 8px; }
+.approval-card table { border-collapse: collapse; font-size: 14px; margin-bottom: 10px; }
+.approval-card td, .approval-card th { padding: 4px 10px; border-bottom: 1px solid #eadfc4; text-align: left; }
+.approval-card td.amt, .approval-card th.amt { text-align: right; }
+.approval-card .actions { display: flex; gap: 8px; }
+.approval-card button { padding: 6px 14px; border-radius: 6px; border: 1px solid var(--line); cursor: pointer; }
+.approval-card button.approve { background: var(--accent); color: #fff; border: none; }
+
+#chat-form {
+  display: flex;
+  gap: 8px;
+  padding: 14px 20px;
+  background: #fff;
+  border-top: 1px solid var(--line);
+}
+#chat-input { flex: 1; padding: 10px 14px; font-size: 16px; border: 1px solid var(--line); border-radius: 8px; }
+#chat-form button {
+  padding: 10px 16px; font-size: 15px; border: none; border-radius: 8px;
+  background: var(--navy); color: #fff; cursor: pointer;
+}
+#chat-form button:disabled { opacity: 0.5; cursor: wait; }
+#briefing-btn { background: var(--accent); }
+
+#receipts-pane {
+  flex: 1;
+  min-width: 280px;
+  max-width: 420px;
+  overflow-y: auto;
+  padding: 18px;
+  background: #eef2f4;
+}
+#receipts-pane h2 { font-size: 16px; margin-bottom: 4px; }
+#receipts-pane .hint { font-size: 12.5px; color: #55707f; margin-bottom: 12px; }
+
+.receipt { background: #fff; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 10px; }
+.receipt summary {
+  padding: 9px 12px; cursor: pointer; font-size: 14px; font-weight: 600;
+  font-family: ui-monospace, Consolas, monospace;
+}
+.receipt .input-line { padding: 0 12px 6px; font-size: 12.5px; color: #55707f; font-family: ui-monospace, Consolas, monospace; }
+.receipt pre {
+  margin: 0; padding: 10px 12px; font-size: 12px; overflow-x: auto;
+  background: var(--navy-dark); color: #cfe3ee; border-radius: 0 0 8px 8px;
+  max-height: 320px; overflow-y: auto;
+}
