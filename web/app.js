@@ -113,5 +113,8 @@ form.addEventListener('submit', (e) => {
 
 briefingBtn.addEventListener('click', () => {
   addMsg('user', 'Morning briefing');
+  // Keep history well-formed: the API requires the first message to be a user
+  // turn, and converse() appends the assistant reply to history.
+  history.push({ role: 'user', content: 'Give me the morning briefing.' });
   converse('/api/briefing', undefined, 'Assembling the briefing…');
 });

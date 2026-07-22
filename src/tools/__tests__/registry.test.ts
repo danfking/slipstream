@@ -12,6 +12,15 @@ describe('draft_invoices', () => {
     expect(db.invoices.length).toBe(before);
   });
 
+  it('apply ignores tampered client amounts and recomputes from the record', () => {
+    const draft = draftInvoices({}).drafts[0];
+    const tampered = { ...draft, amount: 999999 };
+    const { created } = applyInvoiceDrafts([tampered]);
+    const invoice = db.invoices.find((i) => i.id === created[0])!;
+    expect(invoice.amount).toBe(draft.amount);
+    expect(invoice.amount).not.toBe(999999);
+  });
+
   it('apply (server-side only) creates invoices and marks lines billed', () => {
     const first = draftInvoices({}).drafts[0];
     const { drafts } = draftInvoices({ workOrderIds: [first.workOrderId] });

@@ -41,6 +41,13 @@ export function applyInvoiceDrafts(drafts: InvoiceDraft[]) {
   for (const draft of drafts) {
     const wo = db.workOrders.find((w) => w.id === draft.workOrderId);
     if (!wo || wo.status !== 'completed') continue;
+    // Recompute from the record — the client's amount is display-only and is
+    // never trusted (trust model: every booked number comes from tested code).
+    const amount = round2(
+      linesFor(wo.id)
+        .filter((l) => !l.billed)
+        .reduce((s, l) => s + l.qty * l.unitPrice, 0),
+    );
     invSeq++;
     const id = `INV-${invSeq}`;
     db.invoices.push({
@@ -49,7 +56,7 @@ export function applyInvoiceDrafts(drafts: InvoiceDraft[]) {
       workOrderId: wo.id,
       issuedDate: ANCHOR_DATE,
       dueDate: addDays(ANCHOR_DATE, 30),
-      amount: draft.amount,
+      amount,
       status: 'sent',
     });
     for (const line of linesFor(wo.id)) line.billed = true;
