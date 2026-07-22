@@ -1,0 +1,62 @@
+[
+  {
+    "id": "unbilled-total",
+    "question": "How much completed work haven't we billed yet?",
+    "mustInclude": ["16419"],
+    "mustCallTools": ["get_unbilled_work"]
+  },
+  {
+    "id": "haul-crunch",
+    "question": "Can we keep up with the haul-out schedule over the next three weeks?",
+    "mustInclude": ["ray", "38"],
+    "mustCallTools": ["get_schedule_load"]
+  },
+  {
+    "id": "parts-blockers",
+    "question": "Which jobs are blocked waiting on parts, and which customer is hurt most?",
+    "mustInclude": ["bayline"],
+    "mustCallTools": ["get_parts_blockers"]
+  },
+  {
+    "id": "receivables",
+    "question": "Who owes us money and how overdue are they?",
+    "mustInclude": ["bayline", "12400"],
+    "mustCallTools": ["get_receivables"]
+  },
+  {
+    "id": "occupancy",
+    "question": "How are our docks doing on occupancy and monthly revenue?",
+    "mustInclude": ["14520"],
+    "mustCallTools": ["get_occupancy"]
+  },
+  {
+    "id": "overnight-blu",
+    "question": "Anything come in overnight?",
+    "mustInclude": ["blu", "engine"],
+    "mustCallTools": ["get_overnight_activity"]
+  },
+  {
+    "id": "customer-summary",
+    "question": "Give me a summary of Bayline Charters' account.",
+    "mustInclude": ["12400"],
+    "mustCallTools": ["search_customers"]
+  },
+  {
+    "id": "cross-department",
+    "question": "Which customers with overdue invoices also have jobs blocked on parts?",
+    "mustInclude": ["bayline"],
+    "mustCallTools": ["get_receivables", "get_parts_blockers"]
+  },
+  {
+    "id": "awaiting-parts-list",
+    "question": "Show me all work orders with status awaiting_parts.",
+    "mustInclude": ["fuel pump"],
+    "mustCallTools": ["get_work_orders"]
+  },
+  {
+    "id": "invoice-drafts",
+    "question": "Draft invoices for all the unbilled completed work.",
+    "mustInclude": ["approv"],
+    "mustCallTools": ["draft_invoices"]
+  }
+]
