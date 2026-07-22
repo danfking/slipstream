@@ -50,23 +50,32 @@ export function openaiCompatClient(baseUrl: string, apiKey?: string, fetchImpl: 
           function: { name: t.name, description: t.description, parameters: t.input_schema },
         })),
       };
-      const resp = await fetchImpl(`${baseUrl.replace(/\/$/, '')}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-          ...(apiKey ? { authorization: `Bearer ${apiKey}` } : {}),
-        },
-        body: JSON.stringify(body),
-      });
-      if (!resp.ok) {
-        const detail = resp.text ? await resp.text() : `HTTP ${resp.status}`;
-        throw new Error(`Provider error: ${detail}`);
+      const send = async () => {
+        const resp = await fetchImpl(`${baseUrl.replace(/\/$/, '')}/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json',
+            ...(apiKey ? { authorization: `Bearer ${apiKey}` } : {}),
+          },
+          body: JSON.stringify(body),
+        });
+        if (!resp.ok) {
+          const detail = resp.text ? await resp.text() : `HTTP ${resp.status}`;
+          throw new Error(`Provider error: ${detail}`);
+        }
+        return resp.json();
+      };
+      let data;
+      try {
+        data = await send();
+      } catch {
+        data = await send(); // one retry: transient hiccups should not kill a live question
       }
-      const data = await resp.json();
       const msg = data.choices?.[0]?.message ?? {};
       const toolCalls = msg.tool_calls ?? [];
       const content: any[] = [];
-      if (msg.content) content.push({ type: 'text', text: msg.content });
+      const text = (msg.content ?? '').replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+      if (text) content.push({ type: 'text', text });
       for (const tc of toolCalls) {
         let input: unknown = {};
         try {

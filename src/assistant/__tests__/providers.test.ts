@@ -37,6 +37,30 @@ describe('openaiCompatClient', () => {
     expect(captured.tools[0].function.name).toBe('get_x');
   });
 
+  it('retries once on a transient provider failure', async () => {
+    let calls = 0;
+    const fetchStub = async () => {
+      calls++;
+      if (calls === 1) throw new Error('socket hang up');
+      return { ok: true, json: async () => ({ choices: [{ message: { content: 'ok' } }] }) } as any;
+    };
+    const client = openaiCompatClient('http://x/v1', undefined, fetchStub as any);
+    const resp = await client.create({ model: 'm', max_tokens: 10, messages: [] });
+    expect(calls).toBe(2);
+    expect(resp.content[0].text).toBe('ok');
+  });
+
+  it('strips <think> blocks from reply text', async () => {
+    const fetchStub = async () =>
+      ({
+        ok: true,
+        json: async () => ({ choices: [{ message: { content: '<think>secret plan</think>The answer is 5.' } }] }),
+      }) as any;
+    const client = openaiCompatClient('http://x/v1', undefined, fetchStub as any);
+    const resp = await client.create({ model: 'm', max_tokens: 10, messages: [] });
+    expect(resp.content[0].text).toBe('The answer is 5.');
+  });
+
   it('translates an OpenAI tool-call response into Anthropic shape', async () => {
     const fetchStub = async () =>
       ({
