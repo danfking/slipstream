@@ -9,11 +9,14 @@
     "dev": "tsx src/server.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
-    "golden": "tsx scripts/golden.ts"
+    "golden": "tsx scripts/golden.ts",
+    "ui:capture": "tsx scripts/ui/run-journeys.ts"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^22.10.0",
+    "dompurify": "^3.4.12",
+    "marked": "^18.0.7",
     "playwright": "^1.61.1",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0",
