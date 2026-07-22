@@ -18,7 +18,13 @@ const BASE = process.env.GOLDEN_URL ?? 'http://localhost:3000';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const cases: GoldenCase[] = JSON.parse(readFileSync(join(root, 'golden', 'golden.json'), 'utf-8'));
 
-const normalize = (s: string) => s.toLowerCase().replace(/[$,]/g, '');
+// Lowercase, drop currency/comma separators, and collapse any whitespace used
+// as a thousands separator ("14 520" → "14520") without touching word spacing.
+const normalize = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[$,]/g, '')
+    .replace(/(\d)[\s  ]+(?=\d)/g, '$1');
 
 async function runCase(c: GoldenCase) {
   const started = Date.now();

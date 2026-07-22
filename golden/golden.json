@@ -8,12 +8,12 @@
   {
     "id": "haul-crunch",
     "question": "Can we keep up with the haul-out schedule over the next three weeks?",
-    "mustInclude": ["ray", "38"],
+    "mustInclude": ["54", "38"],
     "mustCallTools": ["get_schedule_load"]
   },
   {
     "id": "parts-blockers",
-    "question": "Which jobs are blocked waiting on parts, and which customer is hurt most?",
+    "question": "Which jobs are blocked waiting on parts? Flag any high-priority ones.",
     "mustInclude": ["bayline"],
     "mustCallTools": ["get_parts_blockers"]
   },
