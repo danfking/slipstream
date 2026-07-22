@@ -1,0 +1,3632 @@
+{
+  "anchorDate": "2026-10-05",
+  "customers": [
+    {
+      "id": "C001",
+      "name": "Bayline Charters LLC",
+      "email": "bayline.charters.llc@example.com",
+      "phone": "401-555-0160",
+      "type": "commercial",
+      "customerSince": "2014"
+    },
+    {
+      "id": "C002",
+      "name": "Northeast Sailing School",
+      "email": "northeast.sailing.school@example.com",
+      "phone": "401-555-0185",
+      "type": "commercial",
+      "customerSince": "2017"
+    },
+    {
+      "id": "C003",
+      "name": "Harborview Yacht Sales",
+      "email": "harborview.yacht.sales@example.com",
+      "phone": "401-555-0117",
+      "type": "commercial",
+      "customerSince": "2015"
+    },
+    {
+      "id": "C004",
+      "name": "Coastal Towing Co.",
+      "email": "coastal.towing.co.@example.com",
+      "phone": "401-555-0127",
+      "type": "commercial",
+      "customerSince": "2016"
+    },
+    {
+      "id": "C005",
+      "name": "Ewan Lowe",
+      "email": "ewan.lowe@example.com",
+      "phone": "401-555-0399",
+      "type": "seasonal",
+      "customerSince": "2021"
+    },
+    {
+      "id": "C006",
+      "name": "Kurt Ellis",
+      "email": "kurt.ellis@example.com",
+      "phone": "401-555-0600",
+      "type": "seasonal",
+      "customerSince": "2018"
+    },
+    {
+      "id": "C007",
+      "name": "Alan Lowe",
+      "email": "alan.lowe@example.com",
+      "phone": "401-555-0869",
+      "type": "seasonal",
+      "customerSince": "2018"
+    },
+    {
+      "id": "C008",
+      "name": "Brooke Grant",
+      "email": "brooke.grant@example.com",
+      "phone": "401-555-0249",
+      "type": "seasonal",
+      "customerSince": "2022"
+    },
+    {
+      "id": "C009",
+      "name": "Sam Abbott",
+      "email": "sam.abbott@example.com",
+      "phone": "401-555-0338",
+      "type": "seasonal",
+      "customerSince": "2016"
+    },
+    {
+      "id": "C010",
+      "name": "Cleo Hale",
+      "email": "cleo.hale@example.com",
+      "phone": "401-555-0559",
+      "type": "seasonal",
+      "customerSince": "2008"
+    },
+    {
+      "id": "C011",
+      "name": "Sam Osman",
+      "email": "sam.osman@example.com",
+      "phone": "401-555-0396",
+      "type": "seasonal",
+      "customerSince": "2011"
+    },
+    {
+      "id": "C012",
+      "name": "Kurt Stone",
+      "email": "kurt.stone@example.com",
+      "phone": "401-555-0886",
+      "type": "seasonal",
+      "customerSince": "2011"
+    },
+    {
+      "id": "C013",
+      "name": "Joan Hale",
+      "email": "joan.hale@example.com",
+      "phone": "401-555-0259",
+      "type": "seasonal",
+      "customerSince": "2020"
+    },
+    {
+      "id": "C014",
+      "name": "Xavier Yates",
+      "email": "xavier.yates@example.com",
+      "phone": "401-555-0270",
+      "type": "transient",
+      "customerSince": "2015"
+    },
+    {
+      "id": "C015",
+      "name": "Hana Dunn",
+      "email": "hana.dunn@example.com",
+      "phone": "401-555-0288",
+      "type": "seasonal",
+      "customerSince": "2014"
+    },
+    {
+      "id": "C016",
+      "name": "Quinn Osman",
+      "email": "quinn.osman@example.com",
+      "phone": "401-555-0919",
+      "type": "seasonal",
+      "customerSince": "2020"
+    },
+    {
+      "id": "C017",
+      "name": "Gil Grant",
+      "email": "gil.grant@example.com",
+      "phone": "401-555-0765",
+      "type": "seasonal",
+      "customerSince": "2017"
+    },
+    {
+      "id": "C018",
+      "name": "Cleo Cortez",
+      "email": "cleo.cortez@example.com",
+      "phone": "401-555-0996",
+      "type": "seasonal",
+      "customerSince": "2024"
+    },
+    {
+      "id": "C019",
+      "name": "Olive Nash",
+      "email": "olive.nash@example.com",
+      "phone": "401-555-0469",
+      "type": "seasonal",
+      "customerSince": "2013"
+    },
+    {
+      "id": "C020",
+      "name": "Yara Hale",
+      "email": "yara.hale@example.com",
+      "phone": "401-555-0559",
+      "type": "seasonal",
+      "customerSince": "2020"
+    },
+    {
+      "id": "C021",
+      "name": "Iris Walsh",
+      "email": "iris.walsh@example.com",
+      "phone": "401-555-0545",
+      "type": "seasonal",
+      "customerSince": "2013"
+    },
+    {
+      "id": "C022",
+      "name": "Dana Reyes",
+      "email": "dana.reyes@example.com",
+      "phone": "401-555-0450",
+      "type": "seasonal",
+      "customerSince": "2024"
+    },
+    {
+      "id": "C023",
+      "name": "Dana Lowe",
+      "email": "dana.lowe@example.com",
+      "phone": "401-555-0857",
+      "type": "seasonal",
+      "customerSince": "2025"
+    },
+    {
+      "id": "C024",
+      "name": "Gus Stone",
+      "email": "gus.stone@example.com",
+      "phone": "401-555-0759",
+      "type": "seasonal",
+      "customerSince": "2015"
+    },
+    {
+      "id": "C025",
+      "name": "Fiona Pratt",
+      "email": "fiona.pratt@example.com",
+      "phone": "401-555-0468",
+      "type": "seasonal",
+      "customerSince": "2019"
+    },
+    {
+      "id": "C026",
+      "name": "Faye Hale",
+      "email": "faye.hale@example.com",
+      "phone": "401-555-0833",
+      "type": "seasonal",
+      "customerSince": "2010"
+    },
+    {
+      "id": "C027",
+      "name": "Ewan Ibarra",
+      "email": "ewan.ibarra@example.com",
+      "phone": "401-555-0207",
+      "type": "seasonal",
+      "customerSince": "2019"
+    },
+    {
+      "id": "C028",
+      "name": "Ewan Walsh",
+      "email": "ewan.walsh@example.com",
+      "phone": "401-555-0367",
+      "type": "seasonal",
+      "customerSince": "2016"
+    },
+    {
+      "id": "C029",
+      "name": "Gus Barnes",
+      "email": "gus.barnes@example.com",
+      "phone": "401-555-0764",
+      "type": "seasonal",
+      "customerSince": "2013"
+    },
+    {
+      "id": "C030",
+      "name": "Joan Ibarra",
+      "email": "joan.ibarra@example.com",
+      "phone": "401-555-0223",
+      "type": "seasonal",
+      "customerSince": "2025"
+    },
+    {
+      "id": "C031",
+      "name": "Tessa Zeller",
+      "email": "tessa.zeller@example.com",
+      "phone": "401-555-0331",
+      "type": "seasonal",
+      "customerSince": "2018"
+    },
+    {
+      "id": "C032",
+      "name": "Joan Jensen",
+      "email": "joan.jensen@example.com",
+      "phone": "401-555-0547",
+      "type": "seasonal",
+      "customerSince": "2020"
+    },
+    {
+      "id": "C033",
+      "name": "Ned Ibarra",
+      "email": "ned.ibarra@example.com",
+      "phone": "401-555-0916",
+      "type": "seasonal",
+      "customerSince": "2016"
+    },
+    {
+      "id": "C034",
+      "name": "Uma Nash",
+      "email": "uma.nash@example.com",
+      "phone": "401-555-0671",
+      "type": "seasonal",
+      "customerSince": "2013"
+    },
+    {
+      "id": "C035",
+      "name": "Kurt Hale",
+      "email": "kurt.hale@example.com",
+      "phone": "401-555-0735",
+      "type": "seasonal",
+      "customerSince": "2011"
+    },
+    {
+      "id": "C036",
+      "name": "Xavier Hale",
+      "email": "xavier.hale@example.com",
+      "phone": "401-555-0299",
+      "type": "seasonal",
+      "customerSince": "2008"
+    },
+    {
+      "id": "C037",
+      "name": "Tessa Ellis",
+      "email": "tessa.ellis@example.com",
+      "phone": "401-555-0585",
+      "type": "seasonal",
+      "customerSince": "2020"
+    },
+    {
+      "id": "C038",
+      "name": "Gil Underhill",
+      "email": "gil.underhill@example.com",
+      "phone": "401-555-0551",
+      "type": "seasonal",
+      "customerSince": "2023"
+    },
+    {
+      "id": "C039",
+      "name": "Rosa Vaughn",
+      "email": "rosa.vaughn@example.com",
+      "phone": "401-555-0915",
+      "type": "seasonal",
+      "customerSince": "2010"
+    },
+    {
+      "id": "C040",
+      "name": "Vince Underhill",
+      "email": "vince.underhill@example.com",
+      "phone": "401-555-0366",
+      "type": "seasonal",
+      "customerSince": "2017"
+    },
+    {
+      "id": "C041",
+      "name": "Iris Lowe",
+      "email": "iris.lowe@example.com",
+      "phone": "401-555-0887",
+      "type": "seasonal",
+      "customerSince": "2021"
+    },
+    {
+      "id": "C042",
+      "name": "Brooke Barnes",
+      "email": "brooke.barnes@example.com",
+      "phone": "401-555-0335",
+      "type": "seasonal",
+      "customerSince": "2020"
+    }
+  ],
+  "boats": [
+    {
+      "id": "B001",
+      "customerId": "C001",
+      "name": "Petrel",
+      "make": "MJM 36z",
+      "lengthFt": 35,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B002",
+      "customerId": "C001",
+      "name": "Calypso",
+      "make": "Back Cove 34",
+      "lengthFt": 32,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B003",
+      "customerId": "C001",
+      "name": "Windward",
+      "make": "Parker 2320",
+      "lengthFt": 33,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B004",
+      "customerId": "C002",
+      "name": "Halcyon",
+      "make": "Hunter 36",
+      "lengthFt": 40,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B005",
+      "customerId": "C002",
+      "name": "Cormorant",
+      "make": "Tartan 3700",
+      "lengthFt": 29,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B006",
+      "customerId": "C002",
+      "name": "Squall Line",
+      "make": "Pursuit S 328",
+      "lengthFt": 36,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B007",
+      "customerId": "C003",
+      "name": "Blue Heron",
+      "make": "Hunter 36",
+      "lengthFt": 30,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B008",
+      "customerId": "C003",
+      "name": "Shearwater",
+      "make": "Tartan 3700",
+      "lengthFt": 36,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B009",
+      "customerId": "C004",
+      "name": "Bufflehead",
+      "make": "Sabre 38",
+      "lengthFt": 37,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B010",
+      "customerId": "C004",
+      "name": "Fair Lead",
+      "make": "Sea Ray 320",
+      "lengthFt": 29,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B011",
+      "customerId": "C004",
+      "name": "Last Call",
+      "make": "Beneteau Oceanis 38",
+      "lengthFt": 30,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B012",
+      "customerId": "C005",
+      "name": "Even Keel",
+      "make": "Back Cove 34",
+      "lengthFt": 31,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B013",
+      "customerId": "C006",
+      "name": "Drift Away",
+      "make": "Hallberg-Rassy 40",
+      "lengthFt": 28,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B014",
+      "customerId": "C007",
+      "name": "Meridian",
+      "make": "Sabre 38",
+      "lengthFt": 41,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B015",
+      "customerId": "C008",
+      "name": "Restless",
+      "make": "Hunter 36",
+      "lengthFt": 40,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B016",
+      "customerId": "C009",
+      "name": "Marlin",
+      "make": "Catalina 320",
+      "lengthFt": 38,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B017",
+      "customerId": "C010",
+      "name": "Argo",
+      "make": "MJM 36z",
+      "lengthFt": 34,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B018",
+      "customerId": "C011",
+      "name": "Compass Rose",
+      "make": "Boston Whaler 280",
+      "lengthFt": 35,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B019",
+      "customerId": "C012",
+      "name": "Sea Change",
+      "make": "Beneteau Oceanis 38",
+      "lengthFt": 29,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B020",
+      "customerId": "C013",
+      "name": "Ondine",
+      "make": "Parker 2320",
+      "lengthFt": 33,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B021",
+      "customerId": "C014",
+      "name": "Reel Time",
+      "make": "Beneteau Oceanis 38",
+      "lengthFt": 33,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B022",
+      "customerId": "C015",
+      "name": "Mistral",
+      "make": "Parker 2320",
+      "lengthFt": 31,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B023",
+      "customerId": "C016",
+      "name": "Ketch-22",
+      "make": "MJM 36z",
+      "lengthFt": 26,
+      "kind": "power",
+      "location": "dry_stack"
+    },
+    {
+      "id": "B024",
+      "customerId": "C017",
+      "name": "Rum Line",
+      "make": "MJM 36z",
+      "lengthFt": 33,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B025",
+      "customerId": "C018",
+      "name": "Bluebill",
+      "make": "Sabre 38",
+      "lengthFt": 35,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B026",
+      "customerId": "C019",
+      "name": "Kestrel",
+      "make": "Parker 2320",
+      "lengthFt": 31,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B027",
+      "customerId": "C020",
+      "name": "Osprey",
+      "make": "Pursuit S 328",
+      "lengthFt": 35,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B028",
+      "customerId": "C021",
+      "name": "Pelican",
+      "make": "Parker 2320",
+      "lengthFt": 36,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B029",
+      "customerId": "C022",
+      "name": "Slack Tide",
+      "make": "Hunter 36",
+      "lengthFt": 41,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B030",
+      "customerId": "C023",
+      "name": "Nor'easter",
+      "make": "MJM 36z",
+      "lengthFt": 36,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B031",
+      "customerId": "C024",
+      "name": "Tide Runner",
+      "make": "Parker 2320",
+      "lengthFt": 24,
+      "kind": "power",
+      "location": "dry_stack"
+    },
+    {
+      "id": "B032",
+      "customerId": "C025",
+      "name": "Sandpiper",
+      "make": "MJM 36z",
+      "lengthFt": 26,
+      "kind": "power",
+      "location": "dry_stack"
+    },
+    {
+      "id": "B033",
+      "customerId": "C026",
+      "name": "Knot Working",
+      "make": "MJM 36z",
+      "lengthFt": 34,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B034",
+      "customerId": "C027",
+      "name": "Tempest",
+      "make": "Grady-White 275",
+      "lengthFt": 31,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B035",
+      "customerId": "C028",
+      "name": "Wanderer",
+      "make": "Back Cove 34",
+      "lengthFt": 37,
+      "kind": "power",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B036",
+      "customerId": "C029",
+      "name": "Ariel",
+      "make": "Sabre 38",
+      "lengthFt": 37,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B037",
+      "customerId": "C030",
+      "name": "Second Wind",
+      "make": "Catalina 320",
+      "lengthFt": 30,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B038",
+      "customerId": "C031",
+      "name": "Skimmer",
+      "make": "J/35",
+      "lengthFt": 40,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B039",
+      "customerId": "C032",
+      "name": "Ballast Point",
+      "make": "J/35",
+      "lengthFt": 28,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B040",
+      "customerId": "C033",
+      "name": "Gannet",
+      "make": "Hallberg-Rassy 40",
+      "lengthFt": 40,
+      "kind": "sail",
+      "location": "wet_slip"
+    },
+    {
+      "id": "B041",
+      "customerId": "C034",
+      "name": "North Star",
+      "make": "Pursuit S 328",
+      "lengthFt": 27,
+      "kind": "power",
+      "location": "dry_stack"
+    },
+    {
+      "id": "B042",
+      "customerId": "C035",
+      "name": "Topsail",
+      "make": "Beneteau Oceanis 38",
+      "lengthFt": 35,
+      "kind": "sail",
+      "location": "wet_slip"
+    }
+  ],
+  "slips": [
+    {
+      "id": "A-01",
+      "dock": "A",
+      "number": 1,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-02",
+      "dock": "A",
+      "number": 2,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-03",
+      "dock": "A",
+      "number": 3,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-04",
+      "dock": "A",
+      "number": 4,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-05",
+      "dock": "A",
+      "number": 5,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "occupied",
+      "boatId": "B005"
+    },
+    {
+      "id": "A-06",
+      "dock": "A",
+      "number": 6,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-07",
+      "dock": "A",
+      "number": 7,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-08",
+      "dock": "A",
+      "number": 8,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "occupied",
+      "boatId": "B007"
+    },
+    {
+      "id": "A-09",
+      "dock": "A",
+      "number": 9,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "occupied",
+      "boatId": "B037"
+    },
+    {
+      "id": "A-10",
+      "dock": "A",
+      "number": 10,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-11",
+      "dock": "A",
+      "number": 11,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-12",
+      "dock": "A",
+      "number": 12,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "occupied",
+      "boatId": "B010"
+    },
+    {
+      "id": "A-13",
+      "dock": "A",
+      "number": 13,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-14",
+      "dock": "A",
+      "number": 14,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "occupied",
+      "boatId": "B011"
+    },
+    {
+      "id": "A-15",
+      "dock": "A",
+      "number": 15,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-16",
+      "dock": "A",
+      "number": 16,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-17",
+      "dock": "A",
+      "number": 17,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "occupied",
+      "boatId": "B013"
+    },
+    {
+      "id": "A-18",
+      "dock": "A",
+      "number": 18,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-19",
+      "dock": "A",
+      "number": 19,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "A-20",
+      "dock": "A",
+      "number": 20,
+      "maxLengthFt": 30,
+      "type": "wet",
+      "monthlyRatePerFt": 14,
+      "status": "vacant"
+    },
+    {
+      "id": "B-01",
+      "dock": "B",
+      "number": 1,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B001"
+    },
+    {
+      "id": "B-02",
+      "dock": "B",
+      "number": 2,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B034"
+    },
+    {
+      "id": "B-03",
+      "dock": "B",
+      "number": 3,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B002"
+    },
+    {
+      "id": "B-04",
+      "dock": "B",
+      "number": 4,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B025"
+    },
+    {
+      "id": "B-05",
+      "dock": "B",
+      "number": 5,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B003"
+    },
+    {
+      "id": "B-06",
+      "dock": "B",
+      "number": 6,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "vacant"
+    },
+    {
+      "id": "B-07",
+      "dock": "B",
+      "number": 7,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B004"
+    },
+    {
+      "id": "B-08",
+      "dock": "B",
+      "number": 8,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B019"
+    },
+    {
+      "id": "B-09",
+      "dock": "B",
+      "number": 9,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B039"
+    },
+    {
+      "id": "B-10",
+      "dock": "B",
+      "number": 10,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B006"
+    },
+    {
+      "id": "B-11",
+      "dock": "B",
+      "number": 11,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B026"
+    },
+    {
+      "id": "B-12",
+      "dock": "B",
+      "number": 12,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B040"
+    },
+    {
+      "id": "B-13",
+      "dock": "B",
+      "number": 13,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B008"
+    },
+    {
+      "id": "B-14",
+      "dock": "B",
+      "number": 14,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B035"
+    },
+    {
+      "id": "B-15",
+      "dock": "B",
+      "number": 15,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B009"
+    },
+    {
+      "id": "B-16",
+      "dock": "B",
+      "number": 16,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B027"
+    },
+    {
+      "id": "B-17",
+      "dock": "B",
+      "number": 17,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B042"
+    },
+    {
+      "id": "B-18",
+      "dock": "B",
+      "number": 18,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "vacant"
+    },
+    {
+      "id": "B-19",
+      "dock": "B",
+      "number": 19,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B012"
+    },
+    {
+      "id": "B-20",
+      "dock": "B",
+      "number": 20,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B028"
+    },
+    {
+      "id": "B-21",
+      "dock": "B",
+      "number": 21,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "vacant"
+    },
+    {
+      "id": "B-22",
+      "dock": "B",
+      "number": 22,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B014"
+    },
+    {
+      "id": "B-23",
+      "dock": "B",
+      "number": 23,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B036"
+    },
+    {
+      "id": "B-24",
+      "dock": "B",
+      "number": 24,
+      "maxLengthFt": 42,
+      "type": "wet",
+      "monthlyRatePerFt": 16,
+      "status": "occupied",
+      "boatId": "B015"
+    },
+    {
+      "id": "C-01",
+      "dock": "C",
+      "number": 1,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "occupied",
+      "boatId": "B029"
+    },
+    {
+      "id": "C-02",
+      "dock": "C",
+      "number": 2,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "occupied",
+      "boatId": "B016"
+    },
+    {
+      "id": "C-03",
+      "dock": "C",
+      "number": 3,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "vacant"
+    },
+    {
+      "id": "C-04",
+      "dock": "C",
+      "number": 4,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "occupied",
+      "boatId": "B017"
+    },
+    {
+      "id": "C-05",
+      "dock": "C",
+      "number": 5,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "vacant"
+    },
+    {
+      "id": "C-06",
+      "dock": "C",
+      "number": 6,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "occupied",
+      "boatId": "B018"
+    },
+    {
+      "id": "C-07",
+      "dock": "C",
+      "number": 7,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "occupied",
+      "boatId": "B030"
+    },
+    {
+      "id": "C-08",
+      "dock": "C",
+      "number": 8,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "vacant"
+    },
+    {
+      "id": "C-09",
+      "dock": "C",
+      "number": 9,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "vacant"
+    },
+    {
+      "id": "C-10",
+      "dock": "C",
+      "number": 10,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "occupied",
+      "boatId": "B020"
+    },
+    {
+      "id": "C-11",
+      "dock": "C",
+      "number": 11,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "occupied",
+      "boatId": "B033"
+    },
+    {
+      "id": "C-12",
+      "dock": "C",
+      "number": 12,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "occupied",
+      "boatId": "B021"
+    },
+    {
+      "id": "C-13",
+      "dock": "C",
+      "number": 13,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "occupied",
+      "boatId": "B038"
+    },
+    {
+      "id": "C-14",
+      "dock": "C",
+      "number": 14,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "occupied",
+      "boatId": "B022"
+    },
+    {
+      "id": "C-15",
+      "dock": "C",
+      "number": 15,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "vacant"
+    },
+    {
+      "id": "C-16",
+      "dock": "C",
+      "number": 16,
+      "maxLengthFt": 60,
+      "type": "wet",
+      "monthlyRatePerFt": 22,
+      "status": "occupied",
+      "boatId": "B024"
+    },
+    {
+      "id": "DS-01",
+      "dock": "DS",
+      "number": 1,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "occupied",
+      "boatId": "B023"
+    },
+    {
+      "id": "DS-02",
+      "dock": "DS",
+      "number": 2,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "occupied",
+      "boatId": "B031"
+    },
+    {
+      "id": "DS-03",
+      "dock": "DS",
+      "number": 3,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "occupied",
+      "boatId": "B032"
+    },
+    {
+      "id": "DS-04",
+      "dock": "DS",
+      "number": 4,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "occupied",
+      "boatId": "B041"
+    },
+    {
+      "id": "DS-05",
+      "dock": "DS",
+      "number": 5,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-06",
+      "dock": "DS",
+      "number": 6,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-07",
+      "dock": "DS",
+      "number": 7,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-08",
+      "dock": "DS",
+      "number": 8,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-09",
+      "dock": "DS",
+      "number": 9,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-10",
+      "dock": "DS",
+      "number": 10,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-11",
+      "dock": "DS",
+      "number": 11,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-12",
+      "dock": "DS",
+      "number": 12,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-13",
+      "dock": "DS",
+      "number": 13,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-14",
+      "dock": "DS",
+      "number": 14,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-15",
+      "dock": "DS",
+      "number": 15,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-16",
+      "dock": "DS",
+      "number": 16,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-17",
+      "dock": "DS",
+      "number": 17,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-18",
+      "dock": "DS",
+      "number": 18,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-19",
+      "dock": "DS",
+      "number": 19,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-20",
+      "dock": "DS",
+      "number": 20,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-21",
+      "dock": "DS",
+      "number": 21,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-22",
+      "dock": "DS",
+      "number": 22,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-23",
+      "dock": "DS",
+      "number": 23,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-24",
+      "dock": "DS",
+      "number": 24,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-25",
+      "dock": "DS",
+      "number": 25,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-26",
+      "dock": "DS",
+      "number": 26,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-27",
+      "dock": "DS",
+      "number": 27,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-28",
+      "dock": "DS",
+      "number": 28,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-29",
+      "dock": "DS",
+      "number": 29,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-30",
+      "dock": "DS",
+      "number": 30,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-31",
+      "dock": "DS",
+      "number": 31,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-32",
+      "dock": "DS",
+      "number": 32,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-33",
+      "dock": "DS",
+      "number": 33,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-34",
+      "dock": "DS",
+      "number": 34,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-35",
+      "dock": "DS",
+      "number": 35,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-36",
+      "dock": "DS",
+      "number": 36,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-37",
+      "dock": "DS",
+      "number": 37,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-38",
+      "dock": "DS",
+      "number": 38,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-39",
+      "dock": "DS",
+      "number": 39,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    },
+    {
+      "id": "DS-40",
+      "dock": "DS",
+      "number": 40,
+      "maxLengthFt": 28,
+      "type": "dry_stack",
+      "monthlyRatePerFt": 9,
+      "status": "vacant"
+    }
+  ],
+  "technicians": [
+    {
+      "id": "T01",
+      "name": "Marcus Webb",
+      "skills": [
+        "haul",
+        "fiberglass"
+      ],
+      "billableRate": 125,
+      "weeklyCapacityHrs": 38
+    },
+    {
+      "id": "T02",
+      "name": "Ray Delgado",
+      "skills": [
+        "haul",
+        "engine"
+      ],
+      "billableRate": 135,
+      "weeklyCapacityHrs": 38,
+      "notes": "Approved leave Oct 12-16"
+    },
+    {
+      "id": "T03",
+      "name": "Priya Nair",
+      "skills": [
+        "engine",
+        "electrical"
+      ],
+      "billableRate": 145,
+      "weeklyCapacityHrs": 38
+    },
+    {
+      "id": "T04",
+      "name": "Dave Kowalski",
+      "skills": [
+        "engine"
+      ],
+      "billableRate": 135,
+      "weeklyCapacityHrs": 38
+    },
+    {
+      "id": "T05",
+      "name": "Jess Trinh",
+      "skills": [
+        "electrical",
+        "rigging"
+      ],
+      "billableRate": 140,
+      "weeklyCapacityHrs": 32
+    },
+    {
+      "id": "T06",
+      "name": "Tom Ferreira",
+      "skills": [
+        "rigging",
+        "detailing"
+      ],
+      "billableRate": 110,
+      "weeklyCapacityHrs": 38
+    },
+    {
+      "id": "T07",
+      "name": "Ana Souza",
+      "skills": [
+        "detailing",
+        "fiberglass"
+      ],
+      "billableRate": 110,
+      "weeklyCapacityHrs": 38
+    }
+  ],
+  "workOrders": [
+    {
+      "id": "WO-0001",
+      "boatId": "B001",
+      "customerId": "C001",
+      "title": "Haul-out & block — Petrel",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-22",
+      "scheduledStart": "2026-10-12",
+      "technicianId": "T01",
+      "estimateHrs": 5,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0002",
+      "boatId": "B002",
+      "customerId": "C001",
+      "title": "Haul-out & block — Calypso",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-21",
+      "scheduledStart": "2026-10-13",
+      "technicianId": "T02",
+      "estimateHrs": 4,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0003",
+      "boatId": "B003",
+      "customerId": "C001",
+      "title": "Haul-out & block — Windward",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-18",
+      "scheduledStart": "2026-10-14",
+      "technicianId": "T01",
+      "estimateHrs": 3,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0004",
+      "boatId": "B004",
+      "customerId": "C002",
+      "title": "Haul-out & block — Halcyon",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-16",
+      "scheduledStart": "2026-10-15",
+      "technicianId": "T02",
+      "estimateHrs": 5,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0005",
+      "boatId": "B005",
+      "customerId": "C002",
+      "title": "Haul-out & block — Cormorant",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-30",
+      "scheduledStart": "2026-10-16",
+      "technicianId": "T01",
+      "estimateHrs": 3,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0006",
+      "boatId": "B006",
+      "customerId": "C002",
+      "title": "Haul-out & block — Squall Line",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-25",
+      "scheduledStart": "2026-10-17",
+      "technicianId": "T02",
+      "estimateHrs": 3,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0007",
+      "boatId": "B007",
+      "customerId": "C003",
+      "title": "Haul-out & block — Blue Heron",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-27",
+      "scheduledStart": "2026-10-12",
+      "technicianId": "T01",
+      "estimateHrs": 3,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0008",
+      "boatId": "B008",
+      "customerId": "C003",
+      "title": "Haul-out & block — Shearwater",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-21",
+      "scheduledStart": "2026-10-13",
+      "technicianId": "T02",
+      "estimateHrs": 5,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0009",
+      "boatId": "B009",
+      "customerId": "C004",
+      "title": "Haul-out & block — Bufflehead",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-25",
+      "scheduledStart": "2026-10-14",
+      "technicianId": "T01",
+      "estimateHrs": 5,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0010",
+      "boatId": "B010",
+      "customerId": "C004",
+      "title": "Haul-out & block — Fair Lead",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-30",
+      "scheduledStart": "2026-10-15",
+      "technicianId": "T02",
+      "estimateHrs": 4,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0011",
+      "boatId": "B011",
+      "customerId": "C004",
+      "title": "Haul-out & block — Last Call",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-18",
+      "scheduledStart": "2026-10-16",
+      "technicianId": "T01",
+      "estimateHrs": 5,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0012",
+      "boatId": "B012",
+      "customerId": "C005",
+      "title": "Haul-out & block — Even Keel",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-27",
+      "scheduledStart": "2026-10-17",
+      "technicianId": "T02",
+      "estimateHrs": 4,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0013",
+      "boatId": "B013",
+      "customerId": "C006",
+      "title": "Haul-out & block — Drift Away",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-22",
+      "scheduledStart": "2026-10-12",
+      "technicianId": "T01",
+      "estimateHrs": 5,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0014",
+      "boatId": "B014",
+      "customerId": "C007",
+      "title": "Haul-out & block — Meridian",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-29",
+      "scheduledStart": "2026-10-25",
+      "technicianId": "T02",
+      "estimateHrs": 3,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0015",
+      "boatId": "B015",
+      "customerId": "C008",
+      "title": "Haul-out & block — Restless",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-24",
+      "scheduledStart": "2026-10-19",
+      "technicianId": "T01",
+      "estimateHrs": 5,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0016",
+      "boatId": "B016",
+      "customerId": "C009",
+      "title": "Haul-out & block — Marlin",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-18",
+      "scheduledStart": "2026-10-20",
+      "technicianId": "T02",
+      "estimateHrs": 5,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0017",
+      "boatId": "B017",
+      "customerId": "C010",
+      "title": "Haul-out & block — Argo",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-15",
+      "scheduledStart": "2026-10-21",
+      "technicianId": "T01",
+      "estimateHrs": 4,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0018",
+      "boatId": "B018",
+      "customerId": "C011",
+      "title": "Haul-out & block — Compass Rose",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-28",
+      "scheduledStart": "2026-10-22",
+      "technicianId": "T02",
+      "estimateHrs": 3,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0019",
+      "boatId": "B019",
+      "customerId": "C012",
+      "title": "Haul-out & block — Sea Change",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-20",
+      "scheduledStart": "2026-10-23",
+      "technicianId": "T01",
+      "estimateHrs": 4,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0020",
+      "boatId": "B020",
+      "customerId": "C013",
+      "title": "Haul-out & block — Ondine",
+      "category": "haul_out",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-18",
+      "scheduledStart": "2026-10-24",
+      "technicianId": "T02",
+      "estimateHrs": 3,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0021",
+      "boatId": "B021",
+      "customerId": "C014",
+      "title": "Haul-out & block — Reel Time",
+      "category": "haul_out",
+      "status": "approved",
+      "priority": "normal",
+      "requestedDate": "2026-09-28",
+      "estimateHrs": 3,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0022",
+      "boatId": "B022",
+      "customerId": "C015",
+      "title": "Haul-out & block — Mistral",
+      "category": "haul_out",
+      "status": "approved",
+      "priority": "normal",
+      "requestedDate": "2026-09-21",
+      "estimateHrs": 4,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0023",
+      "boatId": "B024",
+      "customerId": "C017",
+      "title": "Haul-out & block — Rum Line",
+      "category": "haul_out",
+      "status": "approved",
+      "priority": "normal",
+      "requestedDate": "2026-09-27",
+      "estimateHrs": 4,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0024",
+      "boatId": "B025",
+      "customerId": "C018",
+      "title": "Haul-out & block — Bluebill",
+      "category": "haul_out",
+      "status": "approved",
+      "priority": "normal",
+      "requestedDate": "2026-09-22",
+      "estimateHrs": 5,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0025",
+      "boatId": "B026",
+      "customerId": "C019",
+      "title": "Haul-out & block — Kestrel",
+      "category": "haul_out",
+      "status": "approved",
+      "priority": "normal",
+      "requestedDate": "2026-09-30",
+      "estimateHrs": 5,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0026",
+      "boatId": "B027",
+      "customerId": "C020",
+      "title": "Haul-out & block — Osprey",
+      "category": "haul_out",
+      "status": "approved",
+      "priority": "normal",
+      "requestedDate": "2026-09-21",
+      "estimateHrs": 5,
+      "requiredSkill": "haul"
+    },
+    {
+      "id": "WO-0027",
+      "boatId": "B005",
+      "customerId": "C002",
+      "title": "100hr engine service — Cormorant",
+      "category": "engine",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-08-29",
+      "completedDate": "2026-09-03",
+      "technicianId": "T02",
+      "estimateHrs": 9,
+      "actualHrs": 9,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0028",
+      "boatId": "B006",
+      "customerId": "C002",
+      "title": "Alternator replacement — Squall Line",
+      "category": "electrical",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-08-29",
+      "completedDate": "2026-09-06",
+      "technicianId": "T03",
+      "estimateHrs": 6,
+      "actualHrs": 6,
+      "requiredSkill": "electrical"
+    },
+    {
+      "id": "WO-0029",
+      "boatId": "B007",
+      "customerId": "C003",
+      "title": "Standing rigging inspection — Blue Heron",
+      "category": "rigging",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-09-03",
+      "completedDate": "2026-09-08",
+      "technicianId": "T05",
+      "estimateHrs": 8,
+      "actualHrs": 8,
+      "requiredSkill": "rigging"
+    },
+    {
+      "id": "WO-0030",
+      "boatId": "B008",
+      "customerId": "C003",
+      "title": "Gelcoat repair, port bow — Shearwater",
+      "category": "fiberglass",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-09-05",
+      "completedDate": "2026-09-11",
+      "technicianId": "T01",
+      "estimateHrs": 14,
+      "actualHrs": 14,
+      "requiredSkill": "fiberglass"
+    },
+    {
+      "id": "WO-0031",
+      "boatId": "B009",
+      "customerId": "C004",
+      "title": "Raw water pump rebuild — Bufflehead",
+      "category": "engine",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-09-06",
+      "completedDate": "2026-09-13",
+      "technicianId": "T02",
+      "estimateHrs": 7,
+      "actualHrs": 7,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0032",
+      "boatId": "B010",
+      "customerId": "C004",
+      "title": "Chartplotter install — Fair Lead",
+      "category": "electrical",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-09-13",
+      "completedDate": "2026-09-16",
+      "technicianId": "T03",
+      "estimateHrs": 11,
+      "actualHrs": 11,
+      "requiredSkill": "electrical"
+    },
+    {
+      "id": "WO-0033",
+      "boatId": "B011",
+      "customerId": "C004",
+      "title": "Fuel system service — Last Call",
+      "category": "engine",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-09-15",
+      "completedDate": "2026-09-19",
+      "technicianId": "T02",
+      "estimateHrs": 8,
+      "actualHrs": 8,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0034",
+      "boatId": "B012",
+      "customerId": "C005",
+      "title": "Bottom paint touch-up — Even Keel",
+      "category": "fiberglass",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-09-14",
+      "completedDate": "2026-09-21",
+      "technicianId": "T01",
+      "estimateHrs": 10,
+      "actualHrs": 10,
+      "requiredSkill": "fiberglass"
+    },
+    {
+      "id": "WO-0035",
+      "boatId": "B013",
+      "customerId": "C006",
+      "title": "Windlass repair — Drift Away",
+      "category": "electrical",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-09-19",
+      "completedDate": "2026-09-23",
+      "technicianId": "T03",
+      "estimateHrs": 6,
+      "actualHrs": 6,
+      "requiredSkill": "electrical"
+    },
+    {
+      "id": "WO-0036",
+      "boatId": "B014",
+      "customerId": "C007",
+      "title": "Transmission fluid service — Meridian",
+      "category": "engine",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-09-16",
+      "completedDate": "2026-09-25",
+      "technicianId": "T02",
+      "estimateHrs": 5,
+      "actualHrs": 5,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0037",
+      "boatId": "B015",
+      "customerId": "C008",
+      "title": "Compound & wax topsides — Restless",
+      "category": "detailing",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-09-20",
+      "completedDate": "2026-09-27",
+      "technicianId": "T06",
+      "estimateHrs": 12,
+      "actualHrs": 12,
+      "requiredSkill": "detailing"
+    },
+    {
+      "id": "WO-0038",
+      "boatId": "B016",
+      "customerId": "C009",
+      "title": "Head replacement — Marlin",
+      "category": "engine",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-09-22",
+      "completedDate": "2026-09-28",
+      "technicianId": "T02",
+      "estimateHrs": 7,
+      "actualHrs": 7,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0039",
+      "boatId": "B017",
+      "customerId": "C010",
+      "title": "Nav light rewire — Argo",
+      "category": "electrical",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-09-23",
+      "completedDate": "2026-09-29",
+      "technicianId": "T03",
+      "estimateHrs": 5,
+      "actualHrs": 5,
+      "requiredSkill": "electrical"
+    },
+    {
+      "id": "WO-0040",
+      "boatId": "B018",
+      "customerId": "C011",
+      "title": "Teak brightwork refresh — Compass Rose",
+      "category": "detailing",
+      "status": "completed",
+      "priority": "normal",
+      "requestedDate": "2026-09-25",
+      "completedDate": "2026-09-30",
+      "technicianId": "T06",
+      "estimateHrs": 9,
+      "actualHrs": 9,
+      "requiredSkill": "detailing"
+    },
+    {
+      "id": "WO-0041",
+      "boatId": "B001",
+      "customerId": "C001",
+      "title": "Fuel pump replacement — Petrel",
+      "category": "engine",
+      "status": "awaiting_parts",
+      "priority": "high",
+      "requestedDate": "2026-09-25",
+      "scheduledStart": "2026-10-09",
+      "technicianId": "T02",
+      "estimateHrs": 4,
+      "requiredSkill": "engine",
+      "notes": "Charter boat — customer loses bookings every day out of service"
+    },
+    {
+      "id": "WO-0042",
+      "boatId": "B022",
+      "customerId": "C015",
+      "title": "Impeller service — Mistral",
+      "category": "engine",
+      "status": "awaiting_parts",
+      "priority": "normal",
+      "requestedDate": "2026-09-24",
+      "scheduledStart": "2026-10-08",
+      "technicianId": "T02",
+      "estimateHrs": 4,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0043",
+      "boatId": "B023",
+      "customerId": "C016",
+      "title": "Impeller service — Ketch-22",
+      "category": "engine",
+      "status": "awaiting_parts",
+      "priority": "normal",
+      "requestedDate": "2026-09-21",
+      "scheduledStart": "2026-10-10",
+      "technicianId": "T02",
+      "estimateHrs": 7,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0044",
+      "boatId": "B024",
+      "customerId": "C017",
+      "title": "Shaft seal replacement — Rum Line",
+      "category": "engine",
+      "status": "awaiting_parts",
+      "priority": "normal",
+      "requestedDate": "2026-09-24",
+      "scheduledStart": "2026-10-11",
+      "technicianId": "T02",
+      "estimateHrs": 8,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0045",
+      "boatId": "B025",
+      "customerId": "C018",
+      "title": "Shaft seal replacement — Bluebill",
+      "category": "engine",
+      "status": "awaiting_parts",
+      "priority": "normal",
+      "requestedDate": "2026-09-29",
+      "scheduledStart": "2026-10-13",
+      "technicianId": "T02",
+      "estimateHrs": 6,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0046",
+      "boatId": "B026",
+      "customerId": "C019",
+      "title": "House bank replacement (x3) — Kestrel",
+      "category": "electrical",
+      "status": "awaiting_parts",
+      "priority": "normal",
+      "requestedDate": "2026-09-25",
+      "scheduledStart": "2026-10-07",
+      "technicianId": "T03",
+      "estimateHrs": 6,
+      "requiredSkill": "electrical"
+    },
+    {
+      "id": "WO-0047",
+      "boatId": "B009",
+      "customerId": "C004",
+      "title": "Winterization — Bufflehead",
+      "category": "winterize",
+      "status": "in_progress",
+      "priority": "normal",
+      "requestedDate": "2026-09-28",
+      "scheduledStart": "2026-10-04",
+      "technicianId": "T02",
+      "estimateHrs": 4,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0048",
+      "boatId": "B011",
+      "customerId": "C004",
+      "title": "Service — Last Call",
+      "category": "detailing",
+      "status": "in_progress",
+      "priority": "normal",
+      "requestedDate": "2026-09-29",
+      "scheduledStart": "2026-10-04",
+      "technicianId": "T06",
+      "estimateHrs": 4,
+      "requiredSkill": "detailing"
+    },
+    {
+      "id": "WO-0049",
+      "boatId": "B013",
+      "customerId": "C006",
+      "title": "Shrink wrap — Drift Away",
+      "category": "shrink_wrap",
+      "status": "in_progress",
+      "priority": "normal",
+      "requestedDate": "2026-10-03",
+      "scheduledStart": "2026-10-04",
+      "technicianId": "T06",
+      "estimateHrs": 5,
+      "requiredSkill": "detailing"
+    },
+    {
+      "id": "WO-0050",
+      "boatId": "B015",
+      "customerId": "C008",
+      "title": "Service — Restless",
+      "category": "engine",
+      "status": "in_progress",
+      "priority": "normal",
+      "requestedDate": "2026-10-03",
+      "scheduledStart": "2026-10-04",
+      "technicianId": "T02",
+      "estimateHrs": 5,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0051",
+      "boatId": "B017",
+      "customerId": "C010",
+      "title": "Winterization — Argo",
+      "category": "winterize",
+      "status": "in_progress",
+      "priority": "normal",
+      "requestedDate": "2026-10-01",
+      "scheduledStart": "2026-10-04",
+      "technicianId": "T02",
+      "estimateHrs": 3,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0052",
+      "boatId": "B019",
+      "customerId": "C012",
+      "title": "Service — Sea Change",
+      "category": "detailing",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-26",
+      "scheduledStart": "2026-10-17",
+      "technicianId": "T06",
+      "estimateHrs": 3,
+      "requiredSkill": "detailing"
+    },
+    {
+      "id": "WO-0053",
+      "boatId": "B021",
+      "customerId": "C014",
+      "title": "Shrink wrap — Reel Time",
+      "category": "shrink_wrap",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-27",
+      "scheduledStart": "2026-10-16",
+      "technicianId": "T06",
+      "estimateHrs": 4,
+      "requiredSkill": "detailing"
+    },
+    {
+      "id": "WO-0054",
+      "boatId": "B023",
+      "customerId": "C016",
+      "title": "Service — Ketch-22",
+      "category": "engine",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-10-03",
+      "scheduledStart": "2026-10-12",
+      "technicianId": "T02",
+      "estimateHrs": 4,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0055",
+      "boatId": "B025",
+      "customerId": "C018",
+      "title": "Winterization — Bluebill",
+      "category": "winterize",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-29",
+      "scheduledStart": "2026-10-11",
+      "technicianId": "T02",
+      "estimateHrs": 5,
+      "requiredSkill": "engine"
+    },
+    {
+      "id": "WO-0056",
+      "boatId": "B027",
+      "customerId": "C020",
+      "title": "Service — Osprey",
+      "category": "detailing",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-10-02",
+      "scheduledStart": "2026-10-14",
+      "technicianId": "T06",
+      "estimateHrs": 4,
+      "requiredSkill": "detailing"
+    },
+    {
+      "id": "WO-0057",
+      "boatId": "B029",
+      "customerId": "C022",
+      "title": "Shrink wrap — Slack Tide",
+      "category": "shrink_wrap",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-09-23",
+      "scheduledStart": "2026-10-15",
+      "technicianId": "T06",
+      "estimateHrs": 4,
+      "requiredSkill": "detailing"
+    },
+    {
+      "id": "WO-0058",
+      "boatId": "B031",
+      "customerId": "C024",
+      "title": "Service — Tide Runner",
+      "category": "engine",
+      "status": "scheduled",
+      "priority": "normal",
+      "requestedDate": "2026-10-03",
+      "scheduledStart": "2026-10-16",
+      "technicianId": "T02",
+      "estimateHrs": 2,
+      "requiredSkill": "engine"
+    }
+  ],
+  "workOrderLines": [
+    {
+      "id": "L0001",
+      "workOrderId": "WO-0001",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 5,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0002",
+      "workOrderId": "WO-0002",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 4,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0003",
+      "workOrderId": "WO-0003",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 3,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0004",
+      "workOrderId": "WO-0004",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 5,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0005",
+      "workOrderId": "WO-0005",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 3,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0006",
+      "workOrderId": "WO-0006",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 3,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0007",
+      "workOrderId": "WO-0007",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 3,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0008",
+      "workOrderId": "WO-0008",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 5,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0009",
+      "workOrderId": "WO-0009",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 5,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0010",
+      "workOrderId": "WO-0010",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 4,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0011",
+      "workOrderId": "WO-0011",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 5,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0012",
+      "workOrderId": "WO-0012",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 4,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0013",
+      "workOrderId": "WO-0013",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 5,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0014",
+      "workOrderId": "WO-0014",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 3,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0015",
+      "workOrderId": "WO-0015",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 5,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0016",
+      "workOrderId": "WO-0016",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 5,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0017",
+      "workOrderId": "WO-0017",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 4,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0018",
+      "workOrderId": "WO-0018",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 3,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0019",
+      "workOrderId": "WO-0019",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 4,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0020",
+      "workOrderId": "WO-0020",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 3,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0021",
+      "workOrderId": "WO-0021",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 3,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0022",
+      "workOrderId": "WO-0022",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 4,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0023",
+      "workOrderId": "WO-0023",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 4,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0024",
+      "workOrderId": "WO-0024",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 5,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0025",
+      "workOrderId": "WO-0025",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 5,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0026",
+      "workOrderId": "WO-0026",
+      "kind": "labor",
+      "description": "Haul, pressure wash, block",
+      "qty": 5,
+      "unitPrice": 120,
+      "billed": false
+    },
+    {
+      "id": "L0027",
+      "workOrderId": "WO-0027",
+      "kind": "labor",
+      "description": "100hr engine service",
+      "qty": 9,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0028",
+      "workOrderId": "WO-0027",
+      "kind": "part",
+      "description": "Consumables & shop supplies",
+      "qty": 1,
+      "unitPrice": 79,
+      "billed": false
+    },
+    {
+      "id": "L0029",
+      "workOrderId": "WO-0028",
+      "kind": "labor",
+      "description": "Alternator replacement",
+      "qty": 6,
+      "unitPrice": 145,
+      "billed": false
+    },
+    {
+      "id": "L0030",
+      "workOrderId": "WO-0029",
+      "kind": "labor",
+      "description": "Standing rigging inspection",
+      "qty": 8,
+      "unitPrice": 140,
+      "billed": false
+    },
+    {
+      "id": "L0031",
+      "workOrderId": "WO-0030",
+      "kind": "labor",
+      "description": "Gelcoat repair, port bow",
+      "qty": 14,
+      "unitPrice": 125,
+      "billed": false
+    },
+    {
+      "id": "L0032",
+      "workOrderId": "WO-0030",
+      "kind": "part",
+      "description": "Consumables & shop supplies",
+      "qty": 1,
+      "unitPrice": 117,
+      "billed": false
+    },
+    {
+      "id": "L0033",
+      "workOrderId": "WO-0031",
+      "kind": "labor",
+      "description": "Raw water pump rebuild",
+      "qty": 7,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0034",
+      "workOrderId": "WO-0031",
+      "kind": "part",
+      "description": "Consumables & shop supplies",
+      "qty": 1,
+      "unitPrice": 143,
+      "billed": false
+    },
+    {
+      "id": "L0035",
+      "workOrderId": "WO-0032",
+      "kind": "labor",
+      "description": "Chartplotter install",
+      "qty": 11,
+      "unitPrice": 145,
+      "billed": false
+    },
+    {
+      "id": "L0036",
+      "workOrderId": "WO-0032",
+      "kind": "part",
+      "description": "Consumables & shop supplies",
+      "qty": 1,
+      "unitPrice": 160,
+      "billed": false
+    },
+    {
+      "id": "L0037",
+      "workOrderId": "WO-0033",
+      "kind": "labor",
+      "description": "Fuel system service",
+      "qty": 8,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0038",
+      "workOrderId": "WO-0033",
+      "kind": "part",
+      "description": "Consumables & shop supplies",
+      "qty": 1,
+      "unitPrice": 101,
+      "billed": false
+    },
+    {
+      "id": "L0039",
+      "workOrderId": "WO-0034",
+      "kind": "labor",
+      "description": "Bottom paint touch-up",
+      "qty": 10,
+      "unitPrice": 125,
+      "billed": false
+    },
+    {
+      "id": "L0040",
+      "workOrderId": "WO-0034",
+      "kind": "part",
+      "description": "Consumables & shop supplies",
+      "qty": 1,
+      "unitPrice": 121,
+      "billed": false
+    },
+    {
+      "id": "L0041",
+      "workOrderId": "WO-0035",
+      "kind": "labor",
+      "description": "Windlass repair",
+      "qty": 6,
+      "unitPrice": 145,
+      "billed": false
+    },
+    {
+      "id": "L0042",
+      "workOrderId": "WO-0036",
+      "kind": "labor",
+      "description": "Transmission fluid service",
+      "qty": 5,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0043",
+      "workOrderId": "WO-0036",
+      "kind": "part",
+      "description": "Consumables & shop supplies",
+      "qty": 1,
+      "unitPrice": 64,
+      "billed": false
+    },
+    {
+      "id": "L0044",
+      "workOrderId": "WO-0037",
+      "kind": "labor",
+      "description": "Compound & wax topsides",
+      "qty": 12,
+      "unitPrice": 110,
+      "billed": false
+    },
+    {
+      "id": "L0045",
+      "workOrderId": "WO-0038",
+      "kind": "labor",
+      "description": "Head replacement",
+      "qty": 7,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0046",
+      "workOrderId": "WO-0038",
+      "kind": "part",
+      "description": "Consumables & shop supplies",
+      "qty": 1,
+      "unitPrice": 70,
+      "billed": false
+    },
+    {
+      "id": "L0047",
+      "workOrderId": "WO-0039",
+      "kind": "labor",
+      "description": "Nav light rewire",
+      "qty": 5,
+      "unitPrice": 145,
+      "billed": false
+    },
+    {
+      "id": "L0048",
+      "workOrderId": "WO-0039",
+      "kind": "part",
+      "description": "Consumables & shop supplies",
+      "qty": 1,
+      "unitPrice": 144,
+      "billed": false
+    },
+    {
+      "id": "L0049",
+      "workOrderId": "WO-0040",
+      "kind": "labor",
+      "description": "Teak brightwork refresh",
+      "qty": 9,
+      "unitPrice": 110,
+      "billed": false
+    },
+    {
+      "id": "L0050",
+      "workOrderId": "WO-0040",
+      "kind": "part",
+      "description": "Consumables & shop supplies",
+      "qty": 1,
+      "unitPrice": 70,
+      "billed": false
+    },
+    {
+      "id": "L0051",
+      "workOrderId": "WO-0041",
+      "kind": "labor",
+      "description": "Fuel pump replacement",
+      "qty": 4,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0052",
+      "workOrderId": "WO-0041",
+      "kind": "part",
+      "description": "Fuel pump, Volvo Penta D4",
+      "qty": 1,
+      "unitPrice": 615,
+      "billed": false,
+      "partId": "P002"
+    },
+    {
+      "id": "L0053",
+      "workOrderId": "WO-0042",
+      "kind": "labor",
+      "description": "Impeller service",
+      "qty": 4,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0054",
+      "workOrderId": "WO-0042",
+      "kind": "part",
+      "description": "Impeller kit, Yanmar 6-series",
+      "qty": 1,
+      "unitPrice": 62,
+      "billed": false,
+      "partId": "P001"
+    },
+    {
+      "id": "L0055",
+      "workOrderId": "WO-0043",
+      "kind": "labor",
+      "description": "Impeller service",
+      "qty": 7,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0056",
+      "workOrderId": "WO-0043",
+      "kind": "part",
+      "description": "Impeller kit, Yanmar 6-series",
+      "qty": 1,
+      "unitPrice": 62,
+      "billed": false,
+      "partId": "P001"
+    },
+    {
+      "id": "L0057",
+      "workOrderId": "WO-0044",
+      "kind": "labor",
+      "description": "Shaft seal replacement",
+      "qty": 8,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0058",
+      "workOrderId": "WO-0044",
+      "kind": "part",
+      "description": "Shaft seal 1.25in",
+      "qty": 1,
+      "unitPrice": 148,
+      "billed": false,
+      "partId": "P003"
+    },
+    {
+      "id": "L0059",
+      "workOrderId": "WO-0045",
+      "kind": "labor",
+      "description": "Shaft seal replacement",
+      "qty": 6,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0060",
+      "workOrderId": "WO-0045",
+      "kind": "part",
+      "description": "Shaft seal 1.25in",
+      "qty": 1,
+      "unitPrice": 148,
+      "billed": false,
+      "partId": "P003"
+    },
+    {
+      "id": "L0061",
+      "workOrderId": "WO-0046",
+      "kind": "labor",
+      "description": "House bank replacement (x3)",
+      "qty": 6,
+      "unitPrice": 145,
+      "billed": false
+    },
+    {
+      "id": "L0062",
+      "workOrderId": "WO-0046",
+      "kind": "part",
+      "description": "AGM battery group 31",
+      "qty": 3,
+      "unitPrice": 320,
+      "billed": false,
+      "partId": "P004"
+    },
+    {
+      "id": "L0063",
+      "workOrderId": "WO-0047",
+      "kind": "labor",
+      "description": "Winterization — Bufflehead",
+      "qty": 4,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0064",
+      "workOrderId": "WO-0048",
+      "kind": "labor",
+      "description": "Service — Last Call",
+      "qty": 4,
+      "unitPrice": 110,
+      "billed": false
+    },
+    {
+      "id": "L0065",
+      "workOrderId": "WO-0049",
+      "kind": "labor",
+      "description": "Shrink wrap — Drift Away",
+      "qty": 5,
+      "unitPrice": 110,
+      "billed": false
+    },
+    {
+      "id": "L0066",
+      "workOrderId": "WO-0050",
+      "kind": "labor",
+      "description": "Service — Restless",
+      "qty": 5,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0067",
+      "workOrderId": "WO-0051",
+      "kind": "labor",
+      "description": "Winterization — Argo",
+      "qty": 3,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0068",
+      "workOrderId": "WO-0052",
+      "kind": "labor",
+      "description": "Service — Sea Change",
+      "qty": 3,
+      "unitPrice": 110,
+      "billed": false
+    },
+    {
+      "id": "L0069",
+      "workOrderId": "WO-0053",
+      "kind": "labor",
+      "description": "Shrink wrap — Reel Time",
+      "qty": 4,
+      "unitPrice": 110,
+      "billed": false
+    },
+    {
+      "id": "L0070",
+      "workOrderId": "WO-0054",
+      "kind": "labor",
+      "description": "Service — Ketch-22",
+      "qty": 4,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0071",
+      "workOrderId": "WO-0055",
+      "kind": "labor",
+      "description": "Winterization — Bluebill",
+      "qty": 5,
+      "unitPrice": 135,
+      "billed": false
+    },
+    {
+      "id": "L0072",
+      "workOrderId": "WO-0056",
+      "kind": "labor",
+      "description": "Service — Osprey",
+      "qty": 4,
+      "unitPrice": 110,
+      "billed": false
+    },
+    {
+      "id": "L0073",
+      "workOrderId": "WO-0057",
+      "kind": "labor",
+      "description": "Shrink wrap — Slack Tide",
+      "qty": 4,
+      "unitPrice": 110,
+      "billed": false
+    },
+    {
+      "id": "L0074",
+      "workOrderId": "WO-0058",
+      "kind": "labor",
+      "description": "Service — Tide Runner",
+      "qty": 2,
+      "unitPrice": 135,
+      "billed": false
+    }
+  ],
+  "parts": [
+    {
+      "id": "P001",
+      "sku": "IMP-Y6K",
+      "description": "Impeller kit, Yanmar 6-series",
+      "category": "engine",
+      "onHand": 0,
+      "reorderPoint": 4,
+      "unitCost": 38,
+      "unitPrice": 62,
+      "onOrderQty": 8,
+      "poEta": "2026-10-15"
+    },
+    {
+      "id": "P002",
+      "sku": "FP-VP-D4",
+      "description": "Fuel pump, Volvo Penta D4",
+      "category": "engine",
+      "onHand": 0,
+      "reorderPoint": 1,
+      "unitCost": 410,
+      "unitPrice": 615,
+      "onOrderQty": 2,
+      "poEta": "2026-10-17"
+    },
+    {
+      "id": "P003",
+      "sku": "STR-SS-125",
+      "description": "Shaft seal 1.25in",
+      "category": "drivetrain",
+      "onHand": 0,
+      "reorderPoint": 2,
+      "unitCost": 95,
+      "unitPrice": 148,
+      "onOrderQty": 4,
+      "poEta": "2026-10-20"
+    },
+    {
+      "id": "P004",
+      "sku": "BAT-AGM-31",
+      "description": "AGM battery group 31",
+      "category": "electrical",
+      "onHand": 2,
+      "reorderPoint": 4,
+      "unitCost": 210,
+      "unitPrice": 320,
+      "onOrderQty": 6,
+      "poEta": "2026-10-11"
+    },
+    {
+      "id": "P005",
+      "sku": "ZN-SHAFT-1",
+      "description": "Shaft zinc 1in",
+      "category": "drivetrain",
+      "onHand": 44,
+      "reorderPoint": 20,
+      "unitCost": 4,
+      "unitPrice": 9,
+      "onOrderQty": 0
+    },
+    {
+      "id": "P006",
+      "sku": "ZN-HULL-PL",
+      "description": "Hull plate zinc",
+      "category": "drivetrain",
+      "onHand": 31,
+      "reorderPoint": 15,
+      "unitCost": 11,
+      "unitPrice": 19,
+      "onOrderQty": 0
+    },
+    {
+      "id": "P007",
+      "sku": "OIL-15W40-G",
+      "description": "Engine oil 15W-40 (gal)",
+      "category": "engine",
+      "onHand": 26,
+      "reorderPoint": 12,
+      "unitCost": 19,
+      "unitPrice": 34,
+      "onOrderQty": 0
+    },
+    {
+      "id": "P008",
+      "sku": "FLT-RAC-500",
+      "description": "Racor 500 fuel filter",
+      "category": "engine",
+      "onHand": 9,
+      "reorderPoint": 6,
+      "unitCost": 21,
+      "unitPrice": 38,
+      "onOrderQty": 0
+    },
+    {
+      "id": "P009",
+      "sku": "AF-PG-G",
+      "description": "Propylene glycol antifreeze (gal)",
+      "category": "winterize",
+      "onHand": 140,
+      "reorderPoint": 80,
+      "unitCost": 6,
+      "unitPrice": 12,
+      "onOrderQty": 0
+    },
+    {
+      "id": "P010",
+      "sku": "SW-FILM-20",
+      "description": "Shrink wrap film 20ft roll",
+      "category": "winterize",
+      "onHand": 11,
+      "reorderPoint": 6,
+      "unitCost": 98,
+      "unitPrice": 160,
+      "onOrderQty": 0
+    },
+    {
+      "id": "P011",
+      "sku": "PMP-BLG-1100",
+      "description": "Bilge pump 1100gph",
+      "category": "electrical",
+      "onHand": 5,
+      "reorderPoint": 3,
+      "unitCost": 42,
+      "unitPrice": 75,
+      "onOrderQty": 0
+    },
+    {
+      "id": "P012",
+      "sku": "THERM-Y-160",
+      "description": "Thermostat, Yanmar 160F",
+      "category": "engine",
+      "onHand": 3,
+      "reorderPoint": 2,
+      "unitCost": 28,
+      "unitPrice": 49,
+      "onOrderQty": 0
+    }
+  ],
+  "invoices": [
+    {
+      "id": "INV-0001",
+      "customerId": "C001",
+      "issuedDate": "2026-08-21",
+      "dueDate": "2026-09-20",
+      "amount": 12400,
+      "status": "overdue"
+    },
+    {
+      "id": "INV-0002",
+      "customerId": "C004",
+      "issuedDate": "2026-08-28",
+      "dueDate": "2026-09-27",
+      "amount": 3180,
+      "status": "overdue"
+    },
+    {
+      "id": "INV-0003",
+      "customerId": "C011",
+      "issuedDate": "2026-09-01",
+      "dueDate": "2026-10-01",
+      "amount": 1420,
+      "status": "overdue"
+    },
+    {
+      "id": "INV-0004",
+      "customerId": "C022",
+      "issuedDate": "2026-07-04",
+      "dueDate": "2026-08-03",
+      "amount": 3172,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0005",
+      "customerId": "C024",
+      "issuedDate": "2026-06-19",
+      "dueDate": "2026-07-19",
+      "amount": 3900,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0006",
+      "customerId": "C028",
+      "issuedDate": "2026-06-08",
+      "dueDate": "2026-07-08",
+      "amount": 6107,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0007",
+      "customerId": "C041",
+      "issuedDate": "2026-06-10",
+      "dueDate": "2026-07-10",
+      "amount": 5089,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0008",
+      "customerId": "C035",
+      "issuedDate": "2026-08-24",
+      "dueDate": "2026-09-23",
+      "amount": 1240,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0009",
+      "customerId": "C042",
+      "issuedDate": "2026-07-20",
+      "dueDate": "2026-08-19",
+      "amount": 505,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0010",
+      "customerId": "C037",
+      "issuedDate": "2026-06-26",
+      "dueDate": "2026-07-26",
+      "amount": 4307,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0011",
+      "customerId": "C014",
+      "issuedDate": "2026-07-23",
+      "dueDate": "2026-08-22",
+      "amount": 5260,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0012",
+      "customerId": "C039",
+      "issuedDate": "2026-08-10",
+      "dueDate": "2026-09-09",
+      "amount": 4169,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0013",
+      "customerId": "C007",
+      "issuedDate": "2026-06-30",
+      "dueDate": "2026-07-30",
+      "amount": 2509,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0014",
+      "customerId": "C003",
+      "issuedDate": "2026-08-11",
+      "dueDate": "2026-09-10",
+      "amount": 1114,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0015",
+      "customerId": "C027",
+      "issuedDate": "2026-07-08",
+      "dueDate": "2026-08-07",
+      "amount": 2508,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0016",
+      "customerId": "C041",
+      "issuedDate": "2026-06-24",
+      "dueDate": "2026-07-24",
+      "amount": 2716,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0017",
+      "customerId": "C032",
+      "issuedDate": "2026-07-04",
+      "dueDate": "2026-08-03",
+      "amount": 394,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0018",
+      "customerId": "C037",
+      "issuedDate": "2026-07-12",
+      "dueDate": "2026-08-11",
+      "amount": 1801,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0019",
+      "customerId": "C038",
+      "issuedDate": "2026-07-30",
+      "dueDate": "2026-08-29",
+      "amount": 3055,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0020",
+      "customerId": "C036",
+      "issuedDate": "2026-08-04",
+      "dueDate": "2026-09-03",
+      "amount": 4024,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0021",
+      "customerId": "C020",
+      "issuedDate": "2026-06-07",
+      "dueDate": "2026-07-07",
+      "amount": 3423,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0022",
+      "customerId": "C008",
+      "issuedDate": "2026-08-25",
+      "dueDate": "2026-09-24",
+      "amount": 3808,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0023",
+      "customerId": "C028",
+      "issuedDate": "2026-07-25",
+      "dueDate": "2026-08-24",
+      "amount": 4994,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0024",
+      "customerId": "C026",
+      "issuedDate": "2026-07-29",
+      "dueDate": "2026-08-28",
+      "amount": 5226,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0025",
+      "customerId": "C025",
+      "issuedDate": "2026-06-09",
+      "dueDate": "2026-07-09",
+      "amount": 1297,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0026",
+      "customerId": "C008",
+      "issuedDate": "2026-07-02",
+      "dueDate": "2026-08-01",
+      "amount": 4309,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0027",
+      "customerId": "C024",
+      "issuedDate": "2026-07-08",
+      "dueDate": "2026-08-07",
+      "amount": 3525,
+      "status": "paid"
+    },
+    {
+      "id": "INV-0028",
+      "customerId": "C038",
+      "issuedDate": "2026-10-02",
+      "dueDate": "2026-11-01",
+      "amount": 3024,
+      "status": "sent"
+    },
+    {
+      "id": "INV-0029",
+      "customerId": "C003",
+      "issuedDate": "2026-09-12",
+      "dueDate": "2026-10-12",
+      "amount": 725,
+      "status": "sent"
+    },
+    {
+      "id": "INV-0030",
+      "customerId": "C001",
+      "issuedDate": "2026-09-20",
+      "dueDate": "2026-10-20",
+      "amount": 517,
+      "status": "sent"
+    },
+    {
+      "id": "INV-0031",
+      "customerId": "C003",
+      "issuedDate": "2026-09-18",
+      "dueDate": "2026-10-18",
+      "amount": 2934,
+      "status": "sent"
+    },
+    {
+      "id": "INV-0032",
+      "customerId": "C001",
+      "issuedDate": "2026-09-14",
+      "dueDate": "2026-10-14",
+      "amount": 1779,
+      "status": "sent"
+    },
+    {
+      "id": "INV-0033",
+      "customerId": "C015",
+      "issuedDate": "2026-09-15",
+      "dueDate": "2026-10-15",
+      "amount": 1074,
+      "status": "sent"
+    }
+  ]
+}
