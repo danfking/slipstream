@@ -21,6 +21,7 @@ import {
   type Customer,
   type Invoice,
   type Part,
+  type Reservation,
   type SeedData,
   type Slip,
   type TechSkill,
@@ -210,9 +211,9 @@ function addLine(woId: string, kind: 'labor' | 'part', description: string, qty:
   lineN++;
   workOrderLines.push({ id: `L${String(lineN).padStart(4, '0')}`, workOrderId: woId, kind, description, qty, unitPrice, billed, partId });
 }
-function addWO(wo: Omit<WorkOrder, 'id'>): WorkOrder {
+function addWO(wo: Omit<WorkOrder, 'id' | 'source'> & { source?: WorkOrder['source'] }): WorkOrder {
   woN++;
-  const full = { id: `WO-${String(woN).padStart(4, '0')}`, ...wo };
+  const full: WorkOrder = { id: `WO-${String(woN).padStart(4, '0')}`, source: 'staff', ...wo };
   workOrders.push(full);
   return full;
 }
@@ -350,11 +351,29 @@ for (let i = 0; i < 6; i++) {
   addInvoice(pick(customers).id, between(400, 3800), between(3, 25), 'sent');
 }
 
+// --- Blu Voice Agent overnight activity (decision record A6) ----------------
+// Hook: the partner voice channel writes into the record; the assistant is
+// where that activity becomes visible alongside everything else.
+const reservations: Reservation[] = [
+  { id: 'R-001', customerName: 'Walk-up: Meredith Kane', boatLengthFt: 34, arrival: day(2), nights: 3, slipId: 'C-14', status: 'confirmed', source: 'blu_voice_agent', createdDate: day(0) },
+  { id: 'R-002', customerName: 'Walk-up: Gordon Pryce', boatLengthFt: 41, arrival: day(1), nights: 2, status: 'pending', source: 'blu_voice_agent', createdDate: day(0) },
+  { id: 'R-003', customerName: customers[15].name, boatLengthFt: 28, arrival: day(5), nights: 4, status: 'confirmed', source: 'customer_portal', createdDate: day(-1) },
+];
+const bluBoat = seasonalBoats[30];
+addWO({
+  boatId: bluBoat.id, customerId: bluBoat.customerId,
+  title: `Engine won't start — ${bluBoat.name}`,
+  category: 'engine', status: 'requested', priority: 'high',
+  requestedDate: day(0), estimateHrs: 3, requiredSkill: 'engine',
+  source: 'blu_voice_agent',
+  notes: 'Phoned in overnight via Blu Voice Agent; customer says engine cranks but will not start.',
+});
+
 // --- write ------------------------------------------------------------------
 const seed: SeedData = {
   anchorDate: ANCHOR_DATE,
   customers, boats, slips, technicians,
-  workOrders, workOrderLines, parts, invoices,
+  workOrders, workOrderLines, parts, invoices, reservations,
 };
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 mkdirSync(join(root, 'data'), { recursive: true });
