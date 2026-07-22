@@ -10,10 +10,12 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "golden": "tsx scripts/golden.ts",
+    "soak": "tsx scripts/md-soak.ts",
     "ui:capture": "tsx scripts/ui/run-journeys.ts"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/jsdom": "^28.0.3",
     "@types/node": "^22.10.0",
     "dompurify": "^3.4.12",
     "jsdom": "^29.1.1",

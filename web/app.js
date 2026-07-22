@@ -1,4 +1,5 @@
-import { channelLabel, collectSources, isPartnerChannel, linkifyToolCitations, normalizeMarkdown, summarizeInput } from './render.js';
+import { channelLabel, collectSources, isPartnerChannel, renderMarkdown, summarizeInput } from './render.js';
+import remend from './vendor/remend.js';
 
 const messagesEl = document.getElementById('messages');
 const receiptsEl = document.getElementById('receipts');
@@ -20,9 +21,11 @@ fetch('/api/health').then((r) => r.json()).then((h) => {
  * Sanitized because tool results (customer names, note text) reach this string.
  */
 function assistantHtml(text, toolNames) {
-  const dirty = window.marked.parse(normalizeMarkdown(text), { breaks: true });
-  const clean = window.DOMPurify.sanitize(dirty);
-  return linkifyToolCitations(clean, toolNames);
+  return renderMarkdown(text, toolNames, {
+    parse: (s, o) => window.marked.parse(s, o),
+    sanitize: (s) => window.DOMPurify.sanitize(s),
+    complete: (s) => remend(s),
+  });
 }
 
 function clearEmptyState() {

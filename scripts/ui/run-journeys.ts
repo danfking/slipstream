@@ -185,11 +185,32 @@ async function runJourney(browser: Browser, journey: Journey, runDir: string, or
     }
   }
 
+  // Markdown lint gate: run the UI's own lint over every rendered assistant
+  // message, in-page, so a marker artifact fails the journey with a screenshot
+  // already on disk showing it.
+  let mdIssues: string[] = [];
+  try {
+    mdIssues = await page.evaluate(async () => {
+      // Browser-side dynamic import of the served module; the specifier is a
+      // URL, not a node module, so keep TS out of resolving it.
+      const mod = (await import(/* @vite-ignore */ String('/render.js'))) as {
+        lintRendered: (raw: string, html: string) => string[];
+      };
+      const { lintRendered } = mod;
+      return [...document.querySelectorAll('.msg.assistant:not(.pending)')].flatMap((el, i) =>
+        lintRendered('', el.innerHTML).map((issue) => `message ${i}: ${issue}`),
+      );
+    });
+  } catch (err) {
+    mdIssues = [`lint gate failed to run: ${String(err).slice(0, 120)}`];
+  }
+  if (mdIssues.length) failures += mdIssues.length;
+
   writeFileSync(join(dir, 'console.json'), JSON.stringify(console_, null, 2));
   writeFileSync(
     join(dir, 'journey.json'),
     JSON.stringify(
-      { name: journey.name, description: journey.description, model: MODEL, steps, failures, consoleIssues: console_.length },
+      { name: journey.name, description: journey.description, model: MODEL, steps, failures, consoleIssues: console_.length, mdIssues },
       null,
       2,
     ),
