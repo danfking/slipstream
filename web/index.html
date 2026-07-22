@@ -32,11 +32,14 @@
 
     <aside id="receipts-pane">
       <h2>Receipts</h2>
-      <p class="hint">Every number the assistant gives comes from a tool call listed here. Click one to see the raw result.</p>
+      <p class="hint">Every number the assistant gives comes from a tool call listed here, grouped by the question it answered. Click one to see the raw result.</p>
       <div id="receipts"></div>
     </aside>
   </main>
 
-  <script src="app.js"></script>
+  <!-- Vendored, not CDN: the demo has to render markdown with the venue wifi off. -->
+  <script src="vendor/marked.umd.js"></script>
+  <script src="vendor/purify.min.js"></script>
+  <script type="module" src="app.js"></script>
 </body>
 </html>

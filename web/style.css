@@ -1,42 +1,66 @@
 * { box-sizing: border-box; margin: 0; }
 
+/* Design tokens from docs/BRAND.md — DockMaster Web's styling family, so
+   Slipstream reads as native to the ecosystem it surfaces data from. Navy
+   carries all primary chrome and actions; gold is attention only, never a CTA. */
 :root {
-  --navy: #14304a;
-  --navy-dark: #0d2135;
-  --accent: #0e7a8a;
-  --paper: #f6f8f9;
-  --line: #d8e0e5;
-  --ink: #1c2b36;
+  --ds-navy: #161848;
+  --ds-navy-light: #1e1e5a;
+  --ds-navy-dark: #0d0d2b;
+
+  --ds-gold: #ffc844;
+  --ds-gold-soft: #ffd87a;
+  --ds-gold-text: #b86614;
+
+  --ds-surface: #ffffff;
+  --ds-surface-sunken: #f3f4f6;
+  --ds-surface-muted: #b7c6dc;
+
+  --ds-border: #e5e5e5;
+  --ds-text-muted: #666666;
+  --ds-danger: #ef4444;
+  --ds-danger-border-soft: #f3b4ac;
+
+  --ds-radius-sm: 6px;
+  --ds-radius-md: 10px;
+  --ds-radius-lg: 14px;
+  --ds-radius-pill: 9999px;
+
+  --ds-font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ds-font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
 
 body {
-  font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--ds-font-sans);
   font-size: 16px;
-  color: var(--ink);
-  background: var(--paper);
+  color: var(--ds-navy);
+  background: var(--ds-surface-sunken);
   height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 header {
-  background: var(--navy);
+  background: var(--ds-navy);
   color: #fff;
   padding: 14px 22px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-header h1 { font-size: 22px; letter-spacing: 0.5px; }
+header h1 { font-size: 22px; letter-spacing: 0.2px; }
 header .sub { font-size: 13px; opacity: 0.85; }
 .meta { display: flex; gap: 10px; align-items: center; font-size: 13px; }
 .badge {
-  background: var(--accent);
-  border-radius: 4px;
+  background: var(--ds-navy-light);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--ds-radius-sm);
   padding: 3px 8px;
   font-size: 12px;
 }
-.badge.demo { background: #7a5b0e; }
+/* Gold is the ecosystem's attention colour: the synthetic-data disclosure is
+   exactly the thing a viewer must not miss. */
+.badge.demo { background: var(--ds-gold); border-color: var(--ds-gold); color: var(--ds-navy-dark); font-weight: 600; }
 
 main {
   flex: 1;
@@ -49,7 +73,7 @@ main {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  border-right: 1px solid var(--line);
+  border-right: 1px solid var(--ds-border);
 }
 
 #messages {
@@ -61,61 +85,159 @@ main {
   gap: 14px;
 }
 
-.msg { max-width: 82%; padding: 12px 16px; border-radius: 10px; line-height: 1.45; white-space: pre-wrap; }
-.msg.user { align-self: flex-end; background: var(--navy); color: #fff; border-bottom-right-radius: 2px; }
-.msg.assistant { align-self: flex-start; background: #fff; border: 1px solid var(--line); border-bottom-left-radius: 2px; }
-.msg.pending { opacity: 0.6; font-style: italic; }
+.msg { max-width: 82%; padding: 12px 16px; border-radius: var(--ds-radius-md); line-height: 1.5; }
+.msg.user {
+  align-self: flex-end;
+  background: var(--ds-navy);
+  color: #fff;
+  border-bottom-right-radius: 2px;
+  white-space: pre-wrap; /* user text is never parsed as markup */
+}
+.msg.assistant {
+  align-self: flex-start;
+  background: var(--ds-surface);
+  border: 1px solid var(--ds-border);
+  border-bottom-left-radius: 2px;
+}
 
+/* Rendered markdown inside an assistant bubble. */
+.msg.assistant > :first-child { margin-top: 0; }
+.msg.assistant > :last-child { margin-bottom: 0; }
+.msg.assistant p { margin: 0 0 10px; }
+.msg.assistant h1, .msg.assistant h2, .msg.assistant h3, .msg.assistant h4 {
+  font-size: 15px; font-weight: 700; margin: 14px 0 6px; color: var(--ds-navy);
+}
+.msg.assistant ul, .msg.assistant ol { margin: 0 0 10px; padding-left: 20px; }
+.msg.assistant li { margin-bottom: 3px; }
+.msg.assistant strong { font-weight: 700; color: var(--ds-navy-dark); }
+.msg.assistant code {
+  font-family: var(--ds-font-mono); font-size: 13px;
+  background: var(--ds-surface-sunken); border-radius: 4px; padding: 1px 5px;
+}
+.msg.assistant pre { background: var(--ds-surface-sunken); padding: 10px; border-radius: var(--ds-radius-sm); overflow-x: auto; }
+.msg.assistant pre code { background: none; padding: 0; }
+/* Tables scroll inside the bubble rather than stretching the conversation. */
+.msg.assistant table {
+  display: block; max-width: 100%; overflow-x: auto;
+  border-collapse: collapse; font-size: 13.5px; margin: 0 0 10px;
+}
+.msg.assistant th, .msg.assistant td {
+  border-bottom: 1px solid var(--ds-border); padding: 6px 12px 6px 0; text-align: left; white-space: nowrap;
+}
+.msg.assistant th { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--ds-text-muted); }
+.msg.assistant blockquote {
+  margin: 0 0 10px; padding-left: 12px; border-left: 3px solid var(--ds-border); color: var(--ds-text-muted);
+}
+
+/* Tool citations: a control that points at its receipt, not stray asterisks. */
+.citation {
+  font-family: var(--ds-font-mono); font-size: 12.5px;
+  background: var(--ds-surface-sunken); color: var(--ds-navy);
+  border: 1px solid var(--ds-border); border-radius: var(--ds-radius-sm);
+  padding: 1px 7px; cursor: pointer;
+}
+.citation:hover { background: var(--ds-navy); color: #fff; border-color: var(--ds-navy); }
+
+/* Pending: animated, with elapsed seconds once the wait is worth explaining. */
+.msg.assistant.pending { display: flex; align-items: center; gap: 9px; color: var(--ds-text-muted); }
+.pending-label { font-size: 14.5px; }
+.elapsed { font-size: 12.5px; font-variant-numeric: tabular-nums; color: var(--ds-surface-muted); }
+.dots { display: inline-flex; gap: 4px; }
+.dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--ds-surface-muted); animation: pulse 1.2s infinite ease-in-out; }
+.dots i:nth-child(2) { animation-delay: 0.18s; }
+.dots i:nth-child(3) { animation-delay: 0.36s; }
+@keyframes pulse { 0%, 80%, 100% { opacity: 0.3; } 40% { opacity: 1; } }
+
+/* Approval: gold wash marks "look at this", per the DockMaster pinned-note idiom. */
 .approval-card {
   align-self: flex-start;
-  background: #fff8ec;
-  border: 1px solid #e3c98a;
-  border-radius: 10px;
-  padding: 14px 16px;
+  background: #fffaf0;
+  border: 1px solid var(--ds-gold);
+  border-left: 4px solid var(--ds-gold);
+  border-radius: var(--ds-radius-lg);
+  padding: 16px 18px;
   max-width: 92%;
 }
-.approval-card h3 { font-size: 15px; margin-bottom: 8px; }
-.approval-card table { border-collapse: collapse; font-size: 14px; margin-bottom: 10px; }
-.approval-card td, .approval-card th { padding: 4px 10px; border-bottom: 1px solid #eadfc4; text-align: left; }
-.approval-card td.amt, .approval-card th.amt { text-align: right; }
+.approval-card h3 { font-size: 15px; margin-bottom: 10px; color: var(--ds-navy); }
+.approval-card table { border-collapse: collapse; font-size: 14px; margin-bottom: 12px; }
+.approval-card td, .approval-card th { padding: 5px 12px 5px 0; border-bottom: 1px solid #f0e2c0; text-align: left; }
+.approval-card th { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--ds-gold-text); }
+.approval-card td.amt, .approval-card th.amt { text-align: right; font-variant-numeric: tabular-nums; }
 .approval-card .actions { display: flex; gap: 8px; }
-.approval-card button { padding: 6px 14px; border-radius: 6px; border: 1px solid var(--line); cursor: pointer; }
-.approval-card button.approve { background: var(--accent); color: #fff; border: none; }
+.approval-card button {
+  padding: 7px 15px; border-radius: var(--ds-radius-sm); font-size: 14px;
+  border: 1px solid var(--ds-border); background: #fff; color: var(--ds-navy); cursor: pointer;
+}
+.approval-card button.approve { background: var(--ds-navy); color: #fff; border-color: var(--ds-navy); font-weight: 600; }
 
 #chat-form {
   display: flex;
   gap: 8px;
   padding: 14px 20px;
-  background: #fff;
-  border-top: 1px solid var(--line);
+  background: var(--ds-surface);
+  border-top: 1px solid var(--ds-border);
 }
-#chat-input { flex: 1; padding: 10px 14px; font-size: 16px; border: 1px solid var(--line); border-radius: 8px; }
+#chat-input {
+  flex: 1; padding: 10px 14px; font-size: 16px; font-family: inherit;
+  border: 1px solid var(--ds-border); border-radius: var(--ds-radius-md); color: var(--ds-navy);
+}
+#chat-input:focus { outline: 2px solid var(--ds-navy); outline-offset: -1px; }
+#chat-input:disabled { background: var(--ds-surface-sunken); }
 #chat-form button {
-  padding: 10px 16px; font-size: 15px; border: none; border-radius: 8px;
-  background: var(--navy); color: #fff; cursor: pointer;
+  padding: 10px 18px; font-size: 15px; font-family: inherit; font-weight: 600;
+  border: none; border-radius: var(--ds-radius-sm);
+  background: var(--ds-navy); color: #fff; cursor: pointer;
 }
-#chat-form button:disabled { opacity: 0.5; cursor: wait; }
-#briefing-btn { background: var(--accent); }
+#chat-form button:disabled { opacity: 0.45; cursor: wait; }
+#briefing-btn { background: var(--ds-surface); color: var(--ds-navy); border: 1px solid var(--ds-border); }
 
 #receipts-pane {
   flex: 1;
-  min-width: 280px;
-  max-width: 420px;
+  min-width: 300px;
+  max-width: 430px;
   overflow-y: auto;
   padding: 18px;
-  background: #eef2f4;
+  background: var(--ds-surface-sunken);
 }
 #receipts-pane h2 { font-size: 16px; margin-bottom: 4px; }
-#receipts-pane .hint { font-size: 12.5px; color: #55707f; margin-bottom: 12px; }
+#receipts-pane .hint { font-size: 12.5px; color: var(--ds-text-muted); margin-bottom: 14px; line-height: 1.45; }
 
-.receipt { background: #fff; border: 1px solid var(--line); border-radius: 8px; margin-bottom: 10px; }
-.receipt summary {
-  padding: 9px 12px; cursor: pointer; font-size: 14px; font-weight: 600;
-  font-family: ui-monospace, Consolas, monospace;
+/* One group per turn, newest first, so a receipt says which answer it served. */
+.receipt-turn { margin-bottom: 18px; }
+.receipt-turn + .receipt-turn { border-top: 1px solid var(--ds-border); padding-top: 14px; }
+.turn-question {
+  font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--ds-text-muted); font-weight: 600; margin-bottom: 8px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.receipt .input-line { padding: 0 12px 6px; font-size: 12.5px; color: #55707f; font-family: ui-monospace, Consolas, monospace; }
+.turn-none { font-size: 12.5px; color: var(--ds-text-muted); font-style: italic; }
+
+.receipt {
+  background: var(--ds-surface); border: 1px solid var(--ds-border);
+  border-radius: var(--ds-radius-md); margin-bottom: 8px;
+}
+.receipt summary {
+  padding: 9px 12px; cursor: pointer; font-size: 13.5px;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.receipt .tool-name { font-family: var(--ds-font-mono); font-weight: 600; }
+/* Provenance chip: names the channel a record arrived through. Text only —
+   attribution, never a partner's mark (see docs/BRAND.md). */
+.src-chip {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.2px;
+  background: var(--ds-gold-soft); color: var(--ds-gold-text);
+  border-radius: var(--ds-radius-pill); padding: 2px 9px;
+}
+.receipt .input-line {
+  padding: 0 12px 8px; font-size: 12px; color: var(--ds-text-muted); font-family: var(--ds-font-mono);
+}
 .receipt pre {
   margin: 0; padding: 10px 12px; font-size: 12px; overflow-x: auto;
-  background: var(--navy-dark); color: #cfe3ee; border-radius: 0 0 8px 8px;
+  background: var(--ds-navy-dark); color: #d6dcf2; border-radius: 0 0 var(--ds-radius-md) var(--ds-radius-md);
   max-height: 320px; overflow-y: auto;
+}
+.receipt.flash { animation: flash 1.1s ease-out; }
+@keyframes flash {
+  0% { box-shadow: 0 0 0 3px var(--ds-gold); }
+  100% { box-shadow: 0 0 0 3px rgba(255, 200, 68, 0); }
 }
