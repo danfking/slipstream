@@ -10,6 +10,39 @@ const briefingBtn = document.getElementById('briefing-btn');
 
 const history = []; // {role, content} resent each turn
 
+// --- predicted next question (issue #3) --------------------------------------
+// The server derives a likely follow-up from the last turn's tool calls; it
+// shows up in the input placeholder and Tab accepts it. Whether people take
+// the suggestion is the measured gate for the advisor tier, so acceptance is
+// reported back on the next question via headers the server counts.
+const DEFAULT_PLACEHOLDER = input.placeholder;
+let suggestion = null; // {text, source} from the latest reply
+let acceptedSuggestion = null; // set when Tab fills the input
+
+function setSuggestion(s) {
+  suggestion = s ?? null;
+  input.placeholder = suggestion ? `Try: "${suggestion.text}" (Tab to use)` : DEFAULT_PLACEHOLDER;
+}
+
+function suggestionUseHeaders(question) {
+  if (!acceptedSuggestion) return {};
+  const headers = {
+    'x-suggestion-used': question === acceptedSuggestion.text ? 'verbatim' : 'edited',
+    'x-suggestion-source': acceptedSuggestion.source,
+  };
+  acceptedSuggestion = null;
+  return headers;
+}
+
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Tab' && !e.shiftKey && suggestion && !input.value.trim()) {
+    e.preventDefault();
+    input.value = suggestion.text;
+    acceptedSuggestion = suggestion;
+    syncSendState();
+  }
+});
+
 // --- credential gate (hosted mode) -----------------------------------------
 // BYO credentials live in this browser only; every request carries them as
 // headers and the server builds a throwaway client. The passcode path instead
@@ -298,14 +331,14 @@ function addStreamingBubble() {
  * The pipeline is prefix-stable by property test, so intermediate states are
  * always valid; remend closes unterminated syntax mid-stream.
  */
-async function converse(payloadMessages, pendingLabel, question) {
+async function converse(payloadMessages, pendingLabel, question, extraHeaders = {}) {
   sendBtn.disabled = true;
   briefingBtn.disabled = true;
   input.disabled = true;
   const pending = addPending(pendingLabel);
   let bubble = null;
   let buffer = '';
-  const retry = () => converse(payloadMessages, pendingLabel, question);
+  const retry = () => converse(payloadMessages, pendingLabel, question, extraHeaders);
   const clearPending = () => {
     pending.stop();
     pending.el.remove();
@@ -313,7 +346,7 @@ async function converse(payloadMessages, pendingLabel, question) {
   try {
     const resp = await fetch('/api/chat/stream', {
       method: 'POST',
-      headers: { 'content-type': 'application/json', ...byoHeaders() },
+      headers: { 'content-type': 'application/json', ...byoHeaders(), ...extraHeaders },
       body: JSON.stringify({ messages: payloadMessages }),
     });
     if (!resp.ok) {
@@ -379,6 +412,7 @@ async function converse(payloadMessages, pendingLabel, question) {
     // the turn's tool list, which only exists at completion.
     window.Idiomorph.morph(bubble, assistantHtml(doneEvent.reply, toolEvents.map((t) => t.name)), { morphStyle: 'innerHTML' });
     bubble.classList.remove('streaming');
+    setSuggestion(doneEvent.suggestion);
     history.push({ role: 'assistant', content: doneEvent.reply });
     addReceiptGroup(question, toolEvents);
     renderApprovalCards(toolEvents);
@@ -399,16 +433,22 @@ form.addEventListener('submit', (e) => {
   e.preventDefault();
   const q = input.value.trim();
   if (!q) return;
+  const usedHeaders = suggestionUseHeaders(q);
   input.value = '';
   addMsg('user', q);
   history.push({ role: 'user', content: q });
-  converse(history, 'Checking the record', q);
+  converse(history, 'Checking the record', q, usedHeaders);
 });
 
 // The Ask button explains its own inertness: dimmed while there is nothing to
 // send, rather than looking live and doing nothing when clicked.
 const syncSendState = () => { sendBtn.disabled = !input.value.trim(); };
-input.addEventListener('input', syncSendState);
+input.addEventListener('input', () => {
+  // A cleared input means whatever gets typed next is a fresh question, not an
+  // edit of the accepted suggestion — do not report it as adoption.
+  if (!input.value.trim()) acceptedSuggestion = null;
+  syncSendState();
+});
 syncSendState();
 
 // Mirror of BRIEFING_PROMPT in src/server.ts — keep in sync. The history must

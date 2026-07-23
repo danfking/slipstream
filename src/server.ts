@@ -7,6 +7,8 @@ import { makeClient, resolveRequest, type ResolvedProvider } from './assistant/p
 import { runChat, type ChatMessage } from './assistant/chat.js';
 import { applyInvoiceDrafts, type InvoiceDraft } from './tools/actions.js';
 import { createAuth, parseCookies, TokenBucket } from './server/auth.js';
+import { suggestNext } from './assistant/suggest.js';
+import { createMetrics, type UsedKind } from './server/metrics.js';
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
@@ -63,6 +65,19 @@ async function recordReply(question: string, reply: string) {
   }
 }
 
+// Advisor-tier gate (issue #3): the assistant suggests a likely next question;
+// these counters measure whether people take it. Shown is counted where the
+// suggestion is served (one source of truth); used arrives back on the next
+// question via headers the client sets when a suggestion was accepted.
+const metrics = createMetrics();
+function recordSuggestionUse(req: express.Request) {
+  const kind = req.header('x-suggestion-used');
+  const source = req.header('x-suggestion-source');
+  if ((kind === 'verbatim' || kind === 'edited') && source) {
+    metrics.recordUsed(kind as UsedKind, source);
+  }
+}
+
 const BRIEFING_PROMPT =
   'Give me the morning briefing: overnight activity, this week\'s biggest operational risk, and the one financial number I should act on today. Be specific and cite figures.';
 
@@ -75,6 +90,11 @@ app.get('/api/health', (req, res) => {
     authMode: auth.mode,
     authorized: auth.isAuthorized(cookies[SESSION_COOKIE]),
   });
+});
+
+// Nothing sensitive in here — counts only — so public like /api/health.
+app.get('/api/metrics', (_req, res) => {
+  res.json(metrics.snapshot());
 });
 
 app.post('/api/session', (req, res) => {
@@ -94,10 +114,13 @@ async function conversationRoute(req: express.Request, res: express.Response, me
   if (!provider) {
     return res.status(401).json({ error: 'unlock required', detail: 'Enter the passcode, or bring your own model API key.' });
   }
+  recordSuggestionUse(req);
   try {
     const result = await runChat(provider.client, messages, provider.model);
     if (provider.source === 'server') void recordReply(corpusLabel, result.reply);
-    res.json(result);
+    const suggestion = suggestNext(result.toolEvents.map((e) => e.name));
+    if (suggestion) metrics.recordShown(suggestion.source);
+    res.json({ ...result, suggestion });
   } catch (err) {
     res.status(500).json({ error: String(err) });
   }
@@ -127,6 +150,7 @@ app.post('/api/chat/stream', async (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders?.();
+  recordSuggestionUse(req);
   const emit = (event: object) => res.write(`data: ${JSON.stringify(event)}\n\n`);
   try {
     const result = await runChat(provider.client, messages, provider.model, {
@@ -134,7 +158,9 @@ app.post('/api/chat/stream', async (req, res) => {
       onText: (text) => emit({ type: 'delta', text }),
     });
     if (provider.source === 'server') void recordReply(messages[messages.length - 1].content, result.reply);
-    emit({ type: 'done', reply: result.reply, toolEvents: result.toolEvents });
+    const suggestion = suggestNext(result.toolEvents.map((e) => e.name));
+    if (suggestion) metrics.recordShown(suggestion.source);
+    emit({ type: 'done', reply: result.reply, toolEvents: result.toolEvents, suggestion });
   } catch (err) {
     emit({ type: 'error', error: String(err) });
   }
