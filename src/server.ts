@@ -7,7 +7,7 @@ import { makeClient, resolveRequest, type ResolvedProvider } from './assistant/p
 import { runChat, type ChatMessage } from './assistant/chat.js';
 import { applyInvoiceDrafts, type InvoiceDraft } from './tools/actions.js';
 import { createAuth, parseCookies, TokenBucket } from './server/auth.js';
-import { suggestNext } from './assistant/suggest.js';
+import { generateSuggestion, suggestNext } from './assistant/suggest.js';
 import { createMetrics, type UsedKind } from './server/metrics.js';
 
 const app = express();
@@ -161,12 +161,19 @@ app.post('/api/chat/stream', async (req, res) => {
       onText: (text) => emit({ type: 'delta', text }),
     });
     if (provider.source === 'server') void recordReply(messages[messages.length - 1].content, result.reply);
-    const suggestion = suggestNext(
-      result.toolEvents.map((e) => e.name),
-      messages.filter((m) => m.role === 'user').map((m) => m.content),
-    );
-    if (suggestion) metrics.recordShown(suggestion.source);
-    emit({ type: 'done', reply: result.reply, toolEvents: result.toolEvents, suggestion });
+    // The reply ships first — the suggestion must never delay the answer. The
+    // contextual (model-generated) suggestion follows as a trailing event; on
+    // any failure it degrades to the static map. The client re-enables input
+    // at done, so a slow suggestion never holds the UI hostage.
+    emit({ type: 'done', reply: result.reply, toolEvents: result.toolEvents });
+    const asked = messages.filter((m) => m.role === 'user').map((m) => m.content);
+    const suggestion =
+      (await generateSuggestion(provider.client, provider.model, [...messages, { role: 'assistant', content: result.reply }], asked)) ??
+      suggestNext(result.toolEvents.map((e) => e.name), asked);
+    if (suggestion) {
+      metrics.recordShown(suggestion.source);
+      emit({ type: 'suggestion', suggestion });
+    }
   } catch (err) {
     emit({ type: 'error', error: String(err) });
   }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { suggestNext } from '../suggest.js';
+import { extractSuggestionText, generateSuggestion, suggestNext } from '../suggest.js';
 
 describe('suggestNext', () => {
   it('suggests the natural follow-up for the most recent tool', () => {
@@ -78,5 +78,69 @@ describe('suggestNext', () => {
       const s = suggestNext([tool]);
       if (s) expect(s.source).toBe(tool);
     }
+  });
+});
+
+// Model output is untrusted: reasoning leakage, preambles, list markers,
+// quotes, rambling. The sanitizer either yields one clean question or null
+// (null → caller falls back to the static map).
+describe('extractSuggestionText', () => {
+  it('finds the question line and strips wrapping quotes and list markers', () => {
+    expect(extractSuggestionText('"Which invoices are overdue?"')).toBe('Which invoices are overdue?');
+    expect(extractSuggestionText('- Which invoices are overdue?\nTrailing note ignored')).toBe('Which invoices are overdue?');
+    expect(extractSuggestionText('1. Which invoices are overdue?')).toBe('Which invoices are overdue?');
+  });
+
+  // Reasoning models (qwen3, gpt-oss) can leak untagged deliberation before
+  // the actual question — the conclusion comes last, so scan from the end.
+  it('picks the final question after untagged reasoning preamble', () => {
+    const raw =
+      'Okay, the user asked for a briefing. The overdue invoices are the headline, so chasing payment is the natural next step.\n' +
+      'Which customers should we chase for the overdue invoices?';
+    expect(extractSuggestionText(raw)).toBe('Which customers should we chase for the overdue invoices?');
+  });
+
+  it('strips think blocks, including an orphan closing tag', () => {
+    expect(extractSuggestionText('<think>pondering</think>\nWho owes us money?')).toBe('Who owes us money?');
+    expect(extractSuggestionText('stray reasoning</think>\nWho owes us money?')).toBe('Who owes us money?');
+  });
+
+  it('rejects output that is not a single short question', () => {
+    expect(extractSuggestionText('')).toBeNull();
+    expect(extractSuggestionText('This is a statement, not a question.')).toBeNull();
+    expect(extractSuggestionText('Why? '.repeat(60))).toBeNull();
+  });
+
+  it('rejects a question already asked (trim/case-insensitive), tolerating non-string entries', () => {
+    const asked = ['  which INVOICES are overdue?  ', [{}] as unknown as string];
+    expect(extractSuggestionText('Which invoices are overdue?', asked)).toBeNull();
+  });
+});
+
+describe('generateSuggestion', () => {
+  const convo = [
+    { role: 'user' as const, content: 'Morning briefing' },
+    { role: 'assistant' as const, content: 'Total overdue invoices: $17,000 is the number to act on.' },
+  ];
+
+  it('returns a sanitized llm-sourced suggestion from the model output', async () => {
+    const client = { create: async () => ({ content: [{ type: 'text', text: '"Which customers should we chase for the $17,000 overdue?"' }] }) };
+    const s = await generateSuggestion(client, 'test-model', convo, []);
+    expect(s).toEqual({ text: 'Which customers should we chase for the $17,000 overdue?', source: 'llm' });
+  });
+
+  it('returns null when the model output fails validation', async () => {
+    const client = { create: async () => ({ content: [{ type: 'text', text: 'I suggest reviewing the invoices soon.' }] }) };
+    expect(await generateSuggestion(client, 'test-model', convo, [])).toBeNull();
+  });
+
+  it('returns null on provider error', async () => {
+    const client = { create: async () => { throw new Error('boom'); } };
+    expect(await generateSuggestion(client, 'test-model', convo, [])).toBeNull();
+  });
+
+  it('returns null on timeout instead of hanging the stream', async () => {
+    const client = { create: () => new Promise<never>(() => {}) };
+    expect(await generateSuggestion(client as any, 'test-model', convo, [], 50)).toBeNull();
   });
 });

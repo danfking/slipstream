@@ -107,14 +107,16 @@ export function openaiCompatClient(baseUrl: string, apiKey?: string, fetchImpl: 
         }
       }
     }
+    const tools = (params.tools ?? []).map((t: any) => ({
+      type: 'function',
+      function: { name: t.name, description: t.description, parameters: t.input_schema },
+    }));
     return {
       model: params.model,
       max_tokens: params.max_tokens,
       messages,
-      tools: (params.tools ?? []).map((t: any) => ({
-        type: 'function',
-        function: { name: t.name, description: t.description, parameters: t.input_schema },
-      })),
+      // Omitted when empty: some OpenAI-compatible endpoints reject tools: [].
+      ...(tools.length ? { tools } : {}),
     };
   };
   const headers = () => ({
