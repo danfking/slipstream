@@ -1,0 +1,27 @@
+app = "slipstream-demo"
+primary_region = "syd"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  TRUST_PROXY = "true"
+  SLIPSTREAM_PROVIDER = "openai"
+  SLIPSTREAM_BASE_URL = "https://api.openai.com/v1"
+  SLIPSTREAM_MODEL = "gpt-4o-mini"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  [http_service.concurrency]
+    type = "requests"
+    hard_limit = 50
+    soft_limit = 25
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"

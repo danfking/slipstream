@@ -1,0 +1,61 @@
+/* Deck view: projector-first sizing on the same brand tokens as the app. */
+
+.deck-body { overflow: hidden; }
+.deck-header { display: flex; justify-content: space-between; align-items: center; }
+.deck-link { text-decoration: none; }
+
+#deck-main {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+#slides { flex: 1; min-width: 0; display: flex; }
+
+.slide {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 4vh 8vw;
+  font-size: clamp(16px, 1.6vw, 22px);
+  line-height: 1.55;
+}
+.slide.active { display: block; }
+
+.slide h1 { font-size: 1.9em; margin-bottom: 0.7em; }
+.slide h3 { font-size: 1.15em; margin: 1.1em 0 0.4em; }
+.slide p, .slide li { max-width: 62ch; }
+.slide ul, .slide ol { padding-left: 1.3em; margin: 0.4em 0 0.8em; }
+.slide li { margin: 0.3em 0; }
+.slide table { border-collapse: collapse; margin: 0.8em 0; font-size: 0.85em; }
+.slide th, .slide td { padding: 8px 14px; border-bottom: 1px solid var(--ds-border, #d8e0e5); text-align: left; vertical-align: top; }
+.slide th { font-size: 0.8em; text-transform: uppercase; letter-spacing: 0.04em; }
+.slide strong { color: var(--ds-navy, #14304a); }
+.slide em { opacity: 0.85; }
+
+.nav-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 9vw;
+  left: 0;
+  border: none;
+  background: transparent;
+  color: transparent;
+  font-size: 40px;
+  cursor: pointer;
+}
+.nav-zone.right { left: auto; right: 0; }
+.nav-zone:hover { color: var(--ds-text-muted, #55707f); background: linear-gradient(to right, rgba(0,0,0,0.03), transparent); }
+.nav-zone.right:hover { background: linear-gradient(to left, rgba(0,0,0,0.03), transparent); }
+
+/* Print: the whole pack, one slide per page — this IS the send-afterwards
+   document, so nothing interactive appears. */
+@media print {
+  .deck-body { overflow: visible; }
+  .deck-header .meta, .nav-zone { display: none !important; }
+  #deck-main { display: block; }
+  #slides { display: block; }
+  .slide { display: block !important; page-break-after: always; overflow: visible; font-size: 12pt; padding: 0 0 24pt; }
+}

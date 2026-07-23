@@ -96,6 +96,22 @@ main {
   margin-top: auto;
 }
 
+/* Credential gate (hosted mode) */
+#gate {
+  border: none; border-radius: 10px; padding: 22px 26px; max-width: 430px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+#gate::backdrop { background: rgba(13, 33, 53, 0.55); }
+#gate h3 { margin-bottom: 14px; }
+.gate-section { display: flex; flex-direction: column; gap: 8px; }
+.gate-row { display: flex; gap: 8px; }
+.gate-row input, .gate-row select, #gate-base-url { flex: 1; padding: 8px 10px; border: 1px solid var(--ds-border, #d8e0e5); border-radius: 6px; font-size: 14px; }
+.gate-row button { padding: 8px 14px; border: none; border-radius: 6px; background: var(--ds-navy, #14304a); color: #fff; cursor: pointer; }
+.gate-divider { margin: 16px 0 12px; font-size: 12.5px; color: var(--ds-text-muted, #55707f); text-transform: uppercase; letter-spacing: 0.05em; }
+.gate-note { font-size: 12px; color: var(--ds-text-muted, #55707f); }
+.gate-error { font-size: 12.5px; color: #a33; min-height: 1em; }
+.gate-hidden { display: none; }
+
 /* Empty state: centred icon over one muted line, per the DockMaster idiom. */
 .empty-state {
   margin: auto; max-width: 430px; text-align: center; color: var(--ds-text-muted);

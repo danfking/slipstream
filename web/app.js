@@ -10,9 +10,67 @@ const briefingBtn = document.getElementById('briefing-btn');
 
 const history = []; // {role, content} resent each turn
 
+// --- credential gate (hosted mode) -----------------------------------------
+// BYO credentials live in this browser only; every request carries them as
+// headers and the server builds a throwaway client. The passcode path instead
+// sets an httpOnly session cookie that unlocks the server-held key.
+const gate = document.getElementById('gate');
+const BYO_STORE = 'slipstream_byo';
+
+function byoHeaders() {
+  try {
+    const byo = JSON.parse(localStorage.getItem(BYO_STORE) ?? 'null');
+    if (!byo?.key) return {};
+    const headers = { 'x-llm-key': byo.key, 'x-llm-provider': byo.provider };
+    if (byo.baseUrl) headers['x-llm-base-url'] = byo.baseUrl;
+    if (byo.model) headers['x-llm-model'] = byo.model;
+    return headers;
+  } catch {
+    return {};
+  }
+}
+
+function openGate() {
+  if (!gate.open) gate.showModal();
+}
+
+document.getElementById('gate-provider').addEventListener('change', (e) => {
+  document.getElementById('gate-base-url').classList.toggle('gate-hidden', e.target.value !== 'custom');
+});
+
+document.getElementById('gate-passcode-btn').addEventListener('click', async () => {
+  const resp = await fetch('/api/session', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ passcode: document.getElementById('gate-passcode').value }),
+  });
+  if (resp.ok) {
+    gate.close();
+  } else {
+    document.getElementById('gate-passcode-error').textContent = 'Wrong passcode.';
+  }
+});
+
+document.getElementById('gate-key-btn').addEventListener('click', () => {
+  const provider = document.getElementById('gate-provider').value;
+  const key = document.getElementById('gate-key').value.trim();
+  if (!key) return;
+  localStorage.setItem(
+    BYO_STORE,
+    JSON.stringify({
+      provider: provider === 'custom' ? 'openai' : provider,
+      key,
+      baseUrl: provider === 'custom' ? document.getElementById('gate-base-url').value.trim() : undefined,
+      model: document.getElementById('gate-model').value.trim() || undefined,
+    }),
+  );
+  gate.close();
+});
+
 fetch('/api/health').then((r) => r.json()).then((h) => {
   document.getElementById('meta-date').textContent = `today: ${h.anchorDate}`;
   document.getElementById('meta-model').textContent = h.model;
+  if (h.authMode === 'gated' && !h.authorized && !byoHeaders()['x-llm-key']) openGate();
 });
 
 /**
@@ -160,7 +218,7 @@ function renderApprovalCards(toolEvents) {
     card.querySelector('.approve').addEventListener('click', async () => {
       const resp = await fetch('/api/approve', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'content-type': 'application/json', ...byoHeaders() },
         body: JSON.stringify({ drafts: r.drafts }),
       });
       const out = await resp.json();
@@ -230,10 +288,20 @@ async function converse(url, options, pendingLabel, question) {
   input.disabled = true;
   const pending = addPending(pendingLabel);
   try {
-    const resp = await fetch(url, options);
+    const withByo = options
+      ? { ...options, headers: { ...(options.headers ?? {}), ...byoHeaders() } }
+      : Object.keys(byoHeaders()).length
+        ? { headers: byoHeaders() }
+        : undefined;
+    const resp = await fetch(url, withByo);
     const data = await resp.json();
     pending.stop();
     pending.el.remove();
+    if (resp.status === 401) {
+      openGate();
+      addErrorCard(data.detail ?? data.error, () => converse(url, options, pendingLabel, question));
+      return;
+    }
     if (data.error) {
       addErrorCard(data.error, () => converse(url, options, pendingLabel, question));
       return;

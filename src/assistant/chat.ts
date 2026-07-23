@@ -24,13 +24,13 @@ export interface ChatClient {
 
 const apiTools = TOOLS.map(({ name, description, input_schema }) => ({ name, description, input_schema }));
 
-export async function runChat(client: ChatClient, messages: ChatMessage[]) {
+export async function runChat(client: ChatClient, messages: ChatMessage[], model: string = MODEL) {
   const convo: any[] = messages.map((m) => ({ role: m.role, content: m.content }));
   const toolEvents: ToolEvent[] = [];
 
   for (let i = 0; i < MAX_LOOP_ITERATIONS; i++) {
     const response = await client.create({
-      model: MODEL,
+      model,
       max_tokens: MAX_TOKENS,
       system: SYSTEM_PROMPT,
       tools: apiTools,

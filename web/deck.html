@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Slipstream — Case Pack</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="deck.css" />
+</head>
+<body class="deck-body">
+  <header class="deck-header">
+    <div>
+      <h1>Slipstream</h1>
+      <p class="sub" id="deck-title">Case pack</p>
+    </div>
+    <div class="meta">
+      <span id="slide-counter" class="badge"></span>
+      <a class="badge deck-link" href="/" title="Back to the live demo">live demo →</a>
+    </div>
+  </header>
+
+  <main id="deck-main">
+    <div id="slides"></div>
+    <button type="button" id="nav-prev" class="nav-zone" aria-label="Previous slide">‹</button>
+    <button type="button" id="nav-next" class="nav-zone right" aria-label="Next slide">›</button>
+  </main>
+
+  <script src="vendor/marked.umd.js"></script>
+  <script src="vendor/purify.min.js"></script>
+  <script type="module" src="deck.js"></script>
+</body>
+</html>
