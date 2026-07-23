@@ -107,6 +107,17 @@ main {
   margin-top: auto;
 }
 
+/* Streaming reply: a soft caret marks text still arriving. */
+.msg.streaming::after {
+  content: '▍';
+  color: var(--ds-teal, #0e7a8a);
+  animation: caret-blink 1s steps(1) infinite;
+  margin-left: 2px;
+}
+@keyframes caret-blink {
+  50% { opacity: 0; }
+}
+
 /* Credential gate (hosted mode) */
 #gate {
   border: none; border-radius: 10px; padding: 22px 26px; max-width: 430px;

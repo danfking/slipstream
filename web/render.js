@@ -148,8 +148,11 @@ export const TRANSFORMS = [
   },
   {
     name: 'strip-think',
-    why: 'Local reasoning models can leak <think> blocks; providers.ts strips them server-side, but the renderer must not depend on which provider produced the text.',
-    apply: (text) => text.replace(/<think>[\s\S]*?(<\/think>|$)/g, ''),
+    why: 'Local reasoning models can leak <think> blocks; providers.ts strips them server-side, but the renderer must not depend on which provider produced the text. Some models emit only the CLOSING tag when streaming, so an orphan </think> discards everything before it.',
+    apply: (text) => {
+      const out = text.replace(/<think>[\s\S]*?(<\/think>|$)/g, '');
+      return out.includes('</think>') ? out.slice(out.lastIndexOf('</think>') + '</think>'.length).replace(/^\s+/, '') : out;
+    },
   },
   {
     name: 'repair-strong-emphasis',

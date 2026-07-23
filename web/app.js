@@ -282,39 +282,111 @@ function addErrorCard(detail, retry) {
   messagesEl.scrollTop = messagesEl.scrollHeight;
 }
 
-async function converse(url, options, pendingLabel, question) {
+/** An empty assistant bubble that fills as deltas arrive. */
+function addStreamingBubble() {
+  clearEmptyState();
+  const div = document.createElement('div');
+  div.className = 'msg assistant streaming';
+  messagesEl.appendChild(div);
+  return div;
+}
+
+/**
+ * Streaming conversation (issue #7): read server-sent events off
+ * /api/chat/stream and re-render the accumulated buffer through the same
+ * markdown pipeline on every delta, morphing only changed DOM (idiomorph).
+ * The pipeline is prefix-stable by property test, so intermediate states are
+ * always valid; remend closes unterminated syntax mid-stream.
+ */
+async function converse(payloadMessages, pendingLabel, question) {
   sendBtn.disabled = true;
   briefingBtn.disabled = true;
   input.disabled = true;
   const pending = addPending(pendingLabel);
-  try {
-    const withByo = options
-      ? { ...options, headers: { ...(options.headers ?? {}), ...byoHeaders() } }
-      : Object.keys(byoHeaders()).length
-        ? { headers: byoHeaders() }
-        : undefined;
-    const resp = await fetch(url, withByo);
-    const data = await resp.json();
+  let bubble = null;
+  let buffer = '';
+  const retry = () => converse(payloadMessages, pendingLabel, question);
+  const clearPending = () => {
     pending.stop();
     pending.el.remove();
-    if (resp.status === 401) {
-      openGate();
-      addErrorCard(data.detail ?? data.error, () => converse(url, options, pendingLabel, question));
+  };
+  try {
+    const resp = await fetch('/api/chat/stream', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json', ...byoHeaders() },
+      body: JSON.stringify({ messages: payloadMessages }),
+    });
+    if (!resp.ok) {
+      const data = await resp.json().catch(() => ({ error: `HTTP ${resp.status}` }));
+      clearPending();
+      if (resp.status === 401) openGate();
+      addErrorCard(data.detail ?? data.error, retry);
       return;
     }
-    if (data.error) {
-      addErrorCard(data.error, () => converse(url, options, pendingLabel, question));
+
+    let doneEvent = null;
+    let errorEvent = null;
+    const handleEvent = (ev) => {
+      if (ev.type === 'start') {
+        buffer = '';
+        if (bubble) bubble.innerHTML = '';
+      } else if (ev.type === 'delta') {
+        if (!bubble) {
+          clearPending();
+          bubble = addStreamingBubble();
+        }
+        buffer += ev.text;
+        window.Idiomorph.morph(bubble, assistantHtml(buffer, []), { morphStyle: 'innerHTML' });
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      } else if (ev.type === 'done') {
+        doneEvent = ev;
+      } else if (ev.type === 'error') {
+        errorEvent = ev;
+      }
+    };
+
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let sse = '';
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      sse += decoder.decode(value, { stream: true });
+      let sep;
+      while ((sep = sse.indexOf('\n\n')) !== -1) {
+        const block = sse.slice(0, sep);
+        sse = sse.slice(sep + 2);
+        for (const line of block.split('\n')) {
+          if (!line.startsWith('data:')) continue;
+          try {
+            handleEvent(JSON.parse(line.slice(5).trim()));
+          } catch {
+            // Malformed event: skip rather than kill the conversation.
+          }
+        }
+      }
+    }
+    if (!bubble) clearPending(); // stream ended without any delta
+
+    if (errorEvent || !doneEvent) {
+      bubble?.remove();
+      addErrorCard(errorEvent?.error ?? 'The stream ended unexpectedly.', retry);
       return;
     }
-    const toolEvents = data.toolEvents ?? [];
-    addMsg('assistant', data.reply, toolEvents.map((t) => t.name));
-    history.push({ role: 'assistant', content: data.reply });
+    const toolEvents = doneEvent.toolEvents ?? [];
+    if (!bubble) bubble = addStreamingBubble();
+    // Final render replaces the streamed approximation: citation chips need
+    // the turn's tool list, which only exists at completion.
+    window.Idiomorph.morph(bubble, assistantHtml(doneEvent.reply, toolEvents.map((t) => t.name)), { morphStyle: 'innerHTML' });
+    bubble.classList.remove('streaming');
+    history.push({ role: 'assistant', content: doneEvent.reply });
     addReceiptGroup(question, toolEvents);
     renderApprovalCards(toolEvents);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
   } catch (err) {
-    pending.stop();
-    pending.el.remove();
-    addErrorCard(err, () => converse(url, options, pendingLabel, question));
+    clearPending();
+    bubble?.remove();
+    addErrorCard(err, retry);
   } finally {
     briefingBtn.disabled = false;
     input.disabled = false;
@@ -330,11 +402,7 @@ form.addEventListener('submit', (e) => {
   input.value = '';
   addMsg('user', q);
   history.push({ role: 'user', content: q });
-  converse('/api/chat', {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ messages: history }),
-  }, 'Checking the record', q);
+  converse(history, 'Checking the record', q);
 });
 
 // The Ask button explains its own inertness: dimmed while there is nothing to
@@ -354,5 +422,5 @@ briefingBtn.addEventListener('click', () => {
   // Keep history well-formed: the API requires the first message to be a user
   // turn, and converse() appends the assistant reply to history.
   history.push({ role: 'user', content: BRIEFING_PROMPT });
-  converse('/api/briefing', undefined, 'Assembling the briefing', 'Morning briefing');
+  converse(history, 'Assembling the briefing', 'Morning briefing');
 });

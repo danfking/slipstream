@@ -94,6 +94,7 @@ async function waitForReply(page: Page, timeoutMs = 180_000) {
   await page.waitForFunction(
     () =>
       !document.querySelector('.msg.pending') &&
+      !document.querySelector('.msg.streaming') &&
       (document.querySelectorAll('.msg.assistant').length > 0 || document.querySelector('.error-card') !== null),
     undefined,
     { timeout: timeoutMs },

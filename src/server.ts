@@ -109,6 +109,38 @@ app.post('/api/chat', (req, res) => {
   void conversationRoute(req, res, messages, messages[messages.length - 1].content);
 });
 
+// Progressive reveal (issue #7): same auth, same rate limit, same loop — but
+// text deltas stream as server-sent events while the model generates. Events:
+// {type:'start'} at each model turn (client resets its buffer), {type:'delta',
+// text}, then {type:'done', reply, toolEvents} — or {type:'error', error}.
+// Providers that cannot stream fall back to buffered generation server-side;
+// the client code is identical either way (one big delta).
+app.post('/api/chat/stream', async (req, res) => {
+  const messages = (req.body?.messages ?? []) as ChatMessage[];
+  if (!messages.length) return res.status(400).json({ error: 'messages required' });
+  if (!bucket.take(clientIp(req))) return res.status(429).json({ error: 'Rate limit: give it a minute.' });
+  const provider = providerFor(req);
+  if (!provider) {
+    return res.status(401).json({ error: 'unlock required', detail: 'Enter the passcode, or bring your own model API key.' });
+  }
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders?.();
+  const emit = (event: object) => res.write(`data: ${JSON.stringify(event)}\n\n`);
+  try {
+    const result = await runChat(provider.client, messages, provider.model, {
+      onTurnStart: () => emit({ type: 'start' }),
+      onText: (text) => emit({ type: 'delta', text }),
+    });
+    if (provider.source === 'server') void recordReply(messages[messages.length - 1].content, result.reply);
+    emit({ type: 'done', reply: result.reply, toolEvents: result.toolEvents });
+  } catch (err) {
+    emit({ type: 'error', error: String(err) });
+  }
+  res.end();
+});
+
 app.get('/api/briefing', (req, res) => {
   void conversationRoute(req, res, [{ role: 'user', content: BRIEFING_PROMPT }], '(briefing)');
 });
