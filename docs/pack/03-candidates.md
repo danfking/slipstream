@@ -10,4 +10,4 @@
 
 ### The competitive shape that decided it
 
-Dockwa is monetising its **reservation network** (Telescope pricing, Marina-X underwriting). DockMaster cannot win a network-data fight — but Dockwa doesn't have the **operational record**: work orders, labour, parts, invoices. The venture an outsider can't build sits on that record. Notably, DockMaster has **no public API today** — the tool layer this product needs is also the integration surface the company is missing. One build, several consumers.
+Dockwa is monetising its **reservation network** (Telescope pricing, Marina-X underwriting). DockMaster cannot win a network-data fight. But Dockwa doesn't have the **operational record**: work orders, labour, parts, invoices. The venture an outsider can't build sits on that record. Notably, DockMaster has **no public API today**: the tool layer this product needs is also the integration surface the company is missing. One build, several consumers.

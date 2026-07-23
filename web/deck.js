@@ -40,6 +40,9 @@ function show(n) {
     el.classList.toggle('active', i === current - 1);
   }
   counterEl.textContent = `${current} / ${total}`;
+  document.getElementById('deck-progress').style.width = `${(current / total) * 100}%`;
+  document.getElementById('nav-prev').disabled = current === 1;
+  document.getElementById('nav-next').disabled = current === total;
   history.replaceState(null, '', `#/${current}`);
 }
 
