@@ -99,6 +99,14 @@ app.get('/api/metrics', (_req, res) => {
   res.json(metrics.snapshot());
 });
 
+// Synthetic-data browser (issue #6): the honesty disclosure made explorable.
+// Read-only by construction — a GET returning the seed; the only mutation
+// surface in the app stays /api/approve. Live db on purpose: invoices created
+// through the approval flow show up here, which is part of the demo.
+app.get('/api/record', (_req, res) => {
+  res.json(db);
+});
+
 // Service status (issue #5): receipts for answers, status for infrastructure.
 // Provider health comes from real request outcomes; Blu and telemetry are
 // labelled mocks — the honesty line applies to the status page too.
