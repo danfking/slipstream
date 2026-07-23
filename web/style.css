@@ -366,10 +366,12 @@ main {
 .status-dot.ok { background: #34c26b; }
 .status-dot.degraded { background: var(--ds-gold); }
 .status-dot.down { background: var(--ds-danger); }
-.status-dot-link { display: inline-flex; align-items: center; padding: 4px; border-radius: 50%; }
-.status-dot-link:hover, .status-dot-link:focus-visible { outline: 1px solid rgba(255, 255, 255, 0.5); }
+.status-dot-link { display: inline-flex; align-items: center; padding: 7px; border-radius: 50%; }
+.status-dot-link:hover, .status-dot-link:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
 .status-page main.status-main {
+  /* display: block beats the base `main { display: flex }` row layout */
+  display: block;
   max-width: 720px; margin: 28px auto; padding: 0 20px; width: 100%;
 }
 .status-overall {

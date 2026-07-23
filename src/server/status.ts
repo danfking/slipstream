@@ -21,22 +21,29 @@ export function worstState(states: ServiceState[]): ServiceState {
 
 /** Tracks the model provider from actual request outcomes. */
 export function createProviderHealth(now: () => string = () => new Date().toISOString()) {
-  let lastSuccess: string | null = null;
-  let lastError: { at: string; message: string } | null = null;
+  // Call order, not timestamp comparison, decides the state: two outcomes in
+  // the same millisecond produce equal ISO strings, and last-outcome-wins is
+  // the semantics we actually mean. Timestamps are display-only.
+  let lastOutcome: 'ok' | 'error' | null = null;
+  let lastAt: string | null = null;
+  let lastMessage = '';
   return {
     recordSuccess() {
-      lastSuccess = now();
+      lastOutcome = 'ok';
+      lastAt = now();
     },
     recordError(message: string) {
-      lastError = { at: now(), message: String(message).slice(0, 200) };
+      lastOutcome = 'error';
+      lastAt = now();
+      lastMessage = String(message).slice(0, 200);
     },
     status(model: string): ServiceStatus {
       const name = 'Model provider';
-      if (lastError && (!lastSuccess || lastError.at >= lastSuccess)) {
-        return { name, state: 'down', lastChecked: lastError.at, detail: `${model}: last request failed (${lastError.message})` };
+      if (lastOutcome === 'error') {
+        return { name, state: 'down', lastChecked: lastAt!, detail: `${model}: last request failed (${lastMessage})` };
       }
-      if (lastSuccess) {
-        return { name, state: 'ok', lastChecked: lastSuccess, detail: `${model}: last request succeeded` };
+      if (lastOutcome === 'ok') {
+        return { name, state: 'ok', lastChecked: lastAt!, detail: `${model}: last request succeeded` };
       }
       return { name, state: 'ok', lastChecked: now(), detail: `${model}: no requests yet this session` };
     },

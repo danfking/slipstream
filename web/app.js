@@ -103,11 +103,15 @@ document.getElementById('gate-key-btn').addEventListener('click', () => {
 // Header status dot (issue #5): worst component state, links to /status.html.
 // Refreshed on load, after every turn (a provider failure should show at the
 // moment it happens, not a poll later), and on a slow interval.
+let statusSeq = 0; // overlapping fetches: only the latest response may paint
 async function refreshStatus() {
+  const mySeq = ++statusSeq;
   try {
     const s = await fetch('/api/status').then((r) => r.json());
+    if (statusSeq !== mySeq) return;
     document.getElementById('header-status-dot').className = `status-dot ${s.overall}`;
   } catch {
+    if (statusSeq !== mySeq) return;
     document.getElementById('header-status-dot').className = 'status-dot down';
   }
 }

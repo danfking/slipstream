@@ -46,6 +46,15 @@ describe('createProviderHealth', () => {
     h.recordSuccess();
     expect(h.status('m').state).toBe('ok');
   });
+
+  it('last outcome wins even when both land in the same millisecond', () => {
+    const h = createProviderHealth(() => '2026-10-05T08:00:00.000Z');
+    h.recordError('boom');
+    h.recordSuccess();
+    expect(h.status('m').state).toBe('ok');
+    h.recordError('boom again');
+    expect(h.status('m').state).toBe('down');
+  });
 });
 
 describe('recordStoreStatus', () => {

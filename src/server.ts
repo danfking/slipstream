@@ -134,7 +134,9 @@ async function conversationRoute(req: express.Request, res: express.Response, me
   recordSuggestionUse(req);
   try {
     const result = await runChat(provider.client, messages, provider.model);
-    providerHealth.recordSuccess();
+    // Status tracks the SERVER provider only: a visitor's broken BYO key says
+    // nothing about our service, and its error text can echo their key.
+    if (provider.source === 'server') providerHealth.recordSuccess();
     if (provider.source === 'server') void recordReply(corpusLabel, result.reply);
     const suggestion = suggestNext(
       result.toolEvents.map((e) => e.name),
@@ -143,7 +145,7 @@ async function conversationRoute(req: express.Request, res: express.Response, me
     if (suggestion) metrics.recordShown(suggestion.source);
     res.json({ ...result, suggestion });
   } catch (err) {
-    providerHealth.recordError(String(err));
+    if (provider.source === 'server') providerHealth.recordError(String(err));
     res.status(500).json({ error: String(err) });
   }
 }
@@ -179,7 +181,7 @@ app.post('/api/chat/stream', async (req, res) => {
       onTurnStart: () => emit({ type: 'start' }),
       onText: (text) => emit({ type: 'delta', text }),
     });
-    providerHealth.recordSuccess();
+    if (provider.source === 'server') providerHealth.recordSuccess();
     if (provider.source === 'server') void recordReply(messages[messages.length - 1].content, result.reply);
     // The reply ships first — the suggestion must never delay the answer. The
     // contextual (model-generated) suggestion follows as a trailing event; on
@@ -195,7 +197,7 @@ app.post('/api/chat/stream', async (req, res) => {
       emit({ type: 'suggestion', suggestion });
     }
   } catch (err) {
-    providerHealth.recordError(String(err));
+    if (provider.source === 'server') providerHealth.recordError(String(err));
     emit({ type: 'error', error: String(err) });
   }
   res.end();
