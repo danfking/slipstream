@@ -9,6 +9,8 @@ import { applyInvoiceDrafts, type InvoiceDraft } from './tools/actions.js';
 import { createAuth, parseCookies, TokenBucket } from './server/auth.js';
 import { generateSuggestion, suggestNext } from './assistant/suggest.js';
 import { createMetrics, type UsedKind } from './server/metrics.js';
+import { createProviderHealth, recordStoreStatus, worstState, type ServiceStatus } from './server/status.js';
+import { db } from './data/store.js';
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
@@ -97,6 +99,21 @@ app.get('/api/metrics', (_req, res) => {
   res.json(metrics.snapshot());
 });
 
+// Service status (issue #5): receipts for answers, status for infrastructure.
+// Provider health comes from real request outcomes; Blu and telemetry are
+// labelled mocks — the honesty line applies to the status page too.
+const providerHealth = createProviderHealth();
+app.get('/api/status', (_req, res) => {
+  const nowIso = new Date().toISOString();
+  const services: ServiceStatus[] = [
+    recordStoreStatus(db as unknown as Record<string, unknown>, ANCHOR_DATE),
+    providerHealth.status(MODEL),
+    { name: 'Blu webhook (mock)', state: 'ok', lastChecked: nowIso, detail: 'Simulated partner feed: voice-agent and portal events land in the record with source badges.' },
+    { name: 'Telemetry (mock)', state: 'ok', lastChecked: nowIso, detail: 'Console exporter only; OpenTelemetry wiring is tracked as issue #4.' },
+  ];
+  res.json({ overall: worstState(services.map((s) => s.state)), services });
+});
+
 app.post('/api/session', (req, res) => {
   if (!passcodeBucket.take(clientIp(req))) return res.status(429).json({ error: 'Too many attempts: give it a minute.' });
   const token = auth.login(String(req.body?.passcode ?? ''));
@@ -117,6 +134,9 @@ async function conversationRoute(req: express.Request, res: express.Response, me
   recordSuggestionUse(req);
   try {
     const result = await runChat(provider.client, messages, provider.model);
+    // Status tracks the SERVER provider only: a visitor's broken BYO key says
+    // nothing about our service, and its error text can echo their key.
+    if (provider.source === 'server') providerHealth.recordSuccess();
     if (provider.source === 'server') void recordReply(corpusLabel, result.reply);
     const suggestion = suggestNext(
       result.toolEvents.map((e) => e.name),
@@ -125,6 +145,7 @@ async function conversationRoute(req: express.Request, res: express.Response, me
     if (suggestion) metrics.recordShown(suggestion.source);
     res.json({ ...result, suggestion });
   } catch (err) {
+    if (provider.source === 'server') providerHealth.recordError(String(err));
     res.status(500).json({ error: String(err) });
   }
 }
@@ -160,6 +181,7 @@ app.post('/api/chat/stream', async (req, res) => {
       onTurnStart: () => emit({ type: 'start' }),
       onText: (text) => emit({ type: 'delta', text }),
     });
+    if (provider.source === 'server') providerHealth.recordSuccess();
     if (provider.source === 'server') void recordReply(messages[messages.length - 1].content, result.reply);
     // The reply ships first — the suggestion must never delay the answer. The
     // contextual (model-generated) suggestion follows as a trailing event; on
@@ -175,6 +197,7 @@ app.post('/api/chat/stream', async (req, res) => {
       emit({ type: 'suggestion', suggestion });
     }
   } catch (err) {
+    if (provider.source === 'server') providerHealth.recordError(String(err));
     emit({ type: 'error', error: String(err) });
   }
   res.end();
