@@ -4,9 +4,12 @@
 // honest probe — a static follow-up per tool, no extra model call, and the
 // shown→used rate tells us whether proactivity earns its place.
 
+import { TOOLS } from '../tools/registry.js';
+import type { ChatClient } from './chat.js';
+
 export interface Suggestion {
   text: string;
-  source: string; // the tool call the suggestion was derived from
+  source: string; // tool name the static map keyed on, 'llm', or 'starter'
 }
 
 // Each entry answers: after a question that ran THIS tool, what does a marina
@@ -38,7 +41,99 @@ const STARTERS: string[] = [
   'How full are the slips right now?',
 ];
 
-export const SUGGESTION_SOURCES = new Set([...Object.keys(FOLLOW_UPS), 'starter']);
+export const SUGGESTION_SOURCES = new Set([...Object.keys(FOLLOW_UPS), 'starter', 'llm']);
+
+const normalize = (q: string) => q.trim().toLowerCase();
+const askedSet = (alreadyAsked: string[]) =>
+  new Set(alreadyAsked.filter((q) => typeof q === 'string').map(normalize));
+
+/**
+ * Sanitizes raw model output into one clean question, or null. Model output is
+ * untrusted: reasoning leakage, preambles, quotes, list markers, rambling.
+ * Null means the caller falls back to the static map — the LLM path can only
+ * ever degrade to current behavior, never below it.
+ */
+export function extractSuggestionText(raw: string, alreadyAsked: string[] = []): string | null {
+  let t = raw.replace(/<think>[\s\S]*?(<\/think>|$)/g, '');
+  if (t.includes('</think>')) t = t.slice(t.lastIndexOf('</think>') + '</think>'.length);
+  // Reasoning models can leak untagged deliberation before the question; the
+  // conclusion comes last, so take the last plausible question line.
+  const lines = t.split('\n').map((s) => s.trim()).filter(Boolean).reverse();
+  for (const line of lines) {
+    const q = line
+      .replace(/^(?:[-*>]|\d+[.)])\s+/, '')
+      .replace(/^["'`]+/, '')
+      .replace(/["'`]+$/, '')
+      .trim();
+    if (!q || q.length > 140 || !q.endsWith('?')) continue;
+    if (askedSet(alreadyAsked).has(normalize(q))) return null; // the model's pick was already asked — do not fish deeper
+    return q;
+  }
+  return null;
+}
+
+/**
+ * Contextual suggestion: one extra small model call after the reply, so the
+ * suggestion tracks what the answer actually said (the static map cannot know
+ * the briefing's headline was overdue invoices). Guard rails stay in code:
+ * sanitizer, asked-exclusion, timeout, and null-on-anything-wrong so the
+ * caller falls back to the static map.
+ */
+export async function generateSuggestion(
+  client: ChatClient,
+  model: string,
+  conversation: { role: string; content: unknown }[],
+  alreadyAsked: string[],
+  timeoutMs = 20_000,
+): Promise<Suggestion | null> {
+  const transcript = conversation
+    .filter((m) => typeof m.content === 'string')
+    .slice(-8)
+    .map((m) => `${m.role === 'user' ? 'User' : 'Assistant'}: ${(m.content as string).slice(0, 600)}`)
+    .join('\n');
+  const toolLines = TOOLS.map((t) => `- ${t.name}: ${t.description}`).join('\n');
+  // Single user message: provider-safe (Anthropic requires the first message
+  // to be a user turn), and no tools are offered — this call must only write.
+  const params = {
+    model,
+    // Generous on purpose: reasoning models spend most of this thinking, and
+    // a truncated thought yields no question at all (seen with qwen3:4b and
+    // gpt-oss). "Reasoning: low" is gpt-oss's own dial for exactly this; other
+    // models read it as an ignorable style hint.
+    max_tokens: 800,
+    system:
+      'Reasoning: low\n' +
+      'You suggest the next question for the operator of a marina operations assistant. ' +
+      'Reply with exactly one short question and nothing else: no preamble, no quotes, no list. ' +
+      'It must be answerable from the data tools listed, must follow naturally from the conversation, ' +
+      'and must not repeat a question already asked.',
+    messages: [
+      {
+        role: 'user',
+        content: `Conversation so far:\n${transcript}\n\nData tools available:\n${toolLines}\n\nSuggest the single best next question I should ask.`,
+      },
+    ],
+  };
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const resp: any = await Promise.race([
+      client.create(params),
+      new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error('suggestion timeout')), timeoutMs);
+      }),
+    ]);
+    const text = (resp.content ?? [])
+      .filter((b: any) => b.type === 'text')
+      .map((b: any) => b.text)
+      .join('');
+    const q = extractSuggestionText(text, alreadyAsked);
+    return q ? { text: q, source: 'llm' } : null;
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timer);
+  }
+}
 
 /**
  * Most recent tool with a mapped follow-up wins; null when nothing maps.
@@ -50,13 +145,13 @@ export const SUGGESTION_SOURCES = new Set([...Object.keys(FOLLOW_UPS), 'starter'
 export function suggestNext(toolNames: string[], alreadyAsked: string[] = []): Suggestion | null {
   // API callers may send block-array content (the adapters accept it); only
   // string turns can match a follow-up, and nothing here may throw post-reply.
-  const asked = new Set(alreadyAsked.filter((q) => typeof q === 'string').map((q) => q.trim().toLowerCase()));
+  const asked = askedSet(alreadyAsked);
   for (let i = toolNames.length - 1; i >= 0; i--) {
     const text = FOLLOW_UPS[toolNames[i]];
-    if (text && !asked.has(text.trim().toLowerCase())) return { text, source: toolNames[i] };
+    if (text && !asked.has(normalize(text))) return { text, source: toolNames[i] };
   }
   for (const text of STARTERS) {
-    if (!asked.has(text.trim().toLowerCase())) return { text, source: 'starter' };
+    if (!asked.has(normalize(text))) return { text, source: 'starter' };
   }
   return null;
 }

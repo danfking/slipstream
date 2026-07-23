@@ -331,7 +331,11 @@ function addStreamingBubble() {
  * The pipeline is prefix-stable by property test, so intermediate states are
  * always valid; remend closes unterminated syntax mid-stream.
  */
+let converseSeq = 0; // guards stale streams: input unlocks at done, so an old
+// stream's trailing suggestion (or its cleanup) must not touch a newer turn
+
 async function converse(payloadMessages, pendingLabel, question, extraHeaders = {}) {
+  const myTurn = ++converseSeq;
   // The old suggestion is stale the moment a question is in flight — clear it
   // until the reply brings a fresh one (or none).
   setSuggestion(null);
@@ -360,8 +364,47 @@ async function converse(payloadMessages, pendingLabel, question, extraHeaders = 
       return;
     }
 
-    let doneEvent = null;
+    let doneHandled = false;
     let errorEvent = null;
+
+    // The reply renders and the input unlocks the moment done arrives — the
+    // stream then stays open only for the trailing contextual suggestion,
+    // which must never hold the conversation hostage.
+    const renderDone = (ev) => {
+      doneHandled = true;
+      if (!bubble) clearPending();
+      const toolEvents = ev.toolEvents ?? [];
+      // Belt to the server's braces: an empty reply must read as a failure
+      // with a retry, never as a silent empty bubble.
+      if (!ev.reply?.trim()) {
+        bubble?.remove();
+        bubble = null;
+        addErrorCard('The stream completed but the reply was empty.', retry, {
+          heading: 'The model returned an empty answer',
+          body: 'The model was reached but produced nothing this time. It happens occasionally; retrying usually fixes it.',
+        });
+        // Unlock here too: the stream may stay open for the trailing
+        // suggestion, and an error card with a frozen input reads as a hang.
+        briefingBtn.disabled = false;
+        input.disabled = false;
+        syncSendState();
+        return;
+      }
+      if (!bubble) bubble = addStreamingBubble();
+      // Final render replaces the streamed approximation: citation chips need
+      // the turn's tool list, which only exists at completion.
+      window.Idiomorph.morph(bubble, assistantHtml(ev.reply, toolEvents.map((t) => t.name)), { morphStyle: 'innerHTML' });
+      bubble.classList.remove('streaming');
+      history.push({ role: 'assistant', content: ev.reply });
+      addReceiptGroup(question, toolEvents);
+      renderApprovalCards(toolEvents);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+      briefingBtn.disabled = false;
+      input.disabled = false;
+      syncSendState();
+      input.focus();
+    };
+
     const handleEvent = (ev) => {
       if (ev.type === 'start') {
         buffer = '';
@@ -375,7 +418,9 @@ async function converse(payloadMessages, pendingLabel, question, extraHeaders = 
         window.Idiomorph.morph(bubble, assistantHtml(buffer, []), { morphStyle: 'innerHTML' });
         messagesEl.scrollTop = messagesEl.scrollHeight;
       } else if (ev.type === 'done') {
-        doneEvent = ev;
+        renderDone(ev);
+      } else if (ev.type === 'suggestion') {
+        if (converseSeq === myTurn) setSuggestion(ev.suggestion);
       } else if (ev.type === 'error') {
         errorEvent = ev;
       }
@@ -402,43 +447,29 @@ async function converse(payloadMessages, pendingLabel, question, extraHeaders = 
         }
       }
     }
-    if (!bubble) clearPending(); // stream ended without any delta
-
-    if (errorEvent || !doneEvent) {
+    if (!doneHandled) {
+      if (!bubble) clearPending(); // stream ended without any delta
       bubble?.remove();
       addErrorCard(errorEvent?.error ?? 'The stream ended unexpectedly.', retry);
-      return;
     }
-    const toolEvents = doneEvent.toolEvents ?? [];
-    // Belt to the server's braces: an empty reply must read as a failure with
-    // a retry, never as a silent empty bubble.
-    if (!doneEvent.reply?.trim()) {
-      bubble?.remove();
-      addErrorCard('The stream completed but the reply was empty.', retry, {
-        heading: 'The model returned an empty answer',
-        body: 'The model was reached but produced nothing this time. It happens occasionally; retrying usually fixes it.',
-      });
-      return;
-    }
-    if (!bubble) bubble = addStreamingBubble();
-    // Final render replaces the streamed approximation: citation chips need
-    // the turn's tool list, which only exists at completion.
-    window.Idiomorph.morph(bubble, assistantHtml(doneEvent.reply, toolEvents.map((t) => t.name)), { morphStyle: 'innerHTML' });
-    bubble.classList.remove('streaming');
-    setSuggestion(doneEvent.suggestion);
-    history.push({ role: 'assistant', content: doneEvent.reply });
-    addReceiptGroup(question, toolEvents);
-    renderApprovalCards(toolEvents);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
   } catch (err) {
-    clearPending();
-    bubble?.remove();
-    addErrorCard(err, retry);
+    // After done the turn is complete and rendered; a failure in the trailing
+    // suggestion window (up to ~20s of open stream) must not tear it down or
+    // offer a retry that would resend a history ending in an assistant turn.
+    if (!doneHandled) {
+      clearPending();
+      bubble?.remove();
+      addErrorCard(err, retry);
+    }
   } finally {
-    briefingBtn.disabled = false;
-    input.disabled = false;
-    syncSendState(); // stays dimmed when the input is empty again
-    input.focus();
+    // Idempotent when renderDone already unlocked; the seq guard keeps an old
+    // stream's cleanup from re-enabling the input mid-way through a new turn.
+    if (converseSeq === myTurn) {
+      briefingBtn.disabled = false;
+      input.disabled = false;
+      syncSendState(); // stays dimmed when the input is empty again
+      input.focus();
+    }
   }
 }
 

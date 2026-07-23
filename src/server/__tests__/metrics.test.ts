@@ -25,6 +25,13 @@ describe('createMetrics', () => {
     expect(m.snapshot().suggestionsUsed).toBe(0);
   });
 
+  it('accepts the llm pseudo-source (contextual suggestions generated post-reply)', () => {
+    const m = createMetrics();
+    m.recordShown('llm');
+    m.recordUsed('edited', 'llm');
+    expect(m.snapshot().bySource.llm).toEqual({ shown: 1, used: 1 });
+  });
+
   it('accepts the starter pseudo-source (no-tool turns fall back to starter questions)', () => {
     const m = createMetrics();
     m.recordShown('starter');
