@@ -275,10 +275,16 @@ const syncSendState = () => { sendBtn.disabled = !input.value.trim(); };
 input.addEventListener('input', syncSendState);
 syncSendState();
 
+// Mirror of BRIEFING_PROMPT in src/server.ts — keep in sync. The history must
+// record what the model was actually asked, or follow-up turns hand it a
+// conversation that misdescribes its own first exchange.
+const BRIEFING_PROMPT =
+  "Give me the morning briefing: overnight activity, this week's biggest operational risk, and the one financial number I should act on today. Be specific and cite figures.";
+
 briefingBtn.addEventListener('click', () => {
   addMsg('user', 'Morning briefing');
   // Keep history well-formed: the API requires the first message to be a user
   // turn, and converse() appends the assistant reply to history.
-  history.push({ role: 'user', content: 'Give me the morning briefing.' });
+  history.push({ role: 'user', content: BRIEFING_PROMPT });
   converse('/api/briefing', undefined, 'Assembling the briefing', 'Morning briefing');
 });
