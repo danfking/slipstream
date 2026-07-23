@@ -62,6 +62,17 @@ header .sub { font-size: 13px; opacity: 0.85; }
    exactly the thing a viewer must not miss. */
 .badge.demo { background: var(--ds-gold); border-color: var(--ds-gold); color: var(--ds-navy-dark); font-weight: 600; }
 
+/* Badges that are links (the "present ▸" deck link): without this the browser's
+   default anchor blue + underline renders on the navy header, near-invisible. */
+a.badge, a.badge:visited {
+  color: #fff;
+  text-decoration: none;
+  background: var(--ds-teal, #0e7a8a);
+  border-color: var(--ds-teal, #0e7a8a);
+  font-weight: 600;
+}
+a.badge:hover, a.badge:focus-visible { filter: brightness(1.15); text-decoration: underline; }
+
 main {
   flex: 1;
   display: flex;
