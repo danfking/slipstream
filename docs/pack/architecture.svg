@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 560" font-family="-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5a6b7a"/>
+    </marker>
+  </defs>
+
+  <!-- System of record -->
+  <rect x="30" y="150" width="200" height="260" rx="10" fill="#161848"/>
+  <text x="130" y="185" text-anchor="middle" fill="#ffffff" font-size="17" font-weight="600">System of record</text>
+  <text x="130" y="215" text-anchor="middle" fill="#c9cdea" font-size="13">customers · boats · slips</text>
+  <text x="130" y="236" text-anchor="middle" fill="#c9cdea" font-size="13">work orders · labour</text>
+  <text x="130" y="257" text-anchor="middle" fill="#c9cdea" font-size="13">parts · invoices</text>
+  <text x="130" y="292" text-anchor="middle" fill="#ffd87a" font-size="12.5">the moat: only DockMaster</text>
+  <text x="130" y="310" text-anchor="middle" fill="#ffd87a" font-size="12.5">holds this data</text>
+  <text x="130" y="384" text-anchor="middle" fill="#8b90bb" font-size="12">(demo: seeded copy ·</text>
+  <text x="130" y="401" text-anchor="middle" fill="#8b90bb" font-size="12">production: the live database)</text>
+
+  <!-- Tool layer -->
+  <rect x="300" y="150" width="220" height="260" rx="10" fill="#ffffff" stroke="#161848" stroke-width="2.5"/>
+  <text x="410" y="185" text-anchor="middle" fill="#161848" font-size="17" font-weight="600">Typed tool layer</text>
+  <text x="410" y="213" text-anchor="middle" fill="#3a4560" font-size="13">nine read functions</text>
+  <text x="410" y="233" text-anchor="middle" fill="#3a4560" font-size="13">one draft action</text>
+  <text x="410" y="266" text-anchor="middle" fill="#0e7a8a" font-size="12.5" font-weight="600">every number is computed</text>
+  <text x="410" y="284" text-anchor="middle" fill="#0e7a8a" font-size="12.5" font-weight="600">by tested code, never the model</text>
+  <text x="410" y="320" text-anchor="middle" fill="#3a4560" font-size="12.5">this is also the public API</text>
+  <text x="410" y="338" text-anchor="middle" fill="#3a4560" font-size="12.5">DockMaster doesn't have yet</text>
+  <line x1="230" y1="280" x2="300" y2="280" stroke="#5a6b7a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Consumers -->
+  <rect x="610" y="40" width="330" height="130" rx="10" fill="#ffffff" stroke="#0e7a8a" stroke-width="2.5"/>
+  <text x="775" y="70" text-anchor="middle" fill="#161848" font-size="16" font-weight="600">Assistant (today)</text>
+  <text x="775" y="96" text-anchor="middle" fill="#3a4560" font-size="12.5">chat with receipts on every answer</text>
+  <text x="775" y="115" text-anchor="middle" fill="#3a4560" font-size="12.5">writes only via human approval</text>
+  <text x="775" y="141" text-anchor="middle" fill="#0e7a8a" font-size="12.5">model routes questions; a person holds approvals</text>
+  <line x1="520" y1="210" x2="610" y2="110" stroke="#5a6b7a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="610" y="200" width="330" height="90" rx="10" fill="#ffffff" stroke="#161848" stroke-width="2"/>
+  <text x="775" y="230" text-anchor="middle" fill="#161848" font-size="16" font-weight="600">Golden batch (every release)</text>
+  <text x="775" y="256" text-anchor="middle" fill="#3a4560" font-size="12.5">real questions, known answers,</text>
+  <text x="775" y="274" text-anchor="middle" fill="#3a4560" font-size="12.5">run against the live stack</text>
+  <line x1="520" y1="255" x2="610" y2="245" stroke="#5a6b7a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="610" y="320" width="330" height="90" rx="10" fill="#ffffff" stroke="#5a6b7a" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="775" y="350" text-anchor="middle" fill="#3a4560" font-size="16" font-weight="600">Partners &amp; customer AI (later)</text>
+  <text x="775" y="376" text-anchor="middle" fill="#5a6b7a" font-size="12.5">Blu and integration partners; selected</text>
+  <text x="775" y="394" text-anchor="middle" fill="#5a6b7a" font-size="12.5">customers' own AI tools, read-only</text>
+  <line x1="520" y1="330" x2="610" y2="360" stroke="#5a6b7a" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+
+  <rect x="610" y="440" width="330" height="80" rx="10" fill="#ffffff" stroke="#5a6b7a" stroke-width="2" stroke-dasharray="7 5"/>
+  <text x="775" y="470" text-anchor="middle" fill="#3a4560" font-size="16" font-weight="600">Advisor &amp; agent teams (later)</text>
+  <text x="775" y="496" text-anchor="middle" fill="#5a6b7a" font-size="12.5">proactive findings, then approved actions</text>
+  <line x1="520" y1="380" x2="610" y2="470" stroke="#5a6b7a" stroke-width="2" stroke-dasharray="7 5" marker-end="url(#arrow)"/>
+
+  <!-- Model provider -->
+  <rect x="300" y="460" width="220" height="70" rx="10" fill="#f3f4f6" stroke="#5a6b7a" stroke-width="2"/>
+  <text x="410" y="488" text-anchor="middle" fill="#161848" font-size="15" font-weight="600">Model provider</text>
+  <text x="410" y="510" text-anchor="middle" fill="#3a4560" font-size="12.5">a setting: commercial API or local</text>
+  <line x1="410" y1="460" x2="410" y2="410" stroke="#5a6b7a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Read-only boundary note -->
+  <text x="30" y="50" fill="#161848" font-size="15" font-weight="600">One layer, several consumers.</text>
+  <text x="30" y="74" fill="#3a4560" font-size="13">Data flows left to right; nothing writes back without a person approving it.</text>
+</svg>
