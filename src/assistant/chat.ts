@@ -63,6 +63,7 @@ export async function runChat(client: ChatClient, messages: ChatMessage[], model
       if (!reply.trim()) {
         if (emptyRetries < 1) {
           emptyRetries++;
+          i--; // the retry must not burn a step, or an empty final turn skips it
           continue; // nothing was added to convo, so this re-asks the same turn
         }
         return { reply: 'I did not get a usable answer from the model that time. Please try asking again.', toolEvents };
