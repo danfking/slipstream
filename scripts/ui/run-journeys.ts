@@ -197,9 +197,22 @@ async function runJourney(browser: Browser, journey: Journey, runDir: string, or
         lintRendered: (raw: string, html: string) => string[];
       };
       const { lintRendered } = mod;
-      return [...document.querySelectorAll('.msg.assistant:not(.pending)')].flatMap((el, i) =>
+      const issues = [...document.querySelectorAll('.msg.assistant:not(.pending)')].flatMap((el, i) =>
         lintRendered('', el.innerHTML).map((issue) => `message ${i}: ${issue}`),
       );
+      // Scroll-reachability: every pixel of the thread must be scrollable.
+      // justify-content:flex-end once pushed overflow above the scroll origin —
+      // screenshots looked fine on short threads and the top of long ones was
+      // unreachable. Assert the container scrolls to its own top.
+      const messages = document.getElementById('messages');
+      if (messages && messages.scrollHeight > messages.clientHeight + 1) {
+        messages.scrollTop = 0;
+        const first = messages.firstElementChild?.getBoundingClientRect();
+        const box = messages.getBoundingClientRect();
+        if (first && first.top < box.top - 1) issues.push('chat overflow is unreachable above the scroll origin');
+        messages.scrollTop = messages.scrollHeight;
+      }
+      return issues;
     });
   } catch (err) {
     mdIssues = [`lint gate failed to run: ${String(err).slice(0, 120)}`];

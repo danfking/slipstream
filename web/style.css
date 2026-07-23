@@ -85,8 +85,15 @@ main {
   gap: 14px;
   /* Anchor the thread to the bottom like any chat surface. Top-aligned, a
      short conversation left the lower half of the frame an empty grey field,
-     which reads as unfinished in a demo frame. */
-  justify-content: flex-end;
+     which reads as unfinished in a demo frame.
+     NOT justify-content: flex-end — that pushes overflowing content above the
+     scroll origin where overflow-y cannot reach it (the "can't scroll up" bug).
+     margin-top: auto on the first child bottom-anchors short threads and
+     collapses to zero once content overflows, so scrolling stays normal. */
+}
+
+#messages > :first-child {
+  margin-top: auto;
 }
 
 /* Empty state: centred icon over one muted line, per the DockMaster idiom. */
