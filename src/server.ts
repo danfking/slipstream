@@ -25,8 +25,11 @@ if (auth.mode === 'gated') {
 }
 
 // Abuse ceiling for the shared hosted key (burnish's pattern). Generous enough
-// for a live demo, tight enough that a stranger cannot drain the credit.
-const bucket = new TokenBucket(10, 60_000);
+// for a live demo with retries, tight enough that a stranger cannot drain the
+// credit. A separate, stricter bucket guards the passcode endpoint — that is
+// the one worth brute-forcing.
+const bucket = new TokenBucket(20, 60_000);
+const passcodeBucket = new TokenBucket(5, 60_000);
 const trustProxy = process.env.TRUST_PROXY === 'true';
 if (trustProxy) app.set('trust proxy', true);
 const clientIp = (req: express.Request) => (trustProxy ? req.ip : req.socket.remoteAddress) ?? 'unknown';
@@ -75,6 +78,7 @@ app.get('/api/health', (req, res) => {
 });
 
 app.post('/api/session', (req, res) => {
+  if (!passcodeBucket.take(clientIp(req))) return res.status(429).json({ error: 'Too many attempts: give it a minute.' });
   const token = auth.login(String(req.body?.passcode ?? ''));
   if (!token) return res.status(401).json({ error: 'wrong passcode' });
   res.setHeader(

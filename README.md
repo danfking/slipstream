@@ -55,6 +55,8 @@ fly secrets set -a slipstream-demo SLIPSTREAM_PASSCODE="<choose one>" SLIPSTREAM
 fly tokens create deploy -a slipstream-demo   # → add as FLY_API_TOKEN repo secret on GitHub
 ```
 
+Check `SLIPSTREAM_MODEL` in `deploy/fly.toml` against the models your OpenAI account actually lists (`gpt-4o-mini` assumed) before the first deploy.
+
 Hosted behaviour: `/deck.html` and `/pack/*` are public (the pitch burns no credits); `/api/chat`, `/api/briefing`, and `/api/approve` require either the passcode session (server-held key, Dan's OpenAI credit) or bring-your-own-key headers (key stays in the visitor's browser, used per request, never stored or logged). A per-IP token bucket caps usage. Locally, with no `SLIPSTREAM_PASSCODE` set, everything stays open exactly as before.
 
 ## The deck
