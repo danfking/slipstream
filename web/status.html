@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Slipstream — service status</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="status-page">
+  <header>
+    <div>
+      <h1>Service status</h1>
+      <p class="sub">Every dependency the assistant answers through, with its current state</p>
+    </div>
+    <div class="meta">
+      <a class="badge deck-link" href="/">back to demo</a>
+    </div>
+  </header>
+
+  <main class="status-main">
+    <div class="status-overall" id="status-overall">
+      <span class="status-dot" id="overall-dot"></span>
+      <span id="overall-label">Checking…</span>
+    </div>
+    <div id="status-services" class="status-services"></div>
+    <p class="status-note">Provider health reflects actual request outcomes, not synthetic probes. Entries marked mock are simulated for this demo and say so in their detail line.</p>
+  </main>
+
+  <script type="module" src="status.js"></script>
+</body>
+</html>

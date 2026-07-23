@@ -100,6 +100,20 @@ document.getElementById('gate-key-btn').addEventListener('click', () => {
   gate.close();
 });
 
+// Header status dot (issue #5): worst component state, links to /status.html.
+// Refreshed on load, after every turn (a provider failure should show at the
+// moment it happens, not a poll later), and on a slow interval.
+async function refreshStatus() {
+  try {
+    const s = await fetch('/api/status').then((r) => r.json());
+    document.getElementById('header-status-dot').className = `status-dot ${s.overall}`;
+  } catch {
+    document.getElementById('header-status-dot').className = 'status-dot down';
+  }
+}
+refreshStatus();
+setInterval(refreshStatus, 30_000);
+
 fetch('/api/health').then((r) => r.json()).then((h) => {
   document.getElementById('meta-date').textContent = `today: ${h.anchorDate}`;
   document.getElementById('meta-model').textContent = h.model;
@@ -470,6 +484,7 @@ async function converse(payloadMessages, pendingLabel, question, extraHeaders = 
       syncSendState(); // stays dimmed when the input is empty again
       input.focus();
     }
+    refreshStatus(); // provider failures should surface in the dot immediately
   }
 }
 
