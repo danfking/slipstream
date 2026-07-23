@@ -45,6 +45,12 @@ describe('suggestNext', () => {
     expect(suggestNext(['get_schedule_load', 'get_unbilled_work'], asked)).toBeNull();
   });
 
+  it('tolerates non-string conversation content without throwing (API callers send block arrays)', () => {
+    const asked = [[{ type: 'text', text: 'hi' }] as unknown as string, 'Which jobs are blocked waiting on parts?'];
+    const s = suggestNext(['get_schedule_load'], asked);
+    expect(s).toBeNull();
+  });
+
   it('never suggests the question that leads back to the same tool (no loops)', () => {
     for (const tool of ['get_unbilled_work', 'get_schedule_load', 'get_parts_blockers', 'get_receivables', 'get_overnight_activity', 'get_occupancy', 'draft_invoices']) {
       const s = suggestNext([tool]);

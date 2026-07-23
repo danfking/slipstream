@@ -34,7 +34,9 @@ export const SUGGESTION_SOURCES = new Set(Object.keys(FOLLOW_UPS));
  * request carries the conversation, so the exclusion needs no session state.
  */
 export function suggestNext(toolNames: string[], alreadyAsked: string[] = []): Suggestion | null {
-  const asked = new Set(alreadyAsked.map((q) => q.trim().toLowerCase()));
+  // API callers may send block-array content (the adapters accept it); only
+  // string turns can match a follow-up, and nothing here may throw post-reply.
+  const asked = new Set(alreadyAsked.filter((q) => typeof q === 'string').map((q) => q.trim().toLowerCase()));
   for (let i = toolNames.length - 1; i >= 0; i--) {
     const text = FOLLOW_UPS[toolNames[i]];
     if (text && !asked.has(text.trim().toLowerCase())) return { text, source: toolNames[i] };
