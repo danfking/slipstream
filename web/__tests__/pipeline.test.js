@@ -72,12 +72,15 @@ describe('pack slides render clean', () => {
   test('presenter slides are bullets only: h1, optional ### subheads, list items', () => {
     for (const f of presenterFiles) {
       const body = f.raw.split('\n').slice(1); // drop the h1 line
+      let bullets = 0;
       for (const line of body) {
         const t = line.trim();
         if (!t) continue;
         const ok = t.startsWith('- ') || t.startsWith('### ');
         expect(ok, `${f.name} has non-bullet prose: "${t.slice(0, 50)}"`).toBe(true);
+        if (t.startsWith('- ')) bullets++;
       }
+      expect(bullets, `${f.name} has no bullets`).toBeGreaterThan(0);
     }
   });
 });
