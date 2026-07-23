@@ -47,12 +47,12 @@ Provider and model choice is deliberately configuration, not architecture. Examp
 
 ## Hosting (Fly.io, burnish pattern)
 
-The app deploys to Fly.io as `slipstream-demo` via `.github/workflows/deploy.yml` on every push to `main` (remote Docker build, no local Docker needed). One-time setup, run by Dan (keys never leave your terminal):
+The app deploys to Fly.io as `slipstream-dk` via `.github/workflows/deploy.yml` on every push to `main` (remote Docker build, no local Docker needed). One-time setup, run by Dan (keys never leave your terminal):
 
 ```bash
-fly apps create slipstream-demo
-fly secrets set -a slipstream-demo SLIPSTREAM_PASSCODE="<choose one>" SLIPSTREAM_PROVIDER_KEY="<OpenAI API key>"
-fly tokens create deploy -a slipstream-demo   # → add as FLY_API_TOKEN repo secret on GitHub
+fly apps create slipstream-dk
+fly secrets set -a slipstream-dk SLIPSTREAM_PASSCODE="<choose one>" SLIPSTREAM_PROVIDER_KEY="<OpenAI API key>"
+fly tokens create deploy -a slipstream-dk   # → add as FLY_API_TOKEN repo secret on GitHub
 ```
 
 Check `SLIPSTREAM_MODEL` in `deploy/fly.toml` against the models your OpenAI account actually lists (`gpt-4o-mini` assumed) before the first deploy.
