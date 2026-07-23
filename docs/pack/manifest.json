@@ -1,0 +1,16 @@
+{
+  "title": "AI Opportunities at DockMaster — Slipstream",
+  "slides": [
+    { "file": "01-brief-and-method.md", "title": "The brief and the method" },
+    { "file": "02-criteria.md", "title": "Five tests" },
+    { "file": "03-candidates.md", "title": "Candidates and kills" },
+    { "file": "04-product-shape.md", "title": "Product shape" },
+    { "file": "05-build-vs-partner.md", "title": "Build vs partner" },
+    { "file": "06-architecture-trust.md", "title": "Architecture and trust" },
+    { "file": "07-demo.md", "title": "Live demo" },
+    { "file": "08-gtm.md", "title": "Go-to-market" },
+    { "file": "09-expand-metrics.md", "title": "Scale and metrics" },
+    { "file": "10-honesty.md", "title": "The honesty line" },
+    { "file": "11-appendix-decisions.md", "title": "Appendix: decision record" }
+  ]
+}

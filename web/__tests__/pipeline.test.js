@@ -26,6 +26,26 @@ const fixtures = readdirSync(fixturesDir)
   .filter((f) => f.endsWith('.txt'))
   .map((f) => ({ name: f, raw: readFileSync(join(fixturesDir, f), 'utf-8') }));
 
+// The written pack rides the same pipeline as chat replies, so it gets the
+// same machine gate: every slide must render lint-free.
+const packDir = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'docs', 'pack');
+const packSlides = readdirSync(packDir)
+  .filter((f) => f.endsWith('.md'))
+  .map((f) => ({ name: f, raw: readFileSync(join(packDir, f), 'utf-8') }));
+
+describe('pack slides render clean', () => {
+  test.each(packSlides.map((f) => [f.name, f.raw]))('%s → lint-free HTML', (_name, raw) => {
+    const html = renderMarkdown(raw, [], deps);
+    expect(lintRendered(raw, html)).toEqual([]);
+  });
+
+  test('manifest lists every slide file exactly once', () => {
+    const manifest = JSON.parse(readFileSync(join(packDir, 'manifest.json'), 'utf-8'));
+    const listed = manifest.slides.map((s) => s.file).sort();
+    expect(listed).toEqual(packSlides.map((f) => f.name).sort());
+  });
+});
+
 // 06 exists to prove the lint CATCHES what repair correctly refuses to guess at.
 const expectFlagged = new Set(['06-unbalanced-emphasis.txt']);
 const clean = fixtures.filter((f) => !expectFlagged.has(f.name));

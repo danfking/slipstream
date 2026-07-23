@@ -10,6 +10,9 @@ import { applyInvoiceDrafts, type InvoiceDraft } from './tools/actions.js';
 const app = express();
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static('web'));
+// The written pack, served to the in-app deck (web/deck.html) so the whole
+// debrief — slides and live demo — happens in one browser tab.
+app.use('/pack', express.static('docs/pack'));
 
 const client = makeClient();
 
