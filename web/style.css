@@ -393,3 +393,43 @@ main {
 .status-detail { font-size: 13px; color: var(--ds-text-muted); margin: 6px 0 2px 20px; }
 .status-checked { font-size: 12px; color: var(--ds-text-muted); margin-left: 20px; }
 .status-note { font-size: 12.5px; color: var(--ds-text-muted); margin-top: 20px; }
+
+/* --- synthetic-data browser (issue #6) ------------------------------------- */
+.data-page main.data-main {
+  display: block; /* beats the base `main { display: flex }` row layout */
+  max-width: 1100px; margin: 24px auto; padding: 0 20px; width: 100%;
+  overflow-y: auto;
+}
+.record-meta { font-size: 14px; color: var(--ds-text-muted); margin-bottom: 14px; }
+.collection-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+.collection-nav a {
+  font-size: 12.5px; font-weight: 600; text-decoration: none;
+  color: var(--ds-navy); background: var(--ds-surface);
+  border: 1px solid var(--ds-border); border-radius: var(--ds-radius-pill);
+  padding: 5px 12px;
+}
+.collection-nav a:hover, .collection-nav a:focus-visible { border-color: var(--ds-navy); }
+.data-page section { margin-bottom: 30px; }
+.data-page section h2 { font-size: 17px; margin-bottom: 8px; }
+.data-table-wrap {
+  overflow-x: auto; background: var(--ds-surface);
+  border: 1px solid var(--ds-border); border-radius: var(--ds-radius-md);
+  /* Vertical scroll must live HERE for the sticky th to engage: the wrap is
+     the header's nearest scroll container once overflow is non-visible. */
+  max-height: 70vh; overflow-y: auto;
+}
+.data-table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.data-table th {
+  position: sticky; top: 0; background: var(--ds-surface-sunken);
+  border-bottom: 1px solid var(--ds-border); text-align: left; padding: 0;
+}
+.data-table th button {
+  all: unset; cursor: pointer; display: block; width: 100%;
+  padding: 8px 12px; font-weight: 600; font-size: 12.5px; color: var(--ds-navy);
+}
+.data-table th button:hover, .data-table th button:focus-visible { background: var(--ds-border); }
+.data-table th button[data-dir="asc"]::after { content: " \2191"; }
+.data-table th button[data-dir="desc"]::after { content: " \2193"; }
+.data-table td { padding: 7px 12px; border-bottom: 1px solid var(--ds-border); white-space: nowrap; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tr.row-overdue td { background: #fdeceb; }
