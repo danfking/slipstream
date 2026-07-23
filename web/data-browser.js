@@ -115,14 +115,35 @@ async function main() {
     const db = await fetch('/api/record').then((r) => r.json());
     document.getElementById('record-meta').textContent =
       `Anchor date ${db.anchorDate}. Every number the assistant cites resolves to a row on this page.`;
+
+    // The pills are filters, not anchors: click one to see just that
+    // collection, click it again (or All) to see everything.
+    const sections = new Map(); // key → section element
+    const pills = new Map(); // key → pill button (null key = All)
+    let active = null;
+    const setFilter = (key) => {
+      active = key;
+      for (const [k, section] of sections) section.hidden = key !== null && k !== key;
+      for (const [k, pill] of pills) {
+        pill.classList.toggle('active', k === key);
+        pill.setAttribute('aria-pressed', String(k === key)); // toggle state for assistive tech
+      }
+    };
+    const addPill = (key, label) => {
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.textContent = label;
+      pill.addEventListener('click', () => setFilter(key === active ? null : key));
+      pills.set(key, pill);
+      nav.appendChild(pill);
+    };
+    addPill(null, 'All');
+
     for (const [key, title] of Object.entries(TITLES)) {
       const rows = db[key];
       if (!Array.isArray(rows)) continue;
 
-      const link = document.createElement('a');
-      link.href = `#${key}`;
-      link.textContent = `${title} (${rows.length})`;
-      nav.appendChild(link);
+      addPill(key, `${title} (${rows.length})`);
 
       const section = document.createElement('section');
       section.id = key;
@@ -132,8 +153,10 @@ async function main() {
       wrap.className = 'data-table-wrap';
       wrap.replaceChildren(renderTable(wrap, rows, { column: null, direction: 'asc' }));
       section.append(h2, wrap);
+      sections.set(key, section);
       root.appendChild(section);
     }
+    setFilter(null);
   } catch {
     document.getElementById('record-meta').textContent = 'Could not load the record (is the server running?)';
   }
