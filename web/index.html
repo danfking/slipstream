@@ -49,6 +49,38 @@
     </aside>
   </main>
 
+  <!-- Credential gate (hosted mode only): passcode unlocks the server key, or
+       bring your own — stored in this browser, sent per request, never kept
+       server-side. -->
+  <dialog id="gate">
+    <h3>Unlock Slipstream</h3>
+    <div class="gate-section">
+      <label for="gate-passcode">Passcode</label>
+      <div class="gate-row">
+        <input id="gate-passcode" type="password" autocomplete="off" placeholder="from the presenter" />
+        <button type="button" id="gate-passcode-btn">Unlock</button>
+      </div>
+      <p class="gate-error" id="gate-passcode-error"></p>
+    </div>
+    <div class="gate-divider">or bring your own model key</div>
+    <div class="gate-section">
+      <div class="gate-row">
+        <select id="gate-provider">
+          <option value="openai">OpenAI</option>
+          <option value="anthropic">Anthropic</option>
+          <option value="custom">OpenAI-compatible URL</option>
+        </select>
+        <input id="gate-model" type="text" placeholder="model (optional)" />
+      </div>
+      <input id="gate-base-url" type="text" class="gate-hidden" placeholder="https://your-endpoint/v1" />
+      <div class="gate-row">
+        <input id="gate-key" type="password" autocomplete="off" placeholder="API key — stays in this browser" />
+        <button type="button" id="gate-key-btn">Use my key</button>
+      </div>
+      <p class="gate-note">Your key is stored in this browser only and sent per request. It is never saved on the server.</p>
+    </div>
+  </dialog>
+
   <!-- Vendored, not CDN: the demo has to render markdown with the venue wifi off. -->
   <script src="vendor/marked.umd.js"></script>
   <script src="vendor/purify.min.js"></script>

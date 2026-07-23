@@ -45,6 +45,22 @@ Provider and model choice is deliberately configuration, not architecture. Examp
 4. A golden batch (`npm run golden`) runs ten real questions with asserted answers end-to-end through the same HTTP stack the UI uses; it gates releases.
 5. The dataset is synthetic and deterministic (fixed seed, fixed anchor date), so every demo run is reproducible.
 
+## Hosting (Fly.io, burnish pattern)
+
+The app deploys to Fly.io as `slipstream-demo` via `.github/workflows/deploy.yml` on every push to `main` (remote Docker build, no local Docker needed). One-time setup, run by Dan (keys never leave your terminal):
+
+```bash
+fly apps create slipstream-demo
+fly secrets set -a slipstream-demo SLIPSTREAM_PASSCODE="<choose one>" SLIPSTREAM_PROVIDER_KEY="<OpenAI API key>"
+fly tokens create deploy -a slipstream-demo   # → add as FLY_API_TOKEN repo secret on GitHub
+```
+
+Hosted behaviour: `/deck.html` and `/pack/*` are public (the pitch burns no credits); `/api/chat`, `/api/briefing`, and `/api/approve` require either the passcode session (server-held key, Dan's OpenAI credit) or bring-your-own-key headers (key stays in the visitor's browser, used per request, never stored or logged). A per-IP token bucket caps usage. Locally, with no `SLIPSTREAM_PASSCODE` set, everything stays open exactly as before.
+
+## The deck
+
+`/deck.html` presents the written case pack (from `docs/pack/`) as slides through the same markdown pipeline as chat replies: arrow keys or edge-clicks to navigate, `#/n` deep links, and print-to-PDF produces the standalone pack document.
+
 ## Deliberately out of scope for the prototype
 
 Authentication and multi-tenancy; real ERP synchronisation (the tool layer would sit on the production database the same way it sits on the in-memory store); production write paths beyond the invoice-draft flow; usage metering and billing.

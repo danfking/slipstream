@@ -1,5 +1,59 @@
 import { describe, expect, it } from 'vitest';
-import { openaiCompatClient } from '../providers.js';
+import { openaiCompatClient, resolveRequest } from '../providers.js';
+
+describe('resolveRequest (per-request provider)', () => {
+  const serverDefault = { client: { create: async () => ({}) }, model: 'server-model' };
+
+  it('no BYO headers → server default when authorized', () => {
+    const r = resolveRequest({}, serverDefault);
+    expect(r?.source).toBe('server');
+    expect(r?.model).toBe('server-model');
+  });
+
+  it('no BYO headers and no server credentials → null (401 upstream)', () => {
+    expect(resolveRequest({}, null)).toBeNull();
+  });
+
+  it('BYO openai-compatible headers build a visitor client with their model', async () => {
+    let captured: any;
+    const fetchStub = async (url: string, init: any) => {
+      captured = { url, auth: init.headers.authorization, body: JSON.parse(init.body) };
+      return { ok: true, json: async () => ({ choices: [{ message: { content: 'hi' } }] }) } as any;
+    };
+    const r = resolveRequest(
+      { 'x-llm-key': 'sk-visitor', 'x-llm-provider': 'openai', 'x-llm-model': 'gpt-4o-mini' },
+      serverDefault,
+      fetchStub as any,
+    );
+    expect(r?.source).toBe('byo');
+    expect(r?.model).toBe('gpt-4o-mini');
+    await r!.client.create({ model: r!.model, max_tokens: 5, messages: [] });
+    expect(captured.url).toContain('api.openai.com');
+    expect(captured.auth).toBe('Bearer sk-visitor');
+  });
+
+  it('BYO with custom base url is honoured', async () => {
+    let url = '';
+    const fetchStub = async (u: string) => {
+      url = u;
+      return { ok: true, json: async () => ({ choices: [{ message: { content: 'x' } }] }) } as any;
+    };
+    const r = resolveRequest(
+      { 'x-llm-key': 'k', 'x-llm-provider': 'openai', 'x-llm-base-url': 'http://localhost:11434/v1', 'x-llm-model': 'qwen3:4b' },
+      null,
+      fetchStub as any,
+    );
+    await r!.client.create({ model: 'qwen3:4b', max_tokens: 5, messages: [] });
+    expect(url).toContain('localhost:11434');
+  });
+
+  it('BYO anthropic provider resolves with a client and the requested model', () => {
+    const r = resolveRequest({ 'x-llm-key': 'sk-ant-x', 'x-llm-provider': 'anthropic', 'x-llm-model': 'claude-sonnet-5' }, null);
+    expect(r?.source).toBe('byo');
+    expect(r?.model).toBe('claude-sonnet-5');
+    expect(typeof r?.client.create).toBe('function');
+  });
+});
 
 describe('openaiCompatClient', () => {
   it('translates Anthropic-shaped params to an OpenAI-compatible request', async () => {

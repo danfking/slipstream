@@ -100,6 +100,45 @@ export function makeClient(): ChatClient {
   return { create: (params: object) => anthropic.messages.create(params as any) as Promise<any> };
 }
 
+export interface ResolvedProvider {
+  client: ChatClient;
+  model: string;
+  source: 'server' | 'byo';
+}
+
+/**
+ * Per-request provider resolution (hosted mode). A visitor may bring their own
+ * key via headers — their credentials build a throwaway client for this request
+ * and are never stored or logged. Otherwise the server-held provider is used,
+ * when the caller is authorized to spend it; null means 401 upstream.
+ */
+export function resolveRequest(
+  headers: Record<string, string | undefined>,
+  serverDefault: { client: ChatClient; model: string } | null,
+  fetchImpl?: Parameters<typeof openaiCompatClient>[2],
+): ResolvedProvider | null {
+  const key = headers['x-llm-key'];
+  if (key) {
+    const provider = headers['x-llm-provider'] ?? 'openai';
+    if (provider === 'anthropic') {
+      const anthropic = new Anthropic({ apiKey: key });
+      return {
+        client: { create: (params: object) => anthropic.messages.create(params as any) as Promise<any> },
+        model: headers['x-llm-model'] ?? 'claude-sonnet-5',
+        source: 'byo',
+      };
+    }
+    const baseUrl = headers['x-llm-base-url'] ?? 'https://api.openai.com/v1';
+    return {
+      client: openaiCompatClient(baseUrl, key, fetchImpl),
+      model: headers['x-llm-model'] ?? 'gpt-4o-mini',
+      source: 'byo',
+    };
+  }
+  if (serverDefault) return { ...serverDefault, source: 'server' };
+  return null;
+}
+
 export function defaultModel(): string {
   if (process.env.SLIPSTREAM_MODEL) return process.env.SLIPSTREAM_MODEL;
   return (process.env.SLIPSTREAM_PROVIDER ?? 'anthropic') === 'anthropic' ? 'claude-sonnet-5' : 'qwen3:4b';
