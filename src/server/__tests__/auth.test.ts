@@ -19,10 +19,20 @@ describe('createAuth', () => {
     expect(auth.isAuthorized(undefined)).toBe(false);
   });
 
-  it('tokens are unguessable per boot (different instances reject each other)', () => {
+  it('instances sharing a passcode accept each other\'s tokens (multi-machine hosting)', () => {
+    // The signing key derives from the passcode, not from a per-boot secret:
+    // with two Fly machines behind one load balancer, a session minted by one
+    // machine must validate on the other, or every second request 401s.
     const a = createAuth('pass');
     const b = createAuth('pass');
     const token = a.login('pass')!;
+    expect(b.isAuthorized(token)).toBe(true);
+  });
+
+  it('instances with different passcodes reject each other\'s tokens', () => {
+    const a = createAuth('pass-one');
+    const b = createAuth('pass-two');
+    const token = a.login('pass-one')!;
     expect(b.isAuthorized(token)).toBe(false);
   });
 });

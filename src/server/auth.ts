@@ -23,8 +23,13 @@ export function createAuth(passcode: string | undefined): Auth {
   if (!passcode) {
     return { mode: 'open', login: () => null, isAuthorized: () => true };
   }
-  const bootSecret = randomBytes(32);
-  const sign = (id: string) => createHmac('sha256', bootSecret).update(id).digest('hex');
+  // The signing key derives from the passcode, not from per-boot randomness:
+  // multiple machines behind one load balancer must all validate each other's
+  // sessions, and no shared state exists between them. Tokens therefore
+  // survive restarts and rotate when the passcode does — the right trade for
+  // a passcode-gated demo (cookies still expire via Max-Age).
+  const signingKey = createHmac('sha256', 'slipstream-session-v1').update(passcode).digest();
+  const sign = (id: string) => createHmac('sha256', signingKey).update(id).digest('hex');
   return {
     mode: 'gated',
     login(attempt: string) {
