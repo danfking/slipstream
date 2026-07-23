@@ -124,7 +124,10 @@ async function main() {
     const setFilter = (key) => {
       active = key;
       for (const [k, section] of sections) section.hidden = key !== null && k !== key;
-      for (const [k, pill] of pills) pill.classList.toggle('active', k === key);
+      for (const [k, pill] of pills) {
+        pill.classList.toggle('active', k === key);
+        pill.setAttribute('aria-pressed', String(k === key)); // toggle state for assistive tech
+      }
     };
     const addPill = (key, label) => {
       const pill = document.createElement('button');
