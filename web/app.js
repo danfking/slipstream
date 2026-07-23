@@ -280,15 +280,15 @@ function renderApprovalCards(toolEvents) {
  * "handled" — plain language, the raw error still available for the curious,
  * and a retry that does not make the operator retype the question.
  */
-function addErrorCard(detail, retry) {
+function addErrorCard(detail, retry, copy = {}) {
   clearEmptyState();
   const card = document.createElement('div');
   card.className = 'error-card';
 
   const heading = document.createElement('h3');
-  heading.textContent = "Slipstream can't reach the model right now";
+  heading.textContent = copy.heading ?? "Slipstream can't reach the model right now";
   const body = document.createElement('p');
-  body.textContent = 'Your question was not lost, and nothing in the record changed. Try again in a moment.';
+  body.textContent = copy.body ?? 'Your question was not lost, and nothing in the record changed. Try again in a moment.';
 
   const technical = document.createElement('details');
   technical.className = 'error-technical';
@@ -407,6 +407,16 @@ async function converse(payloadMessages, pendingLabel, question, extraHeaders = 
       return;
     }
     const toolEvents = doneEvent.toolEvents ?? [];
+    // Belt to the server's braces: an empty reply must read as a failure with
+    // a retry, never as a silent empty bubble.
+    if (!doneEvent.reply?.trim()) {
+      bubble?.remove();
+      addErrorCard('The stream completed but the reply was empty.', retry, {
+        heading: 'The model returned an empty answer',
+        body: 'The model was reached but produced nothing this time. It happens occasionally; retrying usually fixes it.',
+      });
+      return;
+    }
     if (!bubble) bubble = addStreamingBubble();
     // Final render replaces the streamed approximation: citation chips need
     // the turn's tool list, which only exists at completion.

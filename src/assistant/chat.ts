@@ -36,6 +36,10 @@ const apiTools = TOOLS.map(({ name, description, input_schema }) => ({ name, des
 export async function runChat(client: ChatClient, messages: ChatMessage[], model: string = MODEL, hooks?: ChatHooks) {
   const convo: any[] = messages.map((m) => ({ role: m.role, content: m.content }));
   const toolEvents: ToolEvent[] = [];
+  // Reasoning models (gpt-oss) can spend an entire turn thinking and stop
+  // without any visible content or tool call. That is a hiccup, not an answer:
+  // retry the turn once, and never return an empty reply as success.
+  let emptyRetries = 0;
 
   for (let i = 0; i < MAX_LOOP_ITERATIONS; i++) {
     hooks?.onTurnStart?.();
@@ -56,6 +60,14 @@ export async function runChat(client: ChatClient, messages: ChatMessage[], model
         .filter((b: any) => b.type === 'text')
         .map((b: any) => b.text)
         .join('');
+      if (!reply.trim()) {
+        if (emptyRetries < 1) {
+          emptyRetries++;
+          i--; // the retry must not burn a step, or an empty final turn skips it
+          continue; // nothing was added to convo, so this re-asks the same turn
+        }
+        return { reply: 'I did not get a usable answer from the model that time. Please try asking again.', toolEvents };
+      }
       return { reply, toolEvents };
     }
 
