@@ -383,6 +383,11 @@ async function converse(payloadMessages, pendingLabel, question, extraHeaders = 
           heading: 'The model returned an empty answer',
           body: 'The model was reached but produced nothing this time. It happens occasionally; retrying usually fixes it.',
         });
+        // Unlock here too: the stream may stay open for the trailing
+        // suggestion, and an error card with a frozen input reads as a hang.
+        briefingBtn.disabled = false;
+        input.disabled = false;
+        syncSendState();
         return;
       }
       if (!bubble) bubble = addStreamingBubble();
@@ -448,9 +453,14 @@ async function converse(payloadMessages, pendingLabel, question, extraHeaders = 
       addErrorCard(errorEvent?.error ?? 'The stream ended unexpectedly.', retry);
     }
   } catch (err) {
-    clearPending();
-    bubble?.remove();
-    addErrorCard(err, retry);
+    // After done the turn is complete and rendered; a failure in the trailing
+    // suggestion window (up to ~20s of open stream) must not tear it down or
+    // offer a retry that would resend a history ending in an assistant turn.
+    if (!doneHandled) {
+      clearPending();
+      bubble?.remove();
+      addErrorCard(err, retry);
+    }
   } finally {
     // Idempotent when renderDone already unlocked; the seq guard keeps an old
     // stream's cleanup from re-enabling the input mid-way through a new turn.
