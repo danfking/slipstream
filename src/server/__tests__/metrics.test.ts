@@ -25,6 +25,14 @@ describe('createMetrics', () => {
     expect(m.snapshot().suggestionsUsed).toBe(0);
   });
 
+  it('accepts the starter pseudo-source (no-tool turns fall back to starter questions)', () => {
+    const m = createMetrics();
+    m.recordShown('starter');
+    m.recordUsed('verbatim', 'starter');
+    const snap = m.snapshot();
+    expect(snap.bySource.starter).toEqual({ shown: 1, used: 1 });
+  });
+
   it('rate is zero, not NaN, before anything is shown', () => {
     expect(createMetrics().snapshot().adoptionRate).toBe(0);
   });
