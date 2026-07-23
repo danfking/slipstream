@@ -2,3 +2,6 @@ node_modules/
 dist/
 .env
 artifacts/
+
+# Throwaway exploration/capture scripts (never commit)
+scripts/tmp-*.ts

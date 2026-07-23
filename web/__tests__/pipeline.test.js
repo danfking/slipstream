@@ -48,10 +48,40 @@ describe('pack slides render clean', () => {
     }
   });
 
-  test('manifest lists every slide file exactly once', () => {
+  const detailFiles = packSlides.filter((f) => !f.name.endsWith('.presenter.md'));
+  const presenterFiles = packSlides.filter((f) => f.name.endsWith('.presenter.md'));
+  const firstHeading = (raw) => (raw.match(/^#\s+(.+)$/m) ?? [, ''])[1].trim();
+
+  test('manifest lists every detail slide and every presenter sidecar, no orphans', () => {
     const manifest = JSON.parse(readFileSync(join(packDir, 'manifest.json'), 'utf-8'));
-    const listed = manifest.slides.map((s) => s.file).sort();
-    expect(listed).toEqual(packSlides.map((f) => f.name).sort());
+    const listedDetail = manifest.slides.map((s) => s.file).sort();
+    expect(listedDetail).toEqual(detailFiles.map((f) => f.name).sort());
+    const listedPresenter = manifest.slides.map((s) => s.presenter).filter(Boolean).sort();
+    expect(listedPresenter).toEqual(presenterFiles.map((f) => f.name).sort());
+  });
+
+  test('each presenter slide shares its detail slide title (drift alarm)', () => {
+    const byName = new Map(packSlides.map((f) => [f.name, f.raw]));
+    for (const f of presenterFiles) {
+      const detail = byName.get(f.name.replace('.presenter.md', '.md'));
+      expect(detail, `${f.name} has no matching detail file`).toBeDefined();
+      expect(firstHeading(f.raw), `${f.name} title drifted from its detail slide`).toBe(firstHeading(detail));
+    }
+  });
+
+  test('presenter slides are bullets only: h1, optional ### subheads, list items', () => {
+    for (const f of presenterFiles) {
+      const body = f.raw.split('\n').slice(1); // drop the h1 line
+      let bullets = 0;
+      for (const line of body) {
+        const t = line.trim();
+        if (!t) continue;
+        const ok = t.startsWith('- ') || t.startsWith('### ');
+        expect(ok, `${f.name} has non-bullet prose: "${t.slice(0, 50)}"`).toBe(true);
+        if (t.startsWith('- ')) bullets++;
+      }
+      expect(bullets, `${f.name} has no bullets`).toBeGreaterThan(0);
+    }
   });
 });
 

@@ -23,6 +23,22 @@
 }
 .slide.active { display: block; }
 
+/* Two variants live in every slide; the body class picks which one shows.
+   Detail is the default (bare link opens the reading pack); present shows the
+   bullets Dan speaks from. A slide with no presenter version (diagram, demo
+   run sheet) keeps showing its detail in both modes via .no-presenter. */
+.slide .variant.presenter { display: none; }
+body.mode-present .slide:not(.no-presenter) .variant.detail { display: none; }
+body.mode-present .slide:not(.no-presenter) .variant.presenter { display: block; }
+
+/* Talk view is read across a room: larger type, roomier bullets, no 62ch cap. */
+body.mode-present .variant.presenter { font-size: clamp(21px, 2.5vw, 34px); line-height: 1.5; }
+body.mode-present .variant.presenter li { margin: 0.55em 0; max-width: none; }
+body.mode-present .variant.presenter h1 { font-size: 1.7em; }
+
+/* The toggle is a button wearing the badge style: reset the UA button chrome. */
+#mode-toggle { cursor: pointer; font-family: inherit; }
+
 .slide h1 { font-size: 1.9em; margin-bottom: 0.7em; }
 .slide h3 { font-size: 1.15em; margin: 1.1em 0 0.4em; }
 .slide p, .slide li { max-width: 62ch; }
@@ -90,4 +106,8 @@
   #deck-main { display: block; }
   #slides { display: block; }
   .slide { display: block !important; page-break-after: always; overflow: visible; font-size: 12pt; padding: 0 0 24pt; }
+  /* The printed pack is always the full prose, whatever mode the tab is in:
+     a page of cue bullets is not the send-afterwards document. */
+  .slide .variant.detail { display: block !important; }
+  .slide .variant.presenter { display: none !important; }
 }
