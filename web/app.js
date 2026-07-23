@@ -35,7 +35,7 @@ function suggestionUseHeaders(question) {
 }
 
 input.addEventListener('keydown', (e) => {
-  if (e.key === 'Tab' && suggestion && !input.value.trim()) {
+  if (e.key === 'Tab' && !e.shiftKey && suggestion && !input.value.trim()) {
     e.preventDefault();
     input.value = suggestion.text;
     acceptedSuggestion = suggestion;
