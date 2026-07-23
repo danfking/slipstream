@@ -34,6 +34,9 @@
 .slide strong { color: var(--ds-navy, #14304a); }
 .slide em { opacity: 0.85; }
 
+/* Navigation must be discoverable, not discovered: chevrons stay visible at
+   rest (muted), strengthen on hover/focus, and the header carries the keyboard
+   hint. Invisible-until-hover was an accessibility bug, found by the operator. */
 .nav-zone {
   position: absolute;
   top: 0;
@@ -42,19 +45,37 @@
   left: 0;
   border: none;
   background: transparent;
-  color: transparent;
-  font-size: 40px;
+  color: var(--ds-border, #c3ced6);
+  font-size: 44px;
   cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
 }
 .nav-zone.right { left: auto; right: 0; }
-.nav-zone:hover { color: var(--ds-text-muted, #55707f); background: linear-gradient(to right, rgba(0,0,0,0.03), transparent); }
-.nav-zone.right:hover { background: linear-gradient(to left, rgba(0,0,0,0.03), transparent); }
+.nav-zone:hover, .nav-zone:focus-visible {
+  color: var(--ds-navy, #14304a);
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.04), transparent);
+  outline: none;
+}
+.nav-zone.right:hover, .nav-zone.right:focus-visible { background: linear-gradient(to left, rgba(0, 0, 0, 0.04), transparent); }
+.nav-zone:disabled { opacity: 0.25; cursor: default; }
+
+.nav-hint { font-size: 12px; opacity: 0.75; }
+
+/* Progress bar: where you are in the deck at a glance, without counting. */
+#deck-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--ds-teal, #0e7a8a);
+  transition: width 0.2s ease;
+}
 
 /* Print: the whole pack, one slide per page — this IS the send-afterwards
    document, so nothing interactive appears. */
 @media print {
   .deck-body { overflow: visible; }
-  .deck-header .meta, .nav-zone { display: none !important; }
+  .deck-header .meta, .nav-zone, #deck-progress { display: none !important; }
   #deck-main { display: block; }
   #slides { display: block; }
   .slide { display: block !important; page-break-after: always; overflow: visible; font-size: 12pt; padding: 0 0 24pt; }

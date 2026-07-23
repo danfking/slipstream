@@ -39,6 +39,15 @@ describe('pack slides render clean', () => {
     expect(lintRendered(raw, html)).toEqual([]);
   });
 
+  test('pack slides follow house style: no em dashes', () => {
+    // The pack is authored prose presented as the operator's own writing, and
+    // the house style bans em dashes in every medium. Model chat output is
+    // exempt (model voice); the pack is not.
+    for (const f of packSlides) {
+      expect(f.raw.includes('—'), `${f.name} contains an em dash`).toBe(false);
+    }
+  });
+
   test('manifest lists every slide file exactly once', () => {
     const manifest = JSON.parse(readFileSync(join(packDir, 'manifest.json'), 'utf-8'));
     const listed = manifest.slides.map((s) => s.file).sort();

@@ -6,7 +6,7 @@ Identify where DockMaster could build meaningful, revenue-driving AI features or
 
 ### How this pack is organised
 
-**Decisions before code.** Every choice in this case — which opportunity, what product shape, build versus partner, the architecture, the model — was made explicitly, with alternatives considered and rejected on stated criteria, before anything was built. The prototype at the end is the *output* of that decision trail, not the starting point.
+**Decisions before code.** Every choice in this case (which opportunity, what product shape, build versus partner, the architecture, the model) was made explicitly, with alternatives considered and rejected on stated criteria, before anything was built. The prototype at the end is the *output* of that decision trail, not the starting point.
 
 Each section states the decision, the options that lost, and why. Probe any branch.
 
