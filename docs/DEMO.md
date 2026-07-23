@@ -21,11 +21,19 @@ Warm the model. A cold `gpt-oss:20b` takes 30-60s to first token; warm it is 2-8
 
 If the provider drops, the failure is a designed state — an outlined card with a Try again button that resends the question. That frame is safe to show.
 
-## Config on the day
+## Config on the day (booked: Tue 28 Jul 2026, 6:00am, Teams)
 
-- Primary: Anthropic, `claude-sonnet-5` (the recorded decision).
-- Offline fallback (venue network failure, provider outage): `SLIPSTREAM_PROVIDER=openai SLIPSTREAM_MODEL=gpt-oss:20b` against local Ollama — golden batch passes 10/10 on this configuration too.
+**Primary: the hosted app** — https://slipstream-dk.fly.dev (gpt-4o-mini on the server key, unlocked by passcode). One browser tab does everything: `/deck.html` for slides, the `live demo →` badge to switch, receipts panel visible throughout.
+
+**Pre-call checklist (from about 5:45):**
+1. Open the health URL — wakes the machine (it scales to zero when idle; first hit takes a few seconds).
+2. Open the site, enter the passcode, ask one throwaway question. Confirms model + key + warm path end to end.
+3. Run the golden batch against the hosted app in a terminal (`GOLDEN_URL=https://slipstream-dk.fly.dev GOLDEN_PASSCODE=... npm run golden`) — this is also demo moment 7, so a fresh 10/10 is ready to show.
+4. Start the local hot spare: `SLIPSTREAM_PROVIDER=openai SLIPSTREAM_MODEL=gpt-oss:20b npm run dev` in the repo, briefing clicked once so the model is loaded. If Fly or OpenAI misbehaves mid-call, switch the shared tab to localhost:3000 and carry on — same app, same data, fully offline.
+5. Deck open at slide 1, Teams sharing the browser window (not the screen).
+
 - Do not live-edit `golden.json` or the seed in the room.
+- If asked about the model: it's a setting — the hosted app runs a commercial mini-tier model, the hot spare runs a local open-weights model, same code.
 
 ## Authoring rule learned while building the golden batch
 

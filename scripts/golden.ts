@@ -16,6 +16,24 @@ interface GoldenCase {
 }
 
 const BASE = process.env.GOLDEN_URL ?? 'http://localhost:3000';
+
+// Hosted (gated) targets: GOLDEN_PASSCODE buys a session so the batch can run
+// against the exact demo-day deployment. Run this in your own terminal:
+//   GOLDEN_URL=https://slipstream-dk.fly.dev GOLDEN_PASSCODE=... npm run golden
+let sessionCookie = '';
+async function establishSession() {
+  const passcode = process.env.GOLDEN_PASSCODE;
+  if (!passcode) return;
+  const resp = await fetch(`${BASE}/api/session`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ passcode }),
+  });
+  if (!resp.ok) throw new Error(`passcode rejected (${resp.status}) — check GOLDEN_PASSCODE`);
+  const setCookie = resp.headers.getSetCookie?.()[0] ?? resp.headers.get('set-cookie') ?? '';
+  sessionCookie = setCookie.split(';')[0];
+  if (!sessionCookie) throw new Error('no session cookie returned');
+}
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const cases: GoldenCase[] = JSON.parse(readFileSync(join(root, 'golden', 'golden.json'), 'utf-8'));
 
@@ -31,7 +49,7 @@ async function runCase(c: GoldenCase) {
   const started = Date.now();
   const resp = await fetch(`${BASE}/api/chat`, {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json', ...(sessionCookie ? { cookie: sessionCookie } : {}) },
     body: JSON.stringify({ messages: [{ role: 'user', content: c.question }] }),
   });
   if (!resp.ok) return { c, ok: false, ms: Date.now() - started, missing: [`HTTP ${resp.status}`], reply: '' };
@@ -47,8 +65,9 @@ async function runCase(c: GoldenCase) {
   return { c, ok: missing.length === 0, ms: Date.now() - started, missing, reply: data.reply ?? '' };
 }
 
+await establishSession();
 const health = await fetch(`${BASE}/api/health`).then((r) => r.json());
-console.log(`Golden batch against ${BASE} — model: ${health.model}\n`);
+console.log(`Golden batch against ${BASE} — model: ${health.model}${sessionCookie ? ' (passcode session)' : ''}\n`);
 
 let passed = 0;
 for (const c of cases) {

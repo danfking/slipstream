@@ -161,6 +161,19 @@ export const TRANSFORMS = [
         .join('\n'),
   },
   {
+    name: 'humanize-channel-keys',
+    why: 'The system prompt asks for channel names in full, but smaller models still write raw keys ("source: blu_voice_agent"). The GM reads these as business facts, so the pipeline guarantees the display name; code spans stay technical.',
+    apply: (text) =>
+      text
+        .split('\n')
+        .map((line) =>
+          mapNonCode(line, (seg) =>
+            seg.replace(/\b(blu_voice_agent|customer_portal)\b/g, (key) => CHANNEL_LABELS[key] ?? key),
+          ),
+        )
+        .join('\n'),
+  },
+  {
     name: 'block-separation',
     why: 'With breaks:true a list or heading cannot interrupt a paragraph, so a missing blank line renders bullets as literal asterisks — the original briefing bug.',
     apply: (text) => {

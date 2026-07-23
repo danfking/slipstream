@@ -187,6 +187,20 @@ describe('normalizeMarkdown repairs model typography', () => {
   });
 });
 
+describe('normalizeMarkdown humanizes channel keys', () => {
+  test('replaces a raw source key in prose with its display name', () => {
+    expect(normalizeMarkdown('arrived via blu_voice_agent overnight')).toBe('arrived via Blu Voice Agent overnight');
+  });
+
+  test('replaces the parenthesised source citation the model writes', () => {
+    expect(normalizeMarkdown('(source: customer_portal).')).toBe('(source: Customer Portal).');
+  });
+
+  test('does not touch the key inside code spans (receipts and citations stay technical)', () => {
+    expect(normalizeMarkdown('the `blu_voice_agent` channel')).toBe('the `blu_voice_agent` channel');
+  });
+});
+
 describe('normalizeMarkdown spacing before bold', () => {
   test('separates a bold label the model ran onto the end of the previous sentence', () => {
     expect(normalizeMarkdown('no shortfall.**Next steps:** If we')).toBe('no shortfall. **Next steps:** If we');
