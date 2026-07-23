@@ -187,6 +187,16 @@ describe('normalizeMarkdown repairs model typography', () => {
   });
 });
 
+describe('normalizeMarkdown strips reasoning leakage', () => {
+  test('removes a tagged think block', () => {
+    expect(normalizeMarkdown('<think>secret</think>The answer is 5.')).toBe('The answer is 5.');
+  });
+
+  test('removes an orphan closing tag and everything before it (streamed reasoning with no opener)', () => {
+    expect(normalizeMarkdown('So five words works.\n</think>\n\nHello how are you today')).toBe('Hello how are you today');
+  });
+});
+
 describe('normalizeMarkdown humanizes channel keys', () => {
   test('replaces a raw source key in prose with its display name', () => {
     expect(normalizeMarkdown('arrived via blu_voice_agent overnight')).toBe('arrived via Blu Voice Agent overnight');

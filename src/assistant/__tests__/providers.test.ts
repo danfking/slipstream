@@ -1,5 +1,48 @@
 import { describe, expect, it } from 'vitest';
-import { openaiCompatClient, resolveRequest } from '../providers.js';
+import { createSSESplitter, accumulateOpenAIStream, openaiCompatClient, resolveRequest } from '../providers.js';
+
+describe('createSSESplitter', () => {
+  it('reassembles events across arbitrary chunk boundaries', () => {
+    const split = createSSESplitter();
+    const events = [
+      ...split.feed('data: {"a"'),
+      ...split.feed(':1}\n\ndata: {"b":2}\n\nda'),
+      ...split.feed('ta: [DONE]\n\n'),
+    ];
+    expect(events).toEqual(['{"a":1}', '{"b":2}', '[DONE]']);
+  });
+
+  it('ignores comments and empty lines', () => {
+    const split = createSSESplitter();
+    expect(split.feed(': keepalive\n\ndata: {"x":1}\n\n')).toEqual(['{"x":1}']);
+  });
+});
+
+describe('accumulateOpenAIStream', () => {
+  it('accumulates text deltas and tool-call fragments into an Anthropic-shaped response', () => {
+    const acc = accumulateOpenAIStream();
+    const texts: string[] = [];
+    const push = (json: string) => acc.push(JSON.parse(json), (t) => texts.push(t));
+    push('{"choices":[{"delta":{"content":"Check"}}]}');
+    push('{"choices":[{"delta":{"content":"ing."}}]}');
+    push('{"choices":[{"delta":{"tool_calls":[{"index":0,"id":"c1","function":{"name":"get_unbilled_work","arguments":""}}]}}]}');
+    push('{"choices":[{"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\\"a\\":"}}]}}]}');
+    push('{"choices":[{"delta":{"tool_calls":[{"index":0,"function":{"arguments":"1}"}}]}}]}');
+    const resp = acc.finish();
+    expect(texts).toEqual(['Check', 'ing.']);
+    expect(resp.stop_reason).toBe('tool_use');
+    expect(resp.content[0]).toEqual({ type: 'text', text: 'Checking.' });
+    expect(resp.content[1]).toEqual({ type: 'tool_use', id: 'c1', name: 'get_unbilled_work', input: { a: 1 } });
+  });
+
+  it('text-only stream finishes as end_turn', () => {
+    const acc = accumulateOpenAIStream();
+    acc.push({ choices: [{ delta: { content: 'Done.' } }] }, () => {});
+    const resp = acc.finish();
+    expect(resp.stop_reason).toBe('end_turn');
+    expect(resp.content).toEqual([{ type: 'text', text: 'Done.' }]);
+  });
+});
 
 describe('resolveRequest (per-request provider)', () => {
   const serverDefault = { client: { create: async () => ({}) }, model: 'server-model' };

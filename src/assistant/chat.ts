@@ -20,22 +20,36 @@ export interface ToolEvent {
 
 export interface ChatClient {
   create(params: object): Promise<any>;
+  /** Stream text deltas while producing the same final response shape as create. */
+  createStreaming?(params: object, onText: (delta: string) => void): Promise<any>;
+}
+
+export interface ChatHooks {
+  /** Called as each model turn begins — the client resets its visible buffer. */
+  onTurnStart?: () => void;
+  /** Text deltas as the model produces them. Presence enables streaming. */
+  onText?: (delta: string) => void;
 }
 
 const apiTools = TOOLS.map(({ name, description, input_schema }) => ({ name, description, input_schema }));
 
-export async function runChat(client: ChatClient, messages: ChatMessage[], model: string = MODEL) {
+export async function runChat(client: ChatClient, messages: ChatMessage[], model: string = MODEL, hooks?: ChatHooks) {
   const convo: any[] = messages.map((m) => ({ role: m.role, content: m.content }));
   const toolEvents: ToolEvent[] = [];
 
   for (let i = 0; i < MAX_LOOP_ITERATIONS; i++) {
-    const response = await client.create({
+    hooks?.onTurnStart?.();
+    const params = {
       model,
       max_tokens: MAX_TOKENS,
       system: SYSTEM_PROMPT,
       tools: apiTools,
       messages: convo,
-    });
+    };
+    const response =
+      hooks?.onText && client.createStreaming
+        ? await client.createStreaming(params, hooks.onText)
+        : await client.create(params);
 
     if (response.stop_reason !== 'tool_use') {
       const reply = response.content
