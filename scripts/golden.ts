@@ -6,6 +6,7 @@
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { lintReply } from './lib/mdpipe.js';
 
 interface GoldenCase {
   id: string;
@@ -40,6 +41,9 @@ async function runCase(c: GoldenCase) {
   const missing: string[] = [];
   for (const needle of c.mustInclude) if (!reply.includes(normalize(needle))) missing.push(`text:"${needle}"`);
   for (const tool of c.mustCallTools) if (!calledTools.has(tool)) missing.push(`tool:${tool}`);
+  // Markdown gate: every live reply must render lint-free through the same
+  // pipeline the UI uses — new model quirks fail here, not in front of a human.
+  for (const issue of lintReply(data.reply ?? '', [...calledTools])) missing.push(`md:${issue}`);
   return { c, ok: missing.length === 0, ms: Date.now() - started, missing, reply: data.reply ?? '' };
 }
 

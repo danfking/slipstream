@@ -1,0 +1,3 @@
+The literal `**not bold**` inside code must stay exactly as written.
+Tool citation styles both work: `get_unbilled_work` and *get_schedule_load*.
+A code span with spaces `** spaced **` is also untouchable.
