@@ -332,6 +332,9 @@ function addStreamingBubble() {
  * always valid; remend closes unterminated syntax mid-stream.
  */
 async function converse(payloadMessages, pendingLabel, question, extraHeaders = {}) {
+  // The old suggestion is stale the moment a question is in flight — clear it
+  // until the reply brings a fresh one (or none).
+  setSuggestion(null);
   sendBtn.disabled = true;
   briefingBtn.disabled = true;
   input.disabled = true;

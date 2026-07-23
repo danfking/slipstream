@@ -23,6 +23,34 @@ describe('suggestNext', () => {
     expect(suggestNext(['made_up_tool'])).toBeNull();
   });
 
+  // Seen live 2026-07-23: get_unbilled_work suggested "draft invoices", the
+  // model answered that by running get_unbilled_work again (nothing left to
+  // draft), and the identical suggestion came straight back — a loop.
+  it('skips a follow-up the user has already asked, falling back to an earlier tool', () => {
+    const asked = ['Draft invoices for the completed work we have not billed yet.'];
+    const s = suggestNext(['get_parts_blockers', 'get_unbilled_work'], asked);
+    expect(s?.source).toBe('get_parts_blockers');
+  });
+
+  it('matching against asked questions is trim- and case-insensitive', () => {
+    const asked = ['  draft INVOICES for the completed work we have not billed yet.  '];
+    expect(suggestNext(['get_unbilled_work'], asked)).toBeNull();
+  });
+
+  it('returns null when every candidate follow-up has already been asked', () => {
+    const asked = [
+      'Draft invoices for the completed work we have not billed yet.',
+      'Which jobs are blocked waiting on parts?',
+    ];
+    expect(suggestNext(['get_schedule_load', 'get_unbilled_work'], asked)).toBeNull();
+  });
+
+  it('tolerates non-string conversation content without throwing (API callers send block arrays)', () => {
+    const asked = [[{ type: 'text', text: 'hi' }] as unknown as string, 'Which jobs are blocked waiting on parts?'];
+    const s = suggestNext(['get_schedule_load'], asked);
+    expect(s).toBeNull();
+  });
+
   it('never suggests the question that leads back to the same tool (no loops)', () => {
     for (const tool of ['get_unbilled_work', 'get_schedule_load', 'get_parts_blockers', 'get_receivables', 'get_overnight_activity', 'get_occupancy', 'draft_invoices']) {
       const s = suggestNext([tool]);

@@ -26,11 +26,20 @@ const FOLLOW_UPS: Record<string, string> = {
 
 export const SUGGESTION_SOURCES = new Set(Object.keys(FOLLOW_UPS));
 
-/** Most recent tool with a mapped follow-up wins; null when nothing maps. */
-export function suggestNext(toolNames: string[]): Suggestion | null {
+/**
+ * Most recent tool with a mapped follow-up wins; null when nothing maps.
+ * A follow-up the user has already asked in this conversation is skipped —
+ * otherwise a static map loops (ask the suggestion, the answer runs the same
+ * tool, the same suggestion comes back). The server is stateless, but every
+ * request carries the conversation, so the exclusion needs no session state.
+ */
+export function suggestNext(toolNames: string[], alreadyAsked: string[] = []): Suggestion | null {
+  // API callers may send block-array content (the adapters accept it); only
+  // string turns can match a follow-up, and nothing here may throw post-reply.
+  const asked = new Set(alreadyAsked.filter((q) => typeof q === 'string').map((q) => q.trim().toLowerCase()));
   for (let i = toolNames.length - 1; i >= 0; i--) {
     const text = FOLLOW_UPS[toolNames[i]];
-    if (text) return { text, source: toolNames[i] };
+    if (text && !asked.has(text.trim().toLowerCase())) return { text, source: toolNames[i] };
   }
   return null;
 }
