@@ -407,6 +407,13 @@ async function converse(payloadMessages, pendingLabel, question, extraHeaders = 
       return;
     }
     const toolEvents = doneEvent.toolEvents ?? [];
+    // Belt to the server's braces: an empty reply must read as a failure with
+    // a retry, never as a silent empty bubble.
+    if (!doneEvent.reply?.trim()) {
+      bubble?.remove();
+      addErrorCard('The model returned an empty answer. This happens occasionally; retry usually fixes it.', retry);
+      return;
+    }
     if (!bubble) bubble = addStreamingBubble();
     // Final render replaces the streamed approximation: citation chips need
     // the turn's tool list, which only exists at completion.
