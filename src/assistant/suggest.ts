@@ -24,7 +24,20 @@ const FOLLOW_UPS: Record<string, string> = {
   get_overnight_activity: 'What is this week\'s biggest operational risk?',
 };
 
-export const SUGGESTION_SOURCES = new Set(Object.keys(FOLLOW_UPS));
+// When a turn calls no tools (or every mapped follow-up has been asked), fall
+// back to a starter question rather than the inert default hint: after any
+// reply the placeholder should hold something Tab can actually take. Ordered
+// by demo value; already-asked ones are skipped like any other suggestion.
+const STARTERS: string[] = [
+  'How much completed work have we not billed yet?',
+  'Who owes us money, and how overdue are they?',
+  'Which jobs are blocked waiting on parts?',
+  'Can we keep up with the haul-out schedule over the next three weeks?',
+  'What happened overnight?',
+  'How full are the slips right now?',
+];
+
+export const SUGGESTION_SOURCES = new Set([...Object.keys(FOLLOW_UPS), 'starter']);
 
 /**
  * Most recent tool with a mapped follow-up wins; null when nothing maps.
@@ -40,6 +53,9 @@ export function suggestNext(toolNames: string[], alreadyAsked: string[] = []): S
   for (let i = toolNames.length - 1; i >= 0; i--) {
     const text = FOLLOW_UPS[toolNames[i]];
     if (text && !asked.has(text.trim().toLowerCase())) return { text, source: toolNames[i] };
+  }
+  for (const text of STARTERS) {
+    if (!asked.has(text.trim().toLowerCase())) return { text, source: 'starter' };
   }
   return null;
 }
