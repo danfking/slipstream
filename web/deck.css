@@ -26,6 +26,17 @@
 .slide h1 { font-size: 1.9em; margin-bottom: 0.7em; }
 .slide h3 { font-size: 1.15em; margin: 1.1em 0 0.4em; }
 .slide p, .slide li { max-width: 62ch; }
+/* Diagrams are the exception to the prose column: give them the full slide.
+   The 62ch cap is for readable text; an SVG shrunk to text width is unreadable
+   on a projector, which defeats the slide. */
+.slide p:has(> img) { max-width: none; }
+.slide img {
+  display: block;
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  margin: 0.6em auto;
+}
 .slide ul, .slide ol { padding-left: 1.3em; margin: 0.4em 0 0.8em; }
 .slide li { margin: 0.3em 0; }
 .slide table { border-collapse: collapse; margin: 0.8em 0; font-size: 0.85em; }
