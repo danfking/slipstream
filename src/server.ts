@@ -118,7 +118,10 @@ async function conversationRoute(req: express.Request, res: express.Response, me
   try {
     const result = await runChat(provider.client, messages, provider.model);
     if (provider.source === 'server') void recordReply(corpusLabel, result.reply);
-    const suggestion = suggestNext(result.toolEvents.map((e) => e.name));
+    const suggestion = suggestNext(
+      result.toolEvents.map((e) => e.name),
+      messages.filter((m) => m.role === 'user').map((m) => m.content),
+    );
     if (suggestion) metrics.recordShown(suggestion.source);
     res.json({ ...result, suggestion });
   } catch (err) {
@@ -158,7 +161,10 @@ app.post('/api/chat/stream', async (req, res) => {
       onText: (text) => emit({ type: 'delta', text }),
     });
     if (provider.source === 'server') void recordReply(messages[messages.length - 1].content, result.reply);
-    const suggestion = suggestNext(result.toolEvents.map((e) => e.name));
+    const suggestion = suggestNext(
+      result.toolEvents.map((e) => e.name),
+      messages.filter((m) => m.role === 'user').map((m) => m.content),
+    );
     if (suggestion) metrics.recordShown(suggestion.source);
     emit({ type: 'done', reply: result.reply, toolEvents: result.toolEvents, suggestion });
   } catch (err) {
