@@ -14,7 +14,8 @@ export interface Suggestion {
 // vocabulary — a v1 heuristic the metric can judge before anything smarter.
 const FOLLOW_UPS: Record<string, string> = {
   search_customers: 'What open work orders does this customer have?',
-  get_work_orders: 'Are any of these jobs blocked waiting on parts?',
+  // Same canonical text as the starter, so the asked-exclusion dedupes them.
+  get_work_orders: 'Which jobs are blocked waiting on parts?',
   get_unbilled_work: 'Draft invoices for the completed work we have not billed yet.',
   draft_invoices: 'Who owes us money, and how overdue are they?',
   get_schedule_load: 'Which jobs are blocked waiting on parts?',
