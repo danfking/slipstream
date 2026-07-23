@@ -1,19 +1,19 @@
-# Product shape: a staged arc, priced as it ships
+# Product shape: three stages, each one sellable
 
 ### Assistant, then Advisor, then Agent teams
 
-1. **Assistant** answers the questions the yard already asks: unbilled work, capacity, blocked jobs, overdue accounts. Reactive; read-only.
-2. **Advisor** surfaces the same findings unprompted: the morning briefing, the at-risk schedule, the revenue leak. Proactive; still read-only.
-3. **Agent teams** are domain-scoped agents that act, always behind human approval. Composable personas (service, billing, occupancy) that the group can reuse beyond marine.
+1. **Assistant** answers the questions the yard already asks: unbilled work, capacity, blocked jobs, overdue accounts. It responds when asked, and it can only read.
+2. **Advisor** brings the same findings to you before you ask: the morning briefing, the schedule at risk, the revenue leak. Still read-only.
+3. **Agent teams** act on the findings, always with a person approving each action. Each agent covers one domain (service, billing, occupancy), and the same agent designs can be reused by the group outside marine.
 
-Each stage is sellable on its own. Each stage builds the trust the next one needs. And DockMaster's own shipped scheduling assistant already trained this base on accept/reject workflows, so the approval-gated pattern arrives pre-validated.
+Each stage can be sold on its own, and each stage earns the customer trust the next one needs. DockMaster's own scheduling assistant already asks users to accept or reject its suggestions, so customers here are already used to approving what software proposes.
 
-An assistant responds to what a user asks. An agent perceives and acts, like an employee. Shipping the assistant first while architecting for the team is the safe sequencing: the overhead of agent-team complexity is absorbed only once the end goal is confirmed.
+The difference between the stages: an assistant responds to what a user asks. An agent notices things and acts, more like an employee. Shipping the assistant first while designing for agents later is the safer order. We take on the complexity of agents only once we know they are the goal.
 
-**First-person evidence:** I have shipped this exact progression in production: a conversational assistant over live operational data (2023), then a proactive insight layer (2023-24), then agentic capability. This roadmap is one I have already run once.
+**I have shipped this progression before:** a conversational assistant over live operational data in 2023, then a proactive insight layer, then agentic capability. I am proposing a road I have already walked.
 
 ### Who pays, who uses
 
-- **The cheque:** the GM or owner, who sees the P&L, feels the unbilled labour and vacant slips, and already pays the subscription this rides on.
-- **The daily user:** the service manager, juggling technician capacity, parts arrivals, and the haul-out backlog, every day.
-- **Stage-one bar:** measurable P&L benefit for the buyer, less effort and better performance for the user.
+- **The buyer:** the GM or owner. They see the P&L, they feel the unbilled labour and the empty slips, and they already pay for the subscription this adds onto.
+- **The daily user:** the service manager, who juggles technician capacity, parts deliveries, and the haul-out backlog every day.
+- **The bar for stage one:** the buyer can see the benefit in dollars, and the service manager's job gets easier.

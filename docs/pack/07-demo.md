@@ -1,12 +1,12 @@
 # Live demo
 
-*(Switch to the app. Everything below runs against the synthetic record, disclosed as such.)*
+*(Switch to the app. Everything runs against synthetic data, and I will say so on screen.)*
 
-1. **Morning briefing:** overnight activity, the week's risk, the number to act on. Unprompted; receipts alongside.
-2. **GM seat:** "How much completed work haven't we billed yet?" The answer: $16,419 across 14 jobs.
-3. **Service-manager seat:** "Can we keep up with the haul-out schedule over the next three weeks?" The answer: 54 hours of demand against 38 of capacity in week two.
-4. **Ecosystem moment:** "Anything come in overnight?" Bookings and a no-start phoned in via the Blu Voice Agent. The partner owns the phone; the record owns the truth; this is where it becomes visible.
-5. **Blocked work:** parts blockers with PO dates against schedule dates, the charter customer flagged.
-6. **The approval gate:** draft the invoices, approve, re-ask. The number moved, and the write has its own receipt. The model never holds the pen.
-7. **Golden batch, live:** the accuracy harness running in front of you.
-8. *(If provider risk comes up: swap the model provider with one environment variable, live.)*
+1. **Morning briefing:** overnight activity, this week's biggest risk, and the number to act on today, with receipts alongside.
+2. **The GM's question:** "How much completed work haven't we billed yet?" Answer: $16,419 across 14 jobs.
+3. **The service manager's question:** "Can we keep up with the haul-out schedule over the next three weeks?" Answer: 54 hours of demand against 38 of capacity in week two.
+4. **The ecosystem moment:** "Anything come in overnight?" Bookings and an engine problem phoned in through the Blu Voice Agent. The partner answers the phone, the record keeps the truth, and this screen is where it all becomes visible.
+5. **Blocked work:** jobs waiting on parts, with delivery dates against schedule dates and the charter customer flagged.
+6. **The approval gate:** draft the invoices, approve them, ask the first question again. The number has moved, and the approval has its own receipt. The model cannot write anything on its own.
+7. **The golden batch, run live:** the accuracy checks running in front of you.
+8. *(If vendor risk comes up: change the model provider with one setting, live.)*

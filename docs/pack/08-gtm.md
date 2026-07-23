@@ -2,25 +2,25 @@
 
 ### Positioning
 
-**Making the marina's operations answerable.** Dockwa optimises how boaters find marinas; this makes the marina's operational questions answerable. Sold to the GM and owner, not to the IT function.
+**Making the marina's operations answerable.** Dockwa helps boaters find marinas. This helps the people running the marina get answers about their own operation. It is sold to the GM and the owner.
 
-### Land: the install base is the distribution
+### Landing it: the install base is the distribution
 
-- ~650 marinas already pay for the system of record this rides on, so customer acquisition is an *expansion* motion run by existing account managers, not a cold sale.
-- Beta with a handful of flagship full-service yards (the deepest service-department pain), then general availability with the annual user conference as the launch venue.
-- Support and customer feedback feed straight back into the development loop.
+- About 650 marinas already pay for the system of record this adds onto. Selling it is an expansion conversation run by the account managers who already know these customers. There is no cold outreach in version one.
+- Start with a beta at a handful of large full-service yards, where the service-department pain is deepest. Launch generally at the annual user conference.
+- Support and customer feedback go straight back into development.
 
-### Pricing: a ladder that matches the arc
+### Pricing: a ladder that matches the stages
 
-Per-marina monthly add-on with staged tiers (assistant, then advisor, then automation), with usage limits protecting serving cost. Value anchor: recovered billable hours and surfaced dollars; a handful of either pays the subscription.
+A per-marina monthly add-on with three tiers: assistant, then advisor, then automation. Usage limits keep serving costs under control. The price is anchored to things the customer already counts: recovered billable hours and dollars found. A few of either covers the subscription.
 
-### The arithmetic (assumptions shown, on purpose)
+### The arithmetic, with the assumptions visible
 
 | Input | Value |
 |---|---|
 | Install base | ~650 marinas |
-| Attach over 24 months | 15-30% |
+| Take-up over 24 months | 15-30% |
 | Average price | ~$200/month |
-| **ARR from the base alone** | **~$230k-$470k** |
+| **Revenue from the base alone** | **~$230k-$470k a year** |
 
-Roughly a quarter to half a million of ARR before a single cold sale. The point is the motion and what it proves, not the absolute number. Serving cost is cents per session (cached tool schemas, mini-tier routing), so gross margin stays software-shaped.
+Roughly a quarter to half a million a year before any cold sale. What matters is what that proves about the motion, more than the number itself. Serving costs are cents per session, so margins stay healthy.

@@ -1,21 +1,21 @@
-# Architecture and the trust model
+# Architecture and trust
 
-### How the assistant gets answers: a typed tool layer
+### How the assistant gets its answers
 
-Four ways to connect a model to the record. Three were killed:
+There are four ways to connect a model to the record. Three lost:
 
-- **Fine-tuning**, killed: the questions are about today's data; a model trained on last month knows nothing about this week. Wrong tool for facts that change daily.
-- **RAG**, killed for the same reason in milder form: built for documents, and this data is rows and numbers. "Sum my unbilled labour" over retrieved text chunks gives a confident wrong number.
-- **NL-to-SQL**, the trap that demos well: the model writes a subtly wrong join against a forty-year-old schema, the answer looks plausible, and generated SQL running on the shared production database is an operational risk to every other user of it.
-- **Tool layer**, the winner: typed, tested functions ("get unbilled work", "get schedule load"). The model decides *which* question to ask, never *how* to compute the answer. Every number comes from code.
+- **Fine-tuning** lost because the questions are about today's data. A model trained on last month knows nothing about this week.
+- **RAG** lost for a similar reason: it is built for documents, and this data is rows and numbers. Ask it to add up unbilled labour across retrieved text and you get a confident wrong number.
+- **Letting the model write SQL** lost even though it demos well. The model writes a subtly wrong query against a forty-year-old schema, the answer looks fine, and nobody catches it. Generated queries running on the shared production database can also slow it down or break it for everyone else.
+- **A tool layer won:** a set of typed, tested functions like "get unbilled work" and "get schedule load". The model only chooses which function to call. Every number is computed by code someone wrote and tested.
 
-### Trust, in four layers (all shipped in the prototype)
+### Trust, in four layers (all working in the prototype)
 
-1. Numbers come from deterministic tool calls: same input, same output, repeatably.
-2. **Receipts.** Every answer shows the tool calls and raw results behind it, grouped by the question they served. Trust comes from checkability.
-3. **Read-only first.** The model's toolbox physically contains no write tools. The one draft action requires a human to click approve, and the approval itself gets a receipt. When confidence grows, write tools arrive one at a time, always human-gated.
-4. **The golden batch.** Real questions with asserted answers, run end-to-end through the live stack on every release. Accuracy is a number in CI, not a feeling. The same harness gates markdown quality and keeps the model's stochastic failures out of the demo.
+1. Numbers come from tested functions. Same input, same output, every time.
+2. **Receipts.** Every answer shows the calls and raw results behind it, grouped under the question that caused them. Anyone can check any number.
+3. **Read-only first.** The model's toolbox contains no write tools at all. The one action it can propose, drafting invoices, does nothing until a person clicks approve, and the approval gets its own receipt. Write tools come later, one at a time, each behind the same kind of approval.
+4. **The golden batch.** A set of real questions with known answers runs against the live system on every release. If accuracy slips, the release fails. The same harness checks the formatting of replies, so problems get caught by tests instead of by people.
 
-### Model and provider are configuration, not architecture
+### Model and provider are settings, not structure
 
-Sonnet-tier is the recommended default (routing workloads need speed, not frontier reasoning); requests that don't need reasoning can route to a cheaper tier; provider swap is an environment variable, demonstrated live. This demo has run on a frontier API and a fully local open-weights model with zero code change. Vendor risk and per-marina serving cost (cents per session, caching-aware) are managed quantities, not hopes.
+A mid-tier model is the right default here, because this workload needs speed more than deep reasoning, and simple requests can go to an even cheaper model. Changing model or provider is a configuration change, which I can show live: this demo has run on a commercial API and on a fully local open model with no code change. That is also the answer to vendor risk, and it keeps the cost per marina at cents per session.

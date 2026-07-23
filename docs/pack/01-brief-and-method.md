@@ -2,17 +2,17 @@
 
 ### The brief
 
-Identify where DockMaster could build meaningful, revenue-driving AI features or standalone products. Build a prototype of the strongest one. Show how it would be positioned, sold, and scaled.
+Find where DockMaster could build AI features or products that drive real revenue. Build a prototype of the strongest one. Show how it would be positioned, sold, and scaled.
 
 ### How this pack is organised
 
-**Decisions before code.** Every choice in this case (which opportunity, what product shape, build versus partner, the architecture, the model) was made explicitly, with alternatives considered and rejected on stated criteria, before anything was built. The prototype at the end is the *output* of that decision trail, not the starting point.
+**Decisions first, then code.** Before building anything, I worked through each choice in order: which opportunity, what kind of product, whether to build or partner, how to architect it, which model to use. For each one I looked at the alternatives and wrote down why they lost. The prototype at the end came out of those decisions.
 
-Each section states the decision, the options that lost, and why. Probe any branch.
+Each section covers one decision. Happy to go deeper on any of them.
 
-### What was researched first
+### What I researched first
 
-- DockMaster's product surfaces, install base, and shipped AI features (as of July 2026)
-- The competitive field, especially Dockwa's AI position
-- Marina and boatyard economics: where the money and the pain actually are
-- The group's existing AI ventures and operating playbook
+- DockMaster's products, install base, and the AI features already shipped (as of July 2026)
+- The competitors, especially Dockwa's AI position
+- How marinas and boatyards actually make money, and where it hurts
+- The group's existing AI ventures and how they were launched
