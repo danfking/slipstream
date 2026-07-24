@@ -118,8 +118,16 @@ async function refreshStatus() {
 refreshStatus();
 setInterval(refreshStatus, 30_000);
 
+// The anchor date is written the human way the assistant itself uses ("5 Oct
+// 2026") rather than raw ISO, so it reads as context, not a database value.
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+function formatAnchor(iso) {
+  const [y, m, d] = String(iso).split('-').map(Number);
+  return m >= 1 && m <= 12 && d ? `${d} ${MONTHS[m - 1]} ${y}` : String(iso);
+}
+
 fetch('/api/health').then((r) => r.json()).then((h) => {
-  document.getElementById('meta-date').textContent = `today: ${h.anchorDate}`;
+  document.getElementById('meta-date').textContent = `as of ${formatAnchor(h.anchorDate)}`;
   document.getElementById('meta-model').textContent = h.model;
   if (h.authMode === 'gated' && !h.authorized && !byoHeaders()['x-llm-key']) openGate();
 });
