@@ -3,9 +3,11 @@
 // app now, MCP server later), the loop is the demo's architecture exhibit,
 // and avoiding a beta dependency keeps it legible.
 
+import { SpanStatusCode, context, trace } from '@opentelemetry/api';
 import { MAX_LOOP_ITERATIONS, MAX_TOKENS, MODEL } from './config.js';
 import { SYSTEM_PROMPT } from './system.js';
 import { TOOLS, runTool } from '../tools/registry.js';
+import { tracer } from '../telemetry.js';
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
@@ -41,50 +43,91 @@ export async function runChat(client: ChatClient, messages: ChatMessage[], model
   // retry the turn once, and never return an empty reply as success.
   let emptyRetries = 0;
 
-  for (let i = 0; i < MAX_LOOP_ITERATIONS; i++) {
-    hooks?.onTurnStart?.();
-    const params = {
-      model,
-      max_tokens: MAX_TOKENS,
-      system: SYSTEM_PROMPT,
-      tools: apiTools,
-      messages: convo,
-    };
-    const response =
-      hooks?.onText && client.createStreaming
-        ? await client.createStreaming(params, hooks.onText)
-        : await client.create(params);
+  // One trace per conversation (issue #4): a root "chat" span, an "llm.turn"
+  // child per model call (with token usage), and a "tool.<name>" child per
+  // tool executed. Spans are no-ops until telemetry is started, so tests and
+  // the loop's behaviour are unchanged.
+  const streaming = Boolean(hooks?.onText && client.createStreaming);
+  const chatSpan = tracer.startSpan('chat');
+  chatSpan.setAttribute('slipstream.model', model);
+  chatSpan.setAttribute('slipstream.streaming', streaming);
+  let inTokens = 0;
+  let outTokens = 0;
 
-    if (response.stop_reason !== 'tool_use') {
-      const reply = response.content
-        .filter((b: any) => b.type === 'text')
-        .map((b: any) => b.text)
-        .join('');
-      if (!reply.trim()) {
-        if (emptyRetries < 1) {
-          emptyRetries++;
-          i--; // the retry must not burn a step, or an empty final turn skips it
-          continue; // nothing was added to convo, so this re-asks the same turn
-        }
-        return { reply: 'I did not get a usable answer from the model that time. Please try asking again.', toolEvents };
-      }
-      return { reply, toolEvents };
-    }
-
-    convo.push({ role: 'assistant', content: response.content });
-    const results = response.content
-      .filter((b: any) => b.type === 'tool_use')
-      .map((b: any) => {
+  try {
+    return await context.with(trace.setSpan(context.active(), chatSpan), async () => {
+      for (let i = 0; i < MAX_LOOP_ITERATIONS; i++) {
+        hooks?.onTurnStart?.();
+        const params = {
+          model,
+          max_tokens: MAX_TOKENS,
+          system: SYSTEM_PROMPT,
+          tools: apiTools,
+          messages: convo,
+        };
+        const turnSpan = tracer.startSpan('llm.turn');
+        turnSpan.setAttribute('slipstream.model', model);
+        let response: any;
         try {
-          const result = runTool(b.name, b.input);
-          toolEvents.push({ name: b.name, input: b.input, result });
-          return { type: 'tool_result', tool_use_id: b.id, content: JSON.stringify(result) };
+          response = streaming ? await client.createStreaming!(params, hooks!.onText!) : await client.create(params);
         } catch (err) {
-          return { type: 'tool_result', tool_use_id: b.id, content: String(err), is_error: true };
+          turnSpan.recordException(err as Error);
+          turnSpan.setStatus({ code: SpanStatusCode.ERROR });
+          turnSpan.end();
+          throw err;
         }
-      });
-    convo.push({ role: 'user', content: results });
-  }
+        if (response.usage) {
+          turnSpan.setAttribute('llm.usage.input_tokens', response.usage.inputTokens);
+          turnSpan.setAttribute('llm.usage.output_tokens', response.usage.outputTokens);
+          inTokens += response.usage.inputTokens;
+          outTokens += response.usage.outputTokens;
+        }
+        turnSpan.setAttribute('llm.stop_reason', response.stop_reason);
+        turnSpan.end();
 
-  return { reply: 'I could not complete that within my step limit.', toolEvents };
+        if (response.stop_reason !== 'tool_use') {
+          const reply = response.content
+            .filter((b: any) => b.type === 'text')
+            .map((b: any) => b.text)
+            .join('');
+          if (!reply.trim()) {
+            if (emptyRetries < 1) {
+              emptyRetries++;
+              i--; // the retry must not burn a step, or an empty final turn skips it
+              continue; // nothing was added to convo, so this re-asks the same turn
+            }
+            return { reply: 'I did not get a usable answer from the model that time. Please try asking again.', toolEvents };
+          }
+          return { reply, toolEvents };
+        }
+
+        convo.push({ role: 'assistant', content: response.content });
+        const results = response.content
+          .filter((b: any) => b.type === 'tool_use')
+          .map((b: any) => {
+            const toolSpan = tracer.startSpan(`tool.${b.name}`);
+            toolSpan.setAttribute('slipstream.tool', b.name);
+            try {
+              const result = runTool(b.name, b.input);
+              toolEvents.push({ name: b.name, input: b.input, result });
+              toolSpan.end();
+              return { type: 'tool_result', tool_use_id: b.id, content: JSON.stringify(result) };
+            } catch (err) {
+              toolSpan.recordException(err as Error);
+              toolSpan.setStatus({ code: SpanStatusCode.ERROR });
+              toolSpan.end();
+              return { type: 'tool_result', tool_use_id: b.id, content: String(err), is_error: true };
+            }
+          });
+        convo.push({ role: 'user', content: results });
+      }
+
+      return { reply: 'I could not complete that within my step limit.', toolEvents };
+    });
+  } finally {
+    chatSpan.setAttribute('slipstream.tool_calls', toolEvents.length);
+    chatSpan.setAttribute('llm.usage.input_tokens', inTokens);
+    chatSpan.setAttribute('llm.usage.output_tokens', outTokens);
+    chatSpan.end();
+  }
 }
