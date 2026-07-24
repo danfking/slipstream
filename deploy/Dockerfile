@@ -15,6 +15,7 @@ COPY tsconfig.json ./
 COPY src ./src
 COPY web ./web
 COPY data ./data
+COPY golden ./golden
 COPY docs/pack ./docs/pack
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD curl -f http://localhost:8080/api/health || exit 1

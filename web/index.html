@@ -50,7 +50,10 @@
     </section>
 
     <aside id="receipts-pane">
-      <h2>Receipts</h2>
+      <div class="receipts-head">
+        <h2>Receipts</h2>
+        <button type="button" id="golden-open" class="checks-btn" title="Run the accuracy checks against the live system">Accuracy checks</button>
+      </div>
       <p class="hint">Every number the assistant gives comes from a tool call listed here, grouped by the question it answered. Click one to see the raw result.</p>
       <div id="receipts"></div>
     </aside>
@@ -85,6 +88,21 @@
         <button type="button" id="gate-key-btn">Use my key</button>
       </div>
       <p class="gate-note">Your key is stored in this browser only and sent per request. It is never saved on the server.</p>
+    </div>
+  </dialog>
+
+  <!-- The golden batch, run from the app: real questions with known answers,
+       checked against the live system in front of the audience. -->
+  <dialog id="golden" class="golden-modal">
+    <div class="golden-head">
+      <h3>Accuracy checks</h3>
+      <button type="button" id="golden-close" aria-label="Close">✕</button>
+    </div>
+    <p class="hint">Real questions with known answers, run against the live system. Each one checks that the reply states the right figures and called the right tools.</p>
+    <div class="golden-summary" id="golden-summary">Loading checks…</div>
+    <div id="golden-list" class="golden-list"></div>
+    <div class="golden-actions">
+      <button type="button" id="golden-run">Run checks</button>
     </div>
   </dialog>
 

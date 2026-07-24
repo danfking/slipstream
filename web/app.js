@@ -109,6 +109,114 @@ document.getElementById('gate-key-btn').addEventListener('click', () => {
   gate.close();
 });
 
+// Accuracy checks (the golden batch, run from the app). The case list loads
+// once; running streams each result so the checks turn green in front of the
+// audience. Run is auth-gated server-side; a 401 opens the credential gate.
+const goldenModal = document.getElementById('golden');
+const goldenList = document.getElementById('golden-list');
+const goldenSummary = document.getElementById('golden-summary');
+const goldenRunBtn = document.getElementById('golden-run');
+let goldenCases = null;
+
+function goldenRow(c) {
+  const row = document.createElement('div');
+  row.className = 'golden-row';
+  row.dataset.id = c.id;
+  const status = document.createElement('span');
+  status.className = 'golden-status pending';
+  status.textContent = '•';
+  const q = document.createElement('span');
+  q.className = 'golden-q';
+  q.textContent = c.question;
+  const ms = document.createElement('span');
+  ms.className = 'golden-ms';
+  row.append(status, q, ms);
+  return row;
+}
+
+function setGoldenRow(id, state, missing, ms) {
+  const row = goldenList.querySelector(`.golden-row[data-id="${id}"]`);
+  if (!row) return;
+  const status = row.querySelector('.golden-status');
+  status.className = `golden-status ${state}`;
+  status.textContent = state === 'pass' ? '✓' : state === 'fail' ? '✕' : state === 'running' ? '⋯' : '•';
+  row.querySelector('.golden-ms').textContent = ms != null ? `${ms} ms` : '';
+  row.title = missing && missing.length ? `missing: ${missing.join(', ')}` : '';
+  row.classList.toggle('is-fail', state === 'fail');
+}
+
+async function openGolden() {
+  goldenModal.showModal();
+  if (!goldenCases) {
+    // Leave goldenCases null on failure so reopening retries, rather than
+    // caching an empty list until a page reload.
+    try {
+      const resp = await fetch('/api/golden/cases');
+      if (resp.ok) goldenCases = await resp.json();
+    } catch {
+      /* retry on next open */
+    }
+  }
+  const cases = goldenCases ?? [];
+  goldenList.replaceChildren(...cases.map(goldenRow));
+  goldenSummary.className = 'golden-summary';
+  goldenSummary.textContent = cases.length ? `${cases.length} checks ready.` : 'Checks unavailable. Close and reopen to retry.';
+}
+
+async function runGolden() {
+  if (!goldenCases || !goldenCases.length) return;
+  goldenRunBtn.disabled = true;
+  for (const c of goldenCases) setGoldenRow(c.id, 'pending');
+  goldenSummary.className = 'golden-summary';
+  goldenSummary.textContent = 'Running…';
+  try {
+    const resp = await fetch('/api/golden/run', { headers: { ...byoHeaders() } });
+    if (!resp.ok) {
+      const data = await resp.json().catch(() => ({}));
+      if (resp.status === 401) openGate();
+      goldenSummary.textContent = data.detail ?? data.error ?? `Could not run the checks (HTTP ${resp.status}).`;
+      goldenRunBtn.disabled = false;
+      return;
+    }
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let sse = '';
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      sse += decoder.decode(value, { stream: true });
+      let sep;
+      while ((sep = sse.indexOf('\n\n')) !== -1) {
+        const block = sse.slice(0, sep);
+        sse = sse.slice(sep + 2);
+        for (const line of block.split('\n')) {
+          if (!line.startsWith('data:')) continue;
+          let ev;
+          try {
+            ev = JSON.parse(line.slice(5).trim());
+          } catch {
+            continue;
+          }
+          if (ev.type === 'case') {
+            setGoldenRow(ev.id, ev.ok ? 'pass' : 'fail', ev.missing, ev.ms);
+          } else if (ev.type === 'done') {
+            goldenSummary.textContent = `${ev.passed} / ${ev.total} passed`;
+            goldenSummary.className = `golden-summary ${ev.passed === ev.total ? 'all-pass' : 'some-fail'}`;
+          }
+        }
+      }
+    }
+  } catch {
+    goldenSummary.textContent = 'The checks stopped unexpectedly.';
+  } finally {
+    goldenRunBtn.disabled = false;
+  }
+}
+
+document.getElementById('golden-open').addEventListener('click', openGolden);
+document.getElementById('golden-close').addEventListener('click', () => goldenModal.close());
+goldenRunBtn.addEventListener('click', runGolden);
+
 // Header status dot (issue #5): worst component state, links to /status.html.
 // Refreshed on load, after every turn (a provider failure should show at the
 // moment it happens, not a poll later), and on a slow interval.
