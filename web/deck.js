@@ -56,15 +56,16 @@ for (const [i, { detail, presenter }] of sources.entries()) {
   section.innerHTML =
     `<div class="variant detail">${renderMarkdown(detail, [], deps)}</div>` +
     (presenter ? `<div class="variant presenter">${renderMarkdown(presenter, [], deps)}</div>` : '');
-  // Reading view only: a topic icon chip beside the title (DockMaster's idiom).
-  // Injected into the h1 so it sits inline with the title, never in the talk view.
+  // A topic icon chip beside the title (DockMaster's idiom), in both the
+  // reading and talk views. Each variant's h1 gets its own chip node.
   const icon = SLIDE_ICONS[manifest.slides[i].file];
-  const h1 = section.querySelector('.variant.detail h1');
-  if (icon && h1) {
-    const chip = document.createElement('span');
-    chip.className = 'slide-icon';
-    chip.innerHTML = icon;
-    h1.prepend(chip);
+  if (icon) {
+    for (const h1 of section.querySelectorAll('.variant h1')) {
+      const chip = document.createElement('span');
+      chip.className = 'slide-icon';
+      chip.innerHTML = icon;
+      h1.prepend(chip);
+    }
   }
   slidesEl.appendChild(section);
 }
