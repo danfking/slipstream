@@ -105,8 +105,12 @@ export async function runChat(client: ChatClient, messages: ChatMessage[], model
         const results = response.content
           .filter((b: any) => b.type === 'tool_use')
           .map((b: any) => {
-            const toolSpan = tracer.startSpan(`tool.${b.name}`);
-            toolSpan.setAttribute('slipstream.tool', b.name);
+            // Span name is bounded to the known tool set (plus "unknown") so a
+            // hallucinated tool name cannot explode span-name cardinality; the
+            // exact name is always on the attribute.
+            const known = TOOLS.some((t) => t.name === b.name);
+            const toolSpan = tracer.startSpan(known ? `tool.${b.name}` : 'tool.unknown');
+            toolSpan.setAttribute('slipstream.tool', String(b.name));
             try {
               const result = runTool(b.name, b.input);
               toolEvents.push({ name: b.name, input: b.input, result });
