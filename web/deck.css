@@ -36,8 +36,15 @@ body.mode-present .variant.presenter { font-size: clamp(21px, 2.5vw, 34px); line
 body.mode-present .variant.presenter li { margin: 0.55em 0; max-width: none; }
 body.mode-present .variant.presenter h1 { font-size: 1.7em; }
 
-/* The toggle is a button wearing the badge style: reset the UA button chrome. */
-#mode-toggle { cursor: pointer; font-family: inherit; }
+/* The toggle is a button wearing the badge style. A button does not inherit
+   the header's white text the way the sibling counter span does, so set it
+   explicitly, and highlight the active (talk view) state so the presenter can
+   see which mode they are in at a glance. */
+#mode-toggle { cursor: pointer; font-family: inherit; color: #fff; }
+#mode-toggle[aria-pressed="true"] {
+  background: var(--ds-teal, #0e7a8a);
+  border-color: var(--ds-teal, #0e7a8a);
+}
 
 .slide h1 { font-size: 1.9em; margin-bottom: 0.7em; }
 .slide h3 { font-size: 1.15em; margin: 1.1em 0 0.4em; }
