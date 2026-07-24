@@ -16,6 +16,10 @@ There are four ways to connect a model to the record. Three lost:
 3. **Read-only first.** The model's toolbox contains no write tools at all. The one action it can propose, drafting invoices, does nothing until a person clicks approve, and the approval gets its own receipt. Write tools come later, one at a time, each behind the same kind of approval.
 4. **The golden batch.** A set of real questions with known answers runs against the live system on every release. If accuracy slips, the release fails. The same harness checks the formatting of replies, so problems get caught by tests instead of by people.
 
+### Observable from the outside
+
+The prototype also traces itself: every conversation emits an OpenTelemetry trace of its model turns and tool calls, with token usage on each. Receipts show the GM where a number came from; the traces show the operator what ran and what it cost. Console by default, or shipped to any OpenTelemetry backend.
+
 ### Model and provider are settings, not structure
 
 A mid-tier model is the right default here, because this workload needs speed more than deep reasoning, and simple requests can go to an even cheaper model. Changing model or provider is a configuration change, which I can show live: this demo has run on a commercial API and on a fully local open model with no code change. That is also the answer to vendor risk, and it keeps the cost per marina at cents per session.
