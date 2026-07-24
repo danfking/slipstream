@@ -12,6 +12,11 @@
 - Read-only first, writes wait for human approval
 - Golden batch gates every release
 
+### Observable from the outside
+
+- Every conversation is an OpenTelemetry trace: model turns, tool calls, token usage
+- Receipts for the GM, traces for the operator
+
 ### Model is a setting, not structure
 
 - Shown running local and commercial, no code change, cents per session

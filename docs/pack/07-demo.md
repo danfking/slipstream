@@ -10,3 +10,4 @@
 6. **The approval gate:** draft the invoices, approve them, ask the first question again. The number has moved, and the approval has its own receipt. The model cannot write anything on its own.
 7. **The golden batch, run live:** the accuracy checks running in front of you.
 8. *(If vendor risk comes up: change the model provider with one setting, live.)*
+9. *(Depth if asked: the next question the assistant suggests in the input, Tab to accept, with its take-up measured; the service status page; the browsable synthetic record behind the demo-data pill; the OpenTelemetry traces in the console.)*

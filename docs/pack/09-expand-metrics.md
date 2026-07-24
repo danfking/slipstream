@@ -16,4 +16,4 @@ Nothing in the building blocks is marine-specific. A tool layer over a system of
 - **Feedback scores** on answers.
 - **Dollars saved or found per marina:** the customer's return, and our renewal argument, in one number.
 
-The product also measures its own next step: it tracks which suggested questions users actually use, and that take-up rate is the evidence for when to introduce the Advisor tier and offer the upgrade.
+The product also measures its own next step, and this is live in the prototype: it tracks which suggested questions users actually use, served through the input itself, and that take-up rate is the evidence for when to introduce the Advisor tier and offer the upgrade.

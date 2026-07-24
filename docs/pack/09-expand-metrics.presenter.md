@@ -8,4 +8,4 @@
 ### What gets measured
 
 - Weekly active GMs and service managers, answered-question rate, take-up, dollars saved per marina
-- The product measures its own next step: suggestion take-up signals when to add the Advisor tier
+- The product already measures its own next step, live: suggestion take-up signals when to add the Advisor tier
