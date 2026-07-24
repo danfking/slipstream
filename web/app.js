@@ -522,8 +522,10 @@ const BRIEFING_PROMPT =
 
 briefingBtn.addEventListener('click', () => {
   addMsg('user', 'Morning briefing');
-  // Keep history well-formed: the API requires the first message to be a user
-  // turn, and converse() appends the assistant reply to history.
+  // The briefing is a standalone morning view, not a follow-up: send it as a
+  // fresh request so prior conversation cannot leak stale numbers into it
+  // (issue #28). The user turn still joins the visible history, and converse()
+  // appends the reply, so later questions keep their context.
   history.push({ role: 'user', content: BRIEFING_PROMPT });
-  converse(history, 'Assembling the briefing', 'Morning briefing');
+  converse([{ role: 'user', content: BRIEFING_PROMPT }], 'Assembling the briefing', 'Morning briefing');
 });
