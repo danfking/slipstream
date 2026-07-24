@@ -276,7 +276,8 @@ function renderApprovalCards(toolEvents) {
     card.className = 'approval-card';
     const total = r.drafts.reduce((s, d) => s + d.amount, 0);
     card.innerHTML = `
-      <h3>Approval required: ${r.drafts.length} invoice ${r.drafts.length === 1 ? 'draft' : 'drafts'}, $${total.toLocaleString()}</h3>
+      <span class="approval-badge">Approval required</span>
+      <h3>${r.drafts.length} invoice ${r.drafts.length === 1 ? 'draft' : 'drafts'}, $${total.toLocaleString()}</h3>
       <p class="approval-guarantee">Nothing is created until you approve. Rejecting leaves the record untouched.</p>
       <table>
         <tr><th>Customer</th><th>Description</th><th class="amt">Amount</th></tr>
