@@ -100,7 +100,7 @@ export const TOOLS: ToolDef[] = [
     input_schema: {
       type: 'object',
       properties: {
-        workOrderIds: { type: 'array', items: { type: 'string' }, description: 'Optional subset of work order IDs' },
+        workOrderIds: { type: 'array', items: { type: 'string' }, description: 'Optional. Omit entirely to draft every completed unbilled work order (the usual case). Only pass a list when the user named specific jobs to bill.' },
       },
       required: [],
     },

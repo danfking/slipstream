@@ -4,11 +4,16 @@ import { applyInvoiceDrafts, draftInvoices } from '../actions.js';
 import { TOOLS, runTool } from '../registry.js';
 
 describe('draft_invoices', () => {
-  it('drafts without mutating', () => {
+  it('drafts every unbilled work order when unfiltered, without mutating', () => {
+    // The deterministic guarantee behind issue #29: an empty filter bills the
+    // whole eligible set (14 jobs, $16,419), so "draft all unbilled work" can
+    // never silently drop a job as long as the model omits workOrderIds. This
+    // runs first, before the apply tests below mutate the shared record.
     const before = db.invoices.length;
-    const { drafts, requiresApproval } = draftInvoices({});
+    const { drafts, totalAmount, requiresApproval } = draftInvoices({});
     expect(requiresApproval).toBe(true);
-    expect(drafts.length).toBeGreaterThanOrEqual(10);
+    expect(drafts.length).toBe(14);
+    expect(totalAmount).toBe(16419);
     expect(db.invoices.length).toBe(before);
   });
 
