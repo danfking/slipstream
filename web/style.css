@@ -41,21 +41,23 @@ body {
 }
 
 header {
-  background: var(--ds-navy);
-  color: #fff;
+  background: #fff;
+  color: var(--ds-navy);
+  border-bottom: 1px solid var(--ds-border);
   padding: 14px 22px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 header h1 { font-size: 22px; letter-spacing: 0.2px; }
-header .sub { font-size: 13px; opacity: 0.85; }
+header .sub { font-size: 13px; color: var(--ds-text-muted); }
 .brand { display: flex; align-items: center; gap: 12px; }
 .brand .logo { display: block; flex-shrink: 0; }
 .meta { display: flex; gap: 10px; align-items: center; font-size: 13px; }
 .badge {
   background: var(--ds-navy-light);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff; /* white text on the dark pill, readable on the white header */
+  border: 1px solid var(--ds-navy-light);
   border-radius: var(--ds-radius-sm);
   padding: 3px 8px;
   font-size: 12px;
@@ -385,7 +387,7 @@ main {
 .status-dot.degraded { background: var(--ds-gold); }
 .status-dot.down { background: var(--ds-danger); }
 .status-dot-link { display: inline-flex; align-items: center; padding: 7px; border-radius: 50%; }
-.status-dot-link:hover, .status-dot-link:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.status-dot-link:hover, .status-dot-link:focus-visible { outline: 2px solid var(--ds-navy); outline-offset: 2px; }
 
 .status-page main.status-main {
   /* display: block beats the base `main { display: flex }` row layout */
