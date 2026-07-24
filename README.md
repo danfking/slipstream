@@ -23,6 +23,15 @@ The assistant needs a model provider:
 
 Provider and model choice is deliberately configuration, not architecture. Example, fully local and offline: `SLIPSTREAM_PROVIDER=openai SLIPSTREAM_MODEL=gpt-oss:20b npm run dev`.
 
+### Telemetry
+
+Each conversation is one OpenTelemetry trace: a `chat` root span, an `llm.turn` span per model call (with token usage), and a `tool.<name>` span per tool executed.
+
+| Env var | Default | Notes |
+|---|---|---|
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | — | Ship spans to an OTLP collector. When unset, spans print to the console. |
+| `SLIPSTREAM_OTEL` | `on` | Set to `off` to disable tracing entirely. |
+
 ## Architecture
 
 ```

@@ -1,3 +1,4 @@
+import { startTelemetry } from './telemetry.js';
 import express from 'express';
 import { appendFile, mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -12,6 +13,9 @@ import { createMetrics, type UsedKind } from './server/metrics.js';
 import { createProviderHealth, recordStoreStatus, worstState, type ServiceStatus } from './server/status.js';
 import { contentLabel, parseMessages } from './server/validate.js';
 import { db } from './data/store.js';
+
+// Tracing first, before anything it should instrument (issue #4).
+startTelemetry();
 
 const app = express();
 app.use(express.json({ limit: '1mb' }));
@@ -118,7 +122,14 @@ app.get('/api/status', (_req, res) => {
     recordStoreStatus(db as unknown as Record<string, unknown>, ANCHOR_DATE),
     providerHealth.status(MODEL),
     { name: 'Blu webhook (mock)', state: 'ok', lastChecked: nowIso, detail: 'Simulated partner feed: voice-agent and portal events land in the record with source badges.' },
-    { name: 'Telemetry (mock)', state: 'ok', lastChecked: nowIso, detail: 'Console exporter only; OpenTelemetry wiring is tracked as issue #4.' },
+    {
+      name: 'Telemetry',
+      state: 'ok',
+      lastChecked: nowIso,
+      detail: process.env.OTEL_EXPORTER_OTLP_ENDPOINT
+        ? `OpenTelemetry tracing chat turns and tool calls; exporting to ${process.env.OTEL_EXPORTER_OTLP_ENDPOINT}.`
+        : 'OpenTelemetry tracing chat turns and tool calls with token usage; console exporter (set OTEL_EXPORTER_OTLP_ENDPOINT to ship spans).',
+    },
   ];
   res.json({ overall: worstState(services.map((s) => s.state)), services });
 });

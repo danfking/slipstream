@@ -43,11 +43,24 @@ export function createSSESplitter() {
  * tool-call fragments) into the same Anthropic-shaped response the buffered
  * path returns, emitting text deltas as they arrive.
  */
+/** OpenAI ({prompt,completion}_tokens) and Anthropic ({input,output}_tokens)
+ *  usage normalized to one shape, or undefined when the provider omits it. */
+export function normUsage(u: any): { inputTokens: number; outputTokens: number } | undefined {
+  if (!u) return undefined;
+  const inputTokens = u.input_tokens ?? u.prompt_tokens;
+  const outputTokens = u.output_tokens ?? u.completion_tokens;
+  if (inputTokens == null && outputTokens == null) return undefined;
+  return { inputTokens: inputTokens ?? 0, outputTokens: outputTokens ?? 0 };
+}
+
 export function accumulateOpenAIStream() {
   let text = '';
+  let usage: any;
   const toolCalls = new Map<number, { id: string; name: string; args: string }>();
   return {
     push(event: any, onText: (t: string) => void) {
+      // The final usage chunk (stream_options.include_usage) carries no choices.
+      if (event.usage) usage = event.usage;
       const delta = event.choices?.[0]?.delta ?? {};
       if (typeof delta.content === 'string' && delta.content) {
         text += delta.content;
@@ -77,7 +90,7 @@ export function accumulateOpenAIStream() {
         }
         content.push({ type: 'tool_use', id: tc.id, name: tc.name, input });
       }
-      return { stop_reason: toolCalls.size ? 'tool_use' : 'end_turn', content };
+      return { stop_reason: toolCalls.size ? 'tool_use' : 'end_turn', content, usage: normUsage(usage) };
     },
   };
 }
@@ -130,7 +143,7 @@ export function openaiCompatClient(baseUrl: string, apiKey?: string, fetchImpl: 
       const resp = await fetchImpl(endpoint(), {
         method: 'POST',
         headers: headers(),
-        body: JSON.stringify({ ...translate(params), stream: true }),
+        body: JSON.stringify({ ...translate(params), stream: true, stream_options: { include_usage: true } }),
       });
       if (!resp.ok) {
         const detail = resp.text ? await resp.text() : `HTTP ${resp.status}`;
@@ -188,7 +201,7 @@ export function openaiCompatClient(baseUrl: string, apiKey?: string, fetchImpl: 
         }
         content.push({ type: 'tool_use', id: tc.id, name: tc.function?.name, input });
       }
-      return { stop_reason: toolCalls.length ? 'tool_use' : 'end_turn', content };
+      return { stop_reason: toolCalls.length ? 'tool_use' : 'end_turn', content, usage: normUsage(data.usage) };
     },
   };
 }
@@ -196,11 +209,15 @@ export function openaiCompatClient(baseUrl: string, apiKey?: string, fetchImpl: 
 /** Anthropic SDK wrapped to the ChatClient shape, streaming included. */
 function anthropicClient(anthropic: Anthropic): ChatClient {
   return {
-    create: (params: object) => anthropic.messages.create(params as any) as Promise<any>,
+    create: async (params: object) => {
+      const m = (await anthropic.messages.create(params as any)) as any;
+      return { ...m, usage: normUsage(m.usage) };
+    },
     createStreaming: async (params: object, onText: (t: string) => void) => {
       const stream = anthropic.messages.stream(params as any);
       stream.on('text', onText);
-      return stream.finalMessage() as Promise<any>;
+      const m = (await stream.finalMessage()) as any;
+      return { ...m, usage: normUsage(m.usage) };
     },
   };
 }
