@@ -108,7 +108,14 @@ app.get('/api/metrics', (_req, res) => {
 // The golden batch, runnable from the UI (slide 7: "run live"). The case list
 // is public (just questions); running them spends model credits, so the run is
 // auth-gated, rate-limited, and streams each result as it completes.
-const goldenCases = loadGoldenCases();
+// Resilient boot: a missing case file degrades to an empty batch rather than
+// killing the server at import time.
+let goldenCases: ReturnType<typeof loadGoldenCases> = [];
+try {
+  goldenCases = loadGoldenCases();
+} catch (err) {
+  console.warn('Golden cases unavailable, accuracy checks disabled:', String(err));
+}
 const goldenBucket = new TokenBucket(3, 60_000);
 
 app.get('/api/golden/cases', (_req, res) => {
@@ -123,10 +130,16 @@ app.get('/api/golden/run', async (req, res) => {
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders?.();
+  // Stop spending model credits if the viewer closes the modal mid-run.
+  let aborted = false;
+  req.on('close', () => {
+    aborted = true;
+  });
   const emit = (event: object) => res.write(`data: ${JSON.stringify(event)}\n\n`);
   emit({ type: 'start', total: goldenCases.length });
   let passed = 0;
   for (const c of goldenCases) {
+    if (aborted) break;
     const started = Date.now();
     try {
       const result = await runChat(provider.client, [{ role: 'user', content: c.question }], provider.model);

@@ -148,15 +148,19 @@ function setGoldenRow(id, state, missing, ms) {
 async function openGolden() {
   goldenModal.showModal();
   if (!goldenCases) {
+    // Leave goldenCases null on failure so reopening retries, rather than
+    // caching an empty list until a page reload.
     try {
-      goldenCases = await fetch('/api/golden/cases').then((r) => r.json());
+      const resp = await fetch('/api/golden/cases');
+      if (resp.ok) goldenCases = await resp.json();
     } catch {
-      goldenCases = [];
+      /* retry on next open */
     }
   }
-  goldenList.replaceChildren(...goldenCases.map(goldenRow));
+  const cases = goldenCases ?? [];
+  goldenList.replaceChildren(...cases.map(goldenRow));
   goldenSummary.className = 'golden-summary';
-  goldenSummary.textContent = goldenCases.length ? `${goldenCases.length} checks ready.` : 'No checks available.';
+  goldenSummary.textContent = cases.length ? `${cases.length} checks ready.` : 'Checks unavailable. Close and reopen to retry.';
 }
 
 async function runGolden() {
