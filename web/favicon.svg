@@ -1,8 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Slipstream">
-  <rect width="32" height="32" rx="7" fill="#ffffff"/>
-  <g fill="none" stroke-width="3.2" stroke-linecap="round">
-    <path d="M6 11 C 9 8, 13 8, 16 11 S 23 14, 26 11" stroke="#161848"/>
-    <path d="M6 16 C 9 13, 13 13, 16 16 S 23 19, 26 16" stroke="#ffc844"/>
-    <path d="M6 21 C 9 18, 13 18, 16 21 S 23 24, 26 21" stroke="#161848"/>
-  </g>
+  <rect width="32" height="32" fill="#ffffff"/>
+  <rect y="6" width="32" height="5" fill="#161848"/>
+  <rect y="13.5" width="32" height="5" fill="#ffc844"/>
+  <rect y="21" width="32" height="5" fill="#161848"/>
 </svg>
