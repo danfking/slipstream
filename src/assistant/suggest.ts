@@ -103,14 +103,20 @@ export async function generateSuggestion(
     max_tokens: 800,
     system:
       'Reasoning: low\n' +
-      'You suggest the next question for the operator of a marina operations assistant. ' +
+      'You suggest the single next question a marina operator should ask this assistant. ' +
+      'The assistant can ONLY answer questions its data tools directly cover. Suggest a question one ' +
+      'of the listed tools can answer on its own, and nothing else: not approval status, not staff ' +
+      'assignments or availability, not anything outside the tools. If unsure whether a tool covers it, ' +
+      'pick a simpler question that clearly maps to one. ' +
       'Reply with exactly one short question and nothing else: no preamble, no quotes, no list. ' +
-      'It must be answerable from the data tools listed, must follow naturally from the conversation, ' +
-      'and must not repeat a question already asked.',
+      'It must follow naturally from the conversation and must not repeat a question already asked.',
     messages: [
       {
         role: 'user',
-        content: `Conversation so far:\n${transcript}\n\nData tools available:\n${toolLines}\n\nSuggest the single best next question I should ask.`,
+        content:
+          `Conversation so far:\n${transcript}\n\nData tools available:\n${toolLines}\n\n` +
+          `Examples of good questions these tools can answer:\n${STARTERS.slice(0, 4).map((s) => `- ${s}`).join('\n')}\n\n` +
+          'Suggest the single best next question I should ask, answerable by these tools.',
       },
     ],
   };
