@@ -10,6 +10,7 @@ import { createAuth, parseCookies, TokenBucket } from './server/auth.js';
 import { generateSuggestion, suggestNext } from './assistant/suggest.js';
 import { createMetrics, type UsedKind } from './server/metrics.js';
 import { createProviderHealth, recordStoreStatus, worstState, type ServiceStatus } from './server/status.js';
+import { contentLabel, parseMessages } from './server/validate.js';
 import { db } from './data/store.js';
 
 const app = express();
@@ -158,10 +159,12 @@ async function conversationRoute(req: express.Request, res: express.Response, me
   }
 }
 
+const BAD_MESSAGES = 'messages must be a non-empty array of { role, content } turns';
+
 app.post('/api/chat', (req, res) => {
-  const messages = (req.body?.messages ?? []) as ChatMessage[];
-  if (!messages.length) return res.status(400).json({ error: 'messages required' });
-  void conversationRoute(req, res, messages, messages[messages.length - 1].content);
+  const messages = parseMessages(req.body);
+  if (!messages) return res.status(400).json({ error: BAD_MESSAGES });
+  void conversationRoute(req, res, messages, contentLabel(messages[messages.length - 1].content));
 });
 
 // Progressive reveal (issue #7): same auth, same rate limit, same loop — but
@@ -171,8 +174,8 @@ app.post('/api/chat', (req, res) => {
 // Providers that cannot stream fall back to buffered generation server-side;
 // the client code is identical either way (one big delta).
 app.post('/api/chat/stream', async (req, res) => {
-  const messages = (req.body?.messages ?? []) as ChatMessage[];
-  if (!messages.length) return res.status(400).json({ error: 'messages required' });
+  const messages = parseMessages(req.body);
+  if (!messages) return res.status(400).json({ error: BAD_MESSAGES });
   if (!bucket.take(clientIp(req))) return res.status(429).json({ error: 'Rate limit: give it a minute.' });
   const provider = providerFor(req);
   if (!provider) {
@@ -190,7 +193,7 @@ app.post('/api/chat/stream', async (req, res) => {
       onText: (text) => emit({ type: 'delta', text }),
     });
     if (provider.source === 'server') providerHealth.recordSuccess();
-    if (provider.source === 'server') void recordReply(messages[messages.length - 1].content, result.reply);
+    if (provider.source === 'server') void recordReply(contentLabel(messages[messages.length - 1].content), result.reply);
     // The reply ships first — the suggestion must never delay the answer. The
     // contextual (model-generated) suggestion follows as a trailing event; on
     // any failure it degrades to the static map. The client re-enables input
@@ -228,6 +231,16 @@ app.post('/api/approve', (req, res) => {
   } catch (err) {
     res.status(500).json({ error: String(err) });
   }
+});
+
+// Malformed JSON otherwise falls through to Express's default HTML error page,
+// which leaks a stack trace and absolute file paths (issue #30). Return a clean
+// 400 instead. Registered last so it catches body-parser errors from any route.
+app.use((err: any, _req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (err?.type === 'entity.parse.failed' || err instanceof SyntaxError) {
+    return res.status(400).json({ error: 'invalid JSON body' });
+  }
+  next(err);
 });
 
 const port = Number(process.env.PORT ?? 3000);
