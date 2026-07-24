@@ -50,6 +50,8 @@ header {
 }
 header h1 { font-size: 22px; letter-spacing: 0.2px; }
 header .sub { font-size: 13px; opacity: 0.85; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.brand .logo { display: block; flex-shrink: 0; }
 .meta { display: flex; gap: 10px; align-items: center; font-size: 13px; }
 .badge {
   background: var(--ds-navy-light);
