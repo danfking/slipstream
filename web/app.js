@@ -21,7 +21,16 @@ let acceptedSuggestion = null; // set when Tab fills the input
 
 function setSuggestion(s) {
   suggestion = s ?? null;
-  input.placeholder = suggestion ? `Try: "${suggestion.text}" (Tab to use)` : DEFAULT_PLACEHOLDER;
+  // Front-load the "Tab" affordance so it is never the part that clips on a
+  // narrow input, and truncate a long question so it ends in an ellipsis
+  // rather than a hard cut (issue #32). Tab still accepts the full text.
+  if (!suggestion) {
+    input.placeholder = DEFAULT_PLACEHOLDER;
+    return;
+  }
+  const t = suggestion.text;
+  const shown = t.length > 68 ? `${t.slice(0, 67).trimEnd()}…` : t;
+  input.placeholder = `Tab to ask: ${shown}`;
 }
 
 function suggestionUseHeaders(question) {
