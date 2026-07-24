@@ -79,7 +79,9 @@ body.mode-present .variant.presenter h1 { font-size: 1.7em; }
   left: 0;
   border: none;
   background: transparent;
-  color: var(--ds-border, #c3ced6);
+  /* Muted navy at rest (was near-invisible light grey), full navy on
+     hover/focus, so the chevrons read as controls without shouting. */
+  color: rgba(22, 24, 72, 0.4);
   font-size: 44px;
   cursor: pointer;
   transition: color 0.15s ease, background 0.15s ease;
@@ -94,6 +96,24 @@ body.mode-present .variant.presenter h1 { font-size: 1.7em; }
 .nav-zone:disabled { opacity: 0.25; cursor: default; }
 
 .nav-hint { font-size: 12px; opacity: 0.75; }
+
+/* Scroll cue: when a slide's content runs past the fold, a soft fade and a
+   small chevron signal there is more below. Toggled by deck.js on the active
+   slide's overflow/scroll state. Pointer-events off so it never blocks nav. */
+#deck-main.has-more::after {
+  content: "⌄";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 60px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 6px;
+  color: rgba(22, 24, 72, 0.5);
+  font-size: 22px;
+  background: linear-gradient(to top, var(--ds-surface-sunken, #f3f4f6) 30%, transparent);
+  pointer-events: none;
+}
 
 /* Progress bar: where you are in the deck at a glance, without counting. */
 #deck-progress {

@@ -63,6 +63,17 @@ applyMode(modeFromUrl());
 const total = manifest.slides.length;
 let current = Math.min(Math.max(Number(location.hash.replace('#/', '')) || 1, 1), total);
 
+const deckMain = document.getElementById('deck-main');
+// Show the "more below" fade only while the active slide overflows and is not
+// scrolled to the bottom (issue #33).
+function updateMoreCue() {
+  const el = slidesEl.children[current - 1];
+  if (!el) return;
+  const overflowing = el.scrollHeight - el.clientHeight > 4;
+  const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4;
+  deckMain.classList.toggle('has-more', overflowing && !atBottom);
+}
+
 function show(n) {
   current = Math.min(Math.max(n, 1), total);
   for (const [i, el] of [...slidesEl.children].entries()) {
@@ -73,7 +84,14 @@ function show(n) {
   document.getElementById('nav-prev').disabled = current === 1;
   document.getElementById('nav-next').disabled = current === total;
   history.replaceState(null, '', `#/${current}`);
+  const active = slidesEl.children[current - 1];
+  if (active) {
+    active.scrollTop = 0; // each slide opens at the top
+    active.onscroll = updateMoreCue;
+    updateMoreCue();
+  }
 }
+window.addEventListener('resize', updateMoreCue);
 
 document.addEventListener('keydown', (e) => {
   if (['ArrowRight', ' ', 'PageDown'].includes(e.key)) {
