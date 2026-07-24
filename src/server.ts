@@ -12,6 +12,7 @@ import { generateSuggestion, suggestNext } from './assistant/suggest.js';
 import { createMetrics, type UsedKind } from './server/metrics.js';
 import { createProviderHealth, recordStoreStatus, worstState, type ServiceStatus } from './server/status.js';
 import { contentLabel, parseMessages } from './server/validate.js';
+import { checkReply, loadGoldenCases } from './golden/check.js';
 import { db } from './data/store.js';
 
 // Tracing first, before anything it should instrument (issue #4).
@@ -102,6 +103,44 @@ app.get('/api/health', (req, res) => {
 // Nothing sensitive in here — counts only — so public like /api/health.
 app.get('/api/metrics', (_req, res) => {
   res.json(metrics.snapshot());
+});
+
+// The golden batch, runnable from the UI (slide 7: "run live"). The case list
+// is public (just questions); running them spends model credits, so the run is
+// auth-gated, rate-limited, and streams each result as it completes.
+const goldenCases = loadGoldenCases();
+const goldenBucket = new TokenBucket(3, 60_000);
+
+app.get('/api/golden/cases', (_req, res) => {
+  res.json(goldenCases.map((c) => ({ id: c.id, question: c.question })));
+});
+
+app.get('/api/golden/run', async (req, res) => {
+  if (!goldenBucket.take(clientIp(req))) return res.status(429).json({ error: 'Give the accuracy checks a minute between runs.' });
+  const provider = providerFor(req);
+  if (!provider) return res.status(401).json({ error: 'unlock required', detail: 'Enter the passcode, or bring your own model API key.' });
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders?.();
+  const emit = (event: object) => res.write(`data: ${JSON.stringify(event)}\n\n`);
+  emit({ type: 'start', total: goldenCases.length });
+  let passed = 0;
+  for (const c of goldenCases) {
+    const started = Date.now();
+    try {
+      const result = await runChat(provider.client, [{ role: 'user', content: c.question }], provider.model);
+      if (provider.source === 'server') providerHealth.recordSuccess();
+      const missing = checkReply(result.reply, result.toolEvents.map((e) => e.name), c);
+      if (!missing.length) passed++;
+      emit({ type: 'case', id: c.id, question: c.question, ok: missing.length === 0, missing, ms: Date.now() - started });
+    } catch (err) {
+      if (provider.source === 'server') providerHealth.recordError(String(err));
+      emit({ type: 'case', id: c.id, question: c.question, ok: false, missing: [String(err)], ms: Date.now() - started });
+    }
+  }
+  emit({ type: 'done', passed, total: goldenCases.length });
+  res.end();
 });
 
 // Synthetic-data browser (issue #6): the honesty disclosure made explorable.
