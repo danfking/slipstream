@@ -4,6 +4,7 @@
 // slide stacked = the standalone pack Bhavina's team reviews.
 
 import { renderMarkdown } from './render.js';
+import { SLIDE_ICONS } from './deck-icons.js';
 import remend from './vendor/remend.js';
 
 const deps = {
@@ -55,6 +56,17 @@ for (const [i, { detail, presenter }] of sources.entries()) {
   section.innerHTML =
     `<div class="variant detail">${renderMarkdown(detail, [], deps)}</div>` +
     (presenter ? `<div class="variant presenter">${renderMarkdown(presenter, [], deps)}</div>` : '');
+  // A topic icon chip beside the title (DockMaster's idiom), in both the
+  // reading and talk views. Each variant's h1 gets its own chip node.
+  const icon = SLIDE_ICONS[manifest.slides[i].file];
+  if (icon) {
+    for (const h1 of section.querySelectorAll('.variant h1')) {
+      const chip = document.createElement('span');
+      chip.className = 'slide-icon';
+      chip.innerHTML = icon;
+      h1.prepend(chip);
+    }
+  }
   slidesEl.appendChild(section);
 }
 

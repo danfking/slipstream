@@ -49,6 +49,43 @@ body.mode-present .variant.presenter h1 { font-size: 1.7em; }
 .slide h1 { font-size: 1.9em; margin-bottom: 0.7em; }
 .slide h3 { font-size: 1.15em; margin: 1.1em 0 0.4em; }
 .slide p, .slide li { max-width: 62ch; }
+
+/* Reading- and talk-view visuals (feed DockMaster's own style back). A topic
+   icon chip beside the title, circular numbered badges for step lists (only
+   the reading view has ordered lists), gold list markers. */
+.slide h1 { display: flex; align-items: center; gap: 18px; }
+.slide-icon {
+  flex-shrink: 0;
+  width: 54px; height: 54px;
+  border-radius: 14px;
+  background: var(--ds-surface-sunken, #f3f4f6);
+  border: 1px solid var(--ds-border, #e5e5e5);
+  color: var(--ds-navy, #161848);
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.slide-icon svg { width: 30px; height: 30px; }
+/* Talk view runs larger, so the chip scales up to sit with the bigger title. */
+body.mode-present .variant.presenter .slide-icon { width: 64px; height: 64px; border-radius: 16px; }
+body.mode-present .variant.presenter .slide-icon svg { width: 36px; height: 36px; }
+
+.slide ol { list-style: none; padding-left: 0; counter-reset: step; }
+.slide ol > li {
+  counter-increment: step;
+  position: relative;
+  padding-left: 48px;
+  margin: 0.7em 0;
+}
+.slide ol > li::before {
+  content: counter(step);
+  position: absolute; left: 0; top: 0;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--ds-navy, #161848);
+  color: #fff;
+  font-size: 0.72em; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.slide ul > li::marker { color: var(--ds-gold, #ffc844); }
 /* Diagrams are the exception to the prose column: give them the full slide.
    The 62ch cap is for readable text; an SVG shrunk to text width is unreadable
    on a projector, which defeats the slide. */
