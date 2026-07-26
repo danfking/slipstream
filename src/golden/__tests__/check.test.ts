@@ -27,6 +27,37 @@ describe('checkReply', () => {
   });
 });
 
+// Out-of-scope cases invert the assertions: the reply must say it cannot answer
+// rather than reaching for the nearest tool and producing a plausible figure.
+const REFUSAL = {
+  id: 'r',
+  question: 'q',
+  mustInclude: [],
+  mustCallTools: [],
+  mustNotInclude: ['16419'],
+  mustNotCallTools: ['get_unbilled_work'],
+};
+
+describe('checkReply, out-of-scope cases', () => {
+  it('passes when the reply neither cites the figure nor calls the tool', () => {
+    expect(checkReply("I can't answer that from the record.", [], REFUSAL)).toEqual([]);
+  });
+
+  it('reports a figure the reply should not have stated', () => {
+    const missing = checkReply('That comes to $16,419.', [], REFUSAL);
+    expect(missing).toContain('unexpected-text:"16419"');
+  });
+
+  it('reports a tool the reply should not have called', () => {
+    const missing = checkReply('Let me check.', ['get_unbilled_work'], REFUSAL);
+    expect(missing).toContain('unexpected-tool:get_unbilled_work');
+  });
+
+  it('treats the negative assertions as optional on ordinary cases', () => {
+    expect(checkReply('The total is $16,419.', ['get_unbilled_work'], CASE)).toEqual([]);
+  });
+});
+
 describe('loadGoldenCases', () => {
   it('loads the case file as a non-empty array of well-formed cases', () => {
     const cases = loadGoldenCases();

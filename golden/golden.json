@@ -1,5 +1,37 @@
 [
   {
+    "id": "oos-weather",
+    "question": "What's the weather forecast for haul-out week?",
+    "mustInclude": [],
+    "mustCallTools": [],
+    "mustNotCallTools": ["get_schedule_load", "get_work_orders"]
+  },
+  {
+    "id": "oos-last-year",
+    "question": "How much unbilled work did we have this time last year?",
+    "mustInclude": [],
+    "mustCallTools": [],
+    "mustNotInclude": ["16419"],
+    "mustNotCallTools": []
+  },
+  {
+    "id": "oos-insurance-renewal",
+    "question": "When does our marina insurance policy renew, and what's the premium?",
+    "mustInclude": [],
+    "mustCallTools": [],
+    "mustNotCallTools": [
+      "draft_invoices",
+      "get_occupancy",
+      "get_overnight_activity",
+      "get_parts_blockers",
+      "get_receivables",
+      "get_schedule_load",
+      "get_unbilled_work",
+      "get_work_orders",
+      "search_customers"
+    ]
+  },
+  {
     "id": "unbilled-total",
     "question": "How much completed work haven't we billed yet?",
     "mustInclude": ["16419"],
