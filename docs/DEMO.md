@@ -12,7 +12,7 @@ Server up beforehand; `/api/health` badge visible in the header (model + date). 
 4. **Ecosystem moment:** `Anything come in overnight?` → two Blu Voice Agent bookings and an engine no-start phoned in overnight. Line: *"the partner owns the phone; the record owns the truth; this is where it becomes visible."*
 5. **Blocked work:** `Which jobs are blocked waiting on parts? Flag any high-priority ones.` → six jobs, Bayline's charter boat the high-priority one, PO dates vs schedule dates.
 6. **Approval gate:** `Draft invoices for all the unbilled completed work.` → drafts appear with Approve/Reject, under a fixed line reading "Nothing is created until you approve." Approve. Then ask question 2 again: the number moved. Line: *"the model never holds the pen — a person clicked that button."* If pressed on it, open the **APPROVED — CREATE INVOICES** receipt: the write is auditable on the same terms as every read.
-7. **Golden batch, live:** in a terminal, `npm run golden` → 10/10 with timings. Line: *"this runs on every release; accuracy is a number on a dashboard, not a feeling."*
+7. **Golden batch, live:** in a terminal, `npm run golden` → 13/13 with timings. Three of the thirteen are out-of-scope cases (weather, last year's unbilled total, insurance renewal) that assert the assistant *refuses* rather than reaching for the nearest tool. Line: *"this runs on every release; accuracy is a number on a dashboard, not a feeling."* If asked what the refusal cases are for: they caught a real defect — asked for last year's unbilled work, it answered this year's $16,419 and cited the tool, so the wrong answer arrived carrying a receipt.
 8. If provider/vendor risk comes up: stop the server, restart with the Ollama env vars, ask question 2 again offline. Provider swap as config, demonstrated.
 
 ## Before you start
@@ -28,7 +28,7 @@ If the provider drops, the failure is a designed state — an outlined card with
 **Pre-call checklist (from about 5:45):**
 1. Open the health URL — wakes the machine (it scales to zero when idle; first hit takes a few seconds).
 2. Open the site, enter the passcode, ask one throwaway question. Confirms model + key + warm path end to end.
-3. Run the golden batch against the hosted app in a terminal (`GOLDEN_URL=https://slipstream-dk.fly.dev GOLDEN_PASSCODE=... npm run golden`) — this is also demo moment 7, so a fresh 10/10 is ready to show.
+3. Run the golden batch against the hosted app in a terminal (`GOLDEN_URL=https://slipstream-dk.fly.dev GOLDEN_PASSCODE=... npm run golden`) — this is also demo moment 7, so a fresh 13/13 is ready to show. Run it twice: `parts-blockers` is flaky on the local `gpt-oss:20b` (it passed 7/8 at baseline, failing when the model summarises without naming Bayline). That flake has not been measured on `gpt-4o-mini`, so confirm it here rather than discovering it live.
 4. Start the local hot spare: `SLIPSTREAM_PROVIDER=openai SLIPSTREAM_MODEL=gpt-oss:20b npm run dev` in the repo, briefing clicked once so the model is loaded. If Fly or OpenAI misbehaves mid-call, switch the shared tab to localhost:3000 and carry on — same app, same data, fully offline.
 5. Deck open at slide 1, Teams sharing the browser window (not the screen).
 

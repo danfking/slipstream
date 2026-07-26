@@ -11,6 +11,10 @@ export interface GoldenCase {
   question: string;
   mustInclude: string[];
   mustCallTools: string[];
+  // Out-of-scope cases assert the opposite: a question the tool layer cannot
+  // answer must not produce a figure, and must not reach for a nearby tool.
+  mustNotInclude?: string[];
+  mustNotCallTools?: string[];
 }
 
 export function loadGoldenCases(): GoldenCase[] {
@@ -33,5 +37,9 @@ export function checkReply(reply: string, toolNames: string[], c: GoldenCase): s
   const missing: string[] = [];
   for (const needle of c.mustInclude) if (!norm.includes(normalize(needle))) missing.push(`text:"${needle}"`);
   for (const tool of c.mustCallTools) if (!called.has(tool)) missing.push(`tool:${tool}`);
+  for (const needle of c.mustNotInclude ?? [])
+    if (norm.includes(normalize(needle))) missing.push(`unexpected-text:"${needle}"`);
+  for (const tool of c.mustNotCallTools ?? [])
+    if (called.has(tool)) missing.push(`unexpected-tool:${tool}`);
   return missing;
 }
