@@ -28,7 +28,9 @@ If the provider drops, the failure is a designed state — an outlined card with
 **Pre-call checklist (from about 5:45):**
 1. Open the health URL — wakes the machine (it scales to zero when idle; first hit takes a few seconds).
 2. Open the site, enter the passcode, ask one throwaway question. Confirms model + key + warm path end to end.
-3. Run the golden batch against the hosted app in a terminal (`GOLDEN_URL=https://slipstream-dk.fly.dev GOLDEN_PASSCODE=... npm run golden`) — this is also demo moment 7, so a fresh 13/13 is ready to show. Run it twice: `parts-blockers` is flaky on the local `gpt-oss:20b` (it passed 7/8 at baseline, failing when the model summarises without naming Bayline). That flake has not been measured on `gpt-4o-mini`, so confirm it here rather than discovering it live.
+3. Run the golden batch against the hosted app in a terminal — PowerShell, so `$env:GOLDEN_URL='https://slipstream-dk.fly.dev'; $env:GOLDEN_PASSCODE='...'; npm run golden` (the bash `VAR=x npm run` form does not work in this shell). This is also demo moment 7, so a fresh 13/13 is ready to show. Run it twice: `parts-blockers` is flaky on the local `gpt-oss:20b` (7/8 at baseline, failing when the model summarises without naming Bayline). On hosted `gpt-4o-mini` it has passed once, which is not enough to call it clean — a second run is the cheap insurance.
+
+   The terminal batch is the *stricter* check. `scripts/golden.ts` also runs every reply through the markdown lint gate; the in-app modal (`/api/golden/run`) only checks figures and tool calls. So 13/13 in the modal does not guarantee 13/13 in the terminal — run both before the call.
 4. Start the local hot spare: `SLIPSTREAM_PROVIDER=openai SLIPSTREAM_MODEL=gpt-oss:20b npm run dev` in the repo, briefing clicked once so the model is loaded. If Fly or OpenAI misbehaves mid-call, switch the shared tab to localhost:3000 and carry on — same app, same data, fully offline.
 5. Deck open at slide 1, Teams sharing the browser window (not the screen).
 
