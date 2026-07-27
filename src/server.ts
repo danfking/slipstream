@@ -114,16 +114,24 @@ let goldenCases: ReturnType<typeof loadGoldenCases> = [];
 try {
   goldenCases = loadGoldenCases();
 } catch (err) {
-  console.warn('Golden cases unavailable, accuracy checks disabled:', String(err));
+  console.warn('Golden cases unavailable, golden batch disabled:', String(err));
 }
 const goldenBucket = new TokenBucket(3, 60_000);
 
+// Expectations included so the modal can show what each check asserts.
 app.get('/api/golden/cases', (_req, res) => {
-  res.json(goldenCases.map((c) => ({ id: c.id, question: c.question })));
+  res.json(goldenCases.map((c) => ({
+    id: c.id,
+    question: c.question,
+    mustInclude: c.mustInclude,
+    mustCallTools: c.mustCallTools,
+    mustNotInclude: c.mustNotInclude ?? [],
+    mustNotCallTools: c.mustNotCallTools ?? [],
+  })));
 });
 
 app.get('/api/golden/run', async (req, res) => {
-  if (!goldenBucket.take(clientIp(req))) return res.status(429).json({ error: 'Give the accuracy checks a minute between runs.' });
+  if (!goldenBucket.take(clientIp(req))) return res.status(429).json({ error: 'Give the golden batch a minute between runs.' });
   const provider = providerFor(req);
   if (!provider) return res.status(401).json({ error: 'unlock required', detail: 'Enter the passcode, or bring your own model API key.' });
   res.setHeader('Content-Type', 'text/event-stream');
@@ -144,12 +152,18 @@ app.get('/api/golden/run', async (req, res) => {
     try {
       const result = await runChat(provider.client, [{ role: 'user', content: c.question }], provider.model);
       if (provider.source === 'server') providerHealth.recordSuccess();
-      const missing = checkReply(result.reply, result.toolEvents.map((e) => e.name), c);
+      const toolsCalled = result.toolEvents.map((e) => e.name);
+      const missing = checkReply(result.reply, toolsCalled, c);
       if (!missing.length) passed++;
-      emit({ type: 'case', id: c.id, question: c.question, ok: missing.length === 0, missing, ms: Date.now() - started });
+      // toolsCalled and the reply ride along so the modal can show WHY a
+      // check passed, not just that it did.
+      emit({ type: 'case', id: c.id, question: c.question, ok: missing.length === 0, missing, ms: Date.now() - started, toolsCalled, reply: result.reply });
     } catch (err) {
       if (provider.source === 'server') providerHealth.recordError(String(err));
-      emit({ type: 'case', id: c.id, question: c.question, ok: false, missing: [String(err)], ms: Date.now() - started });
+      // A case that never ran must not render its assertions as passed:
+      // checkReply against an empty reply fails every positive assertion, and
+      // the error string rides along as its own failure line.
+      emit({ type: 'case', id: c.id, question: c.question, ok: false, missing: [...checkReply('', [], c), String(err)], ms: Date.now() - started, toolsCalled: [], reply: '' });
     }
   }
   emit({ type: 'done', passed, total: goldenCases.length });

@@ -109,19 +109,106 @@ document.getElementById('gate-key-btn').addEventListener('click', () => {
   gate.close();
 });
 
-// Accuracy checks (the golden batch, run from the app). The case list loads
-// once; running streams each result so the checks turn green in front of the
-// audience. Run is auth-gated server-side; a 401 opens the credential gate.
+// The golden batch, run from the app. The case list loads once; running
+// streams each result so the checks turn green in front of the audience.
+// Run is auth-gated server-side; a 401 opens the credential gate.
 const goldenModal = document.getElementById('golden');
 const goldenList = document.getElementById('golden-list');
 const goldenSummary = document.getElementById('golden-summary');
 const goldenRunBtn = document.getElementById('golden-run');
 let goldenCases = null;
+// Latest run result per case id, so an expanded row can show why it passed.
+const goldenResults = new Map();
+
+// One entry per assertion, tagged exactly the way the server tags failures in
+// missing[] (src/golden/check.ts), so pass/fail is a set-membership test.
+function goldenAssertions(c) {
+  const list = [];
+  for (const needle of c.mustInclude ?? []) list.push({ tag: `text:"${needle}"`, label: 'Reply must state', value: needle });
+  for (const tool of c.mustCallTools ?? []) list.push({ tag: `tool:${tool}`, label: 'Must call', value: tool });
+  for (const needle of c.mustNotInclude ?? []) list.push({ tag: `unexpected-text:"${needle}"`, label: 'Must not state', value: needle });
+  for (const tool of c.mustNotCallTools ?? []) list.push({ tag: `unexpected-tool:${tool}`, label: 'Must not call', value: tool });
+  return list;
+}
+
+// Fills the expanded panel: what the check asserts, and after a run, how each
+// assertion went, which tools actually ran, and the reply itself.
+function renderGoldenDetail(c, detail) {
+  detail.replaceChildren();
+  const result = goldenResults.get(c.id);
+  const asserts = goldenAssertions(c);
+  const positive = (c.mustInclude ?? []).length + (c.mustCallTools ?? []).length;
+  if (!positive) {
+    const note = document.createElement('div');
+    note.className = 'oos-note';
+    note.textContent = 'Out of scope on purpose: the right answer here is a refusal, not a figure.';
+    detail.append(note);
+  }
+  const missing = new Set(result?.missing ?? []);
+  for (const a of asserts) {
+    const line = document.createElement('div');
+    line.className = 'golden-assert';
+    const glyph = document.createElement('span');
+    glyph.className = 'glyph';
+    glyph.textContent = '·';
+    if (result) {
+      const failed = missing.has(a.tag);
+      line.classList.add(failed ? 'fail' : 'pass');
+      glyph.textContent = failed ? '✕' : '✓';
+      missing.delete(a.tag);
+    }
+    const text = document.createElement('span');
+    const code = document.createElement('code');
+    code.textContent = a.value;
+    text.append(`${a.label} `, code);
+    line.append(glyph, text);
+    detail.append(line);
+  }
+  // Anything left in missing[] matched no assertion tag: a run error. Show it.
+  for (const leftover of missing) {
+    const line = document.createElement('div');
+    line.className = 'golden-assert fail';
+    const glyph = document.createElement('span');
+    glyph.className = 'glyph';
+    glyph.textContent = '✕';
+    const text = document.createElement('span');
+    text.textContent = leftover;
+    line.append(glyph, text);
+    detail.append(line);
+  }
+  if (result) {
+    const tools = document.createElement('div');
+    tools.className = 'golden-tools';
+    const names = result.toolsCalled ?? [];
+    tools.textContent = 'Tools called: ';
+    if (names.length) {
+      names.forEach((n, i) => {
+        if (i) tools.append(', ');
+        const code = document.createElement('code');
+        code.textContent = n;
+        tools.append(code);
+      });
+    } else {
+      tools.append('none');
+    }
+    detail.append(tools);
+    if (result.reply) {
+      const reply = document.createElement('div');
+      reply.className = 'golden-reply';
+      reply.textContent = result.reply;
+      detail.append(reply);
+    }
+  }
+}
 
 function goldenRow(c) {
-  const row = document.createElement('div');
+  const item = document.createElement('div');
+  item.className = 'golden-item';
+  const row = document.createElement('button');
+  row.type = 'button';
   row.className = 'golden-row';
   row.dataset.id = c.id;
+  row.setAttribute('aria-expanded', 'false');
   const status = document.createElement('span');
   status.className = 'golden-status pending';
   status.textContent = '•';
@@ -130,8 +217,24 @@ function goldenRow(c) {
   q.textContent = c.question;
   const ms = document.createElement('span');
   ms.className = 'golden-ms';
-  row.append(status, q, ms);
-  return row;
+  const chev = document.createElement('span');
+  chev.className = 'golden-chev';
+  chev.textContent = '⌄';
+  chev.setAttribute('aria-hidden', 'true');
+  row.append(status, q, ms, chev);
+  const detail = document.createElement('div');
+  detail.className = 'golden-detail';
+  detail.id = `golden-detail-${c.id}`;
+  row.setAttribute('aria-controls', detail.id);
+  detail.hidden = true;
+  row.addEventListener('click', () => {
+    const open = detail.hidden;
+    detail.hidden = !open;
+    row.setAttribute('aria-expanded', String(open));
+    if (open) renderGoldenDetail(c, detail);
+  });
+  item.append(row, detail);
+  return item;
 }
 
 function setGoldenRow(id, state, missing, ms) {
@@ -143,6 +246,12 @@ function setGoldenRow(id, state, missing, ms) {
   row.querySelector('.golden-ms').textContent = ms != null ? `${ms} ms` : '';
   row.title = missing && missing.length ? `missing: ${missing.join(', ')}` : '';
   row.classList.toggle('is-fail', state === 'fail');
+  // If the row is open while the batch runs, refresh its detail in place.
+  const detail = row.nextElementSibling;
+  if (detail && !detail.hidden) {
+    const c = (goldenCases ?? []).find((x) => x.id === id);
+    if (c) renderGoldenDetail(c, detail);
+  }
 }
 
 async function openGolden() {
@@ -160,12 +269,13 @@ async function openGolden() {
   const cases = goldenCases ?? [];
   goldenList.replaceChildren(...cases.map(goldenRow));
   goldenSummary.className = 'golden-summary';
-  goldenSummary.textContent = cases.length ? `${cases.length} checks ready.` : 'Checks unavailable. Close and reopen to retry.';
+  goldenSummary.textContent = cases.length ? `${cases.length} checks in the batch.` : 'Batch unavailable. Close and reopen to retry.';
 }
 
 async function runGolden() {
   if (!goldenCases || !goldenCases.length) return;
   goldenRunBtn.disabled = true;
+  goldenResults.clear();
   for (const c of goldenCases) setGoldenRow(c.id, 'pending');
   goldenSummary.className = 'golden-summary';
   goldenSummary.textContent = 'Running…';
@@ -174,7 +284,7 @@ async function runGolden() {
     if (!resp.ok) {
       const data = await resp.json().catch(() => ({}));
       if (resp.status === 401) openGate();
-      goldenSummary.textContent = data.detail ?? data.error ?? `Could not run the checks (HTTP ${resp.status}).`;
+      goldenSummary.textContent = data.detail ?? data.error ?? `Could not run the batch (HTTP ${resp.status}).`;
       goldenRunBtn.disabled = false;
       return;
     }
@@ -198,6 +308,7 @@ async function runGolden() {
             continue;
           }
           if (ev.type === 'case') {
+            goldenResults.set(ev.id, ev);
             setGoldenRow(ev.id, ev.ok ? 'pass' : 'fail', ev.missing, ev.ms);
           } else if (ev.type === 'done') {
             goldenSummary.textContent = `${ev.passed} / ${ev.total} passed`;
@@ -207,7 +318,7 @@ async function runGolden() {
       }
     }
   } catch {
-    goldenSummary.textContent = 'The checks stopped unexpectedly.';
+    goldenSummary.textContent = 'The batch stopped unexpectedly.';
   } finally {
     goldenRunBtn.disabled = false;
   }

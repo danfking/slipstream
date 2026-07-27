@@ -51,7 +51,7 @@ Each conversation is one OpenTelemetry trace: a `chat` root span, an `llm.turn` 
 1. Numbers come from deterministic tool functions, never from the model — the model chooses *which* question to ask, not *how* to compute the answer.
 2. Every answer ships with receipts: the raw tool calls and results, visible in the UI.
 3. The model's toolbox is read-only, plus one draft action; the apply function is not registered with the model and runs only behind a human approval gate.
-4. A golden batch (`npm run golden`) runs ten real questions with asserted answers end-to-end through the same HTTP stack the UI uses; it gates releases.
+4. A golden batch (`npm run golden`) runs thirteen real questions with asserted answers end-to-end through the same HTTP stack the UI uses, three of them out-of-scope questions asserting a refusal; it gates releases.
 5. The dataset is synthetic and deterministic (fixed seed, fixed anchor date), so every demo run is reproducible.
 
 ## Hosting (Fly.io, burnish pattern)

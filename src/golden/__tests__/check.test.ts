@@ -68,4 +68,21 @@ describe('loadGoldenCases', () => {
       expect(Array.isArray(c.mustCallTools)).toBe(true);
     }
   });
+
+  // /api/golden/cases serialises these fields for the modal's expandable
+  // detail; every case must expose usable ids and (possibly empty) negative
+  // assertion arrays after the ?? [] defaulting the route applies.
+  it('exposes the fields the cases endpoint serialises', () => {
+    const cases = loadGoldenCases();
+    const ids = new Set(cases.map((c) => c.id));
+    expect(ids.size).toBe(cases.length);
+    for (const c of cases) {
+      expect(typeof c.id).toBe('string');
+      expect(Array.isArray(c.mustNotInclude ?? [])).toBe(true);
+      expect(Array.isArray(c.mustNotCallTools ?? [])).toBe(true);
+      const total =
+        c.mustInclude.length + c.mustCallTools.length + (c.mustNotInclude ?? []).length + (c.mustNotCallTools ?? []).length;
+      expect(total).toBeGreaterThan(0);
+    }
+  });
 });

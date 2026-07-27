@@ -30,7 +30,10 @@ export const normalize = (s: string): string =>
     .replace(/[$,]/g, '')
     .replace(/(\d)[\s  ]+(?=\d)/g, '$1');
 
-/** Returns the list of failed assertions, empty when the reply passes. */
+/** Returns the list of failed assertions, empty when the reply passes.
+ * Tag formats (text:"..", tool:.., unexpected-text:"..", unexpected-tool:..)
+ * are mirrored by goldenAssertions in web/app.js for the modal's per-assertion
+ * verdicts; change them in both places or verdicts silently misrender. */
 export function checkReply(reply: string, toolNames: string[], c: GoldenCase): string[] {
   const norm = normalize(reply ?? '');
   const called = new Set(toolNames);

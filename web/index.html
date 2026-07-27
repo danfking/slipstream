@@ -52,7 +52,7 @@
     <aside id="receipts-pane">
       <div class="receipts-head">
         <h2>Receipts</h2>
-        <button type="button" id="golden-open" class="checks-btn" title="Run the accuracy checks against the live system">Accuracy checks</button>
+        <button type="button" id="golden-open" class="checks-btn" title="Run the golden batch against the live system">Golden batch</button>
       </div>
       <p class="hint">Every number the assistant gives comes from a tool call listed here, grouped by the question it answered. Click one to see the raw result.</p>
       <div id="receipts"></div>
@@ -95,14 +95,14 @@
        checked against the live system in front of the audience. -->
   <dialog id="golden" class="golden-modal">
     <div class="golden-head">
-      <h3>Accuracy checks</h3>
+      <h3>The golden batch</h3>
       <button type="button" id="golden-close" aria-label="Close">✕</button>
     </div>
-    <p class="hint">Real questions with known answers, run against the live system. Each one checks that the reply states the right figures and called the right tools.</p>
+    <p class="hint">Real questions with known answers, run against the live system on every release. Most check that the reply states the right figures and called the right tools; three ask something the tools cannot answer and check that the assistant refuses instead of guessing. Expand a question to see exactly what it asserts.</p>
     <div class="golden-summary" id="golden-summary">Loading checks…</div>
     <div id="golden-list" class="golden-list"></div>
     <div class="golden-actions">
-      <button type="button" id="golden-run">Run checks</button>
+      <button type="button" id="golden-run">Run the batch</button>
     </div>
   </dialog>
 
