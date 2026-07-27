@@ -11,6 +11,20 @@ export const db: SeedData = JSON.parse(
   readFileSync(join(root, 'data', 'seed.json'), 'utf-8'),
 );
 
+// Restores the record to its seeded state. Only the slices the approval flow
+// mutates are replaced (work-order statuses, line billed flags, invoices);
+// reference data (customers, boats, technicians, parts) is never written to,
+// so the lookup maps below stay valid. Arrays are replaced in place because
+// other modules hold references to db itself.
+export function resetDb(): void {
+  const fresh: SeedData = JSON.parse(
+    readFileSync(join(root, 'data', 'seed.json'), 'utf-8'),
+  );
+  db.workOrders.splice(0, db.workOrders.length, ...fresh.workOrders);
+  db.workOrderLines.splice(0, db.workOrderLines.length, ...fresh.workOrderLines);
+  db.invoices.splice(0, db.invoices.length, ...fresh.invoices);
+}
+
 export const customerById = new Map(db.customers.map((c) => [c.id, c]));
 export const boatById = new Map(db.boats.map((b) => [b.id, b]));
 export const techById = new Map(db.technicians.map((t) => [t.id, t]));

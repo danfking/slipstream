@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { db } from '../../data/store.js';
-import { applyInvoiceDrafts, draftInvoices } from '../actions.js';
+import { db, resetDb } from '../../data/store.js';
+import { applyInvoiceDrafts, draftInvoices, resetInvoiceSequence } from '../actions.js';
 import { TOOLS, runTool } from '../registry.js';
 
 describe('draft_invoices', () => {
@@ -34,6 +34,28 @@ describe('draft_invoices', () => {
     expect(created).toHaveLength(1);
     expect(db.invoices.length).toBe(before + 1);
     expect(draftInvoices({}).drafts.some((d) => d.workOrderId === first.workOrderId)).toBe(false);
+  });
+
+  it('reset restores the seeded record and the invoice-number sequence', () => {
+    // Bill everything, then reset: the demo reset behind /api/reset. The
+    // seeded figures must come back exactly, and a re-run must create the
+    // same INV ids so every demo run is identical.
+    const seededInvoices = db.invoices.filter((i) => !i.id.startsWith('INV-9')).length;
+    applyInvoiceDrafts(draftInvoices({}).drafts);
+    expect(draftInvoices({}).drafts.length).toBe(0);
+
+    resetDb();
+    resetInvoiceSequence();
+
+    const { drafts, totalAmount } = draftInvoices({});
+    expect(drafts.length).toBe(14);
+    expect(totalAmount).toBe(16419);
+    expect(db.invoices.length).toBe(seededInvoices);
+    const { created } = applyInvoiceDrafts([drafts[0]]);
+    expect(created[0]).toBe('INV-901');
+    // Leave the store clean for any suite ordering after this file.
+    resetDb();
+    resetInvoiceSequence();
   });
 });
 

@@ -66,6 +66,12 @@ header .sub { font-size: 13px; color: var(--ds-text-muted); }
    exactly the thing a viewer must not miss. */
 .badge.demo { background: var(--ds-gold); border-color: var(--ds-gold); color: var(--ds-navy-dark); font-weight: 600; }
 
+/* The reset control wears the badge style; a button needs the font and color
+   set explicitly (they don't inherit the way a span's do). */
+.reset-btn { font-family: inherit; font-size: inherit; color: #fff; cursor: pointer; }
+.reset-btn:hover, .reset-btn:focus-visible { background: var(--ds-navy); }
+.reset-btn:disabled { opacity: 0.55; cursor: default; }
+
 /* Badges that are links (the "present ▸" deck link): without this the browser's
    default anchor blue + underline renders on the navy header, near-invisible. */
 a.badge, a.badge:visited {

@@ -17,6 +17,13 @@ export interface InvoiceDraft {
 
 let invSeq = 900;
 
+// Companion to store.resetDb: the demo reset restores the counter too, so a
+// re-run creates the same INV-901... ids and the every-run-is-identical claim
+// stays true.
+export function resetInvoiceSequence(): void {
+  invSeq = 900;
+}
+
 export function draftInvoices(input: { workOrderIds?: string[] }) {
   const unbilled = getUnbilledWork().items;
   const selected = input.workOrderIds?.length

@@ -6,14 +6,14 @@ import { ANCHOR_DATE } from './data/types.js';
 import { MODEL } from './assistant/config.js';
 import { makeClient, resolveRequest, type ResolvedProvider } from './assistant/providers.js';
 import { runChat, type ChatMessage } from './assistant/chat.js';
-import { applyInvoiceDrafts, type InvoiceDraft } from './tools/actions.js';
+import { applyInvoiceDrafts, resetInvoiceSequence, type InvoiceDraft } from './tools/actions.js';
 import { createAuth, parseCookies, TokenBucket } from './server/auth.js';
 import { generateSuggestion, suggestNext } from './assistant/suggest.js';
 import { createMetrics, type UsedKind } from './server/metrics.js';
 import { createProviderHealth, recordStoreStatus, worstState, type ServiceStatus } from './server/status.js';
 import { contentLabel, parseMessages } from './server/validate.js';
 import { checkReply, loadGoldenCases } from './golden/check.js';
-import { db } from './data/store.js';
+import { db, resetDb } from './data/store.js';
 
 // Tracing first, before anything it should instrument (issue #4).
 startTelemetry();
@@ -305,6 +305,25 @@ app.post('/api/approve', (req, res) => {
     const drafts = (req.body?.drafts ?? []) as InvoiceDraft[];
     if (!drafts.length) return res.status(400).json({ error: 'drafts required' });
     res.json(applyInvoiceDrafts(drafts));
+  } catch (err) {
+    res.status(500).json({ error: String(err) });
+  }
+});
+
+// Demo reset: restores the seeded record so the approval flow can be shown
+// more than once (approving marks work orders invoiced until the process
+// restarts). Gated the same way as the approval itself; the reset also
+// restores the invoice-number counter so a re-run creates identical ids.
+app.post('/api/reset', (req, res) => {
+  const cookies = parseCookies(req.headers.cookie);
+  const hasByoKey = Boolean(req.header('x-llm-key'));
+  if (!auth.isAuthorized(cookies[SESSION_COOKIE]) && !hasByoKey) {
+    return res.status(401).json({ error: 'unlock required' });
+  }
+  try {
+    resetDb();
+    resetInvoiceSequence();
+    res.json({ ok: true, note: 'Record restored to the seeded state.' });
   } catch (err) {
     res.status(500).json({ error: String(err) });
   }
