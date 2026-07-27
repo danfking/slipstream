@@ -494,7 +494,8 @@ main {
   padding: 8px 10px; border-radius: var(--ds-radius-sm);
   border: 1px solid transparent;
 }
-.golden-row:hover, .golden-row:focus-visible { background: var(--ds-surface-sunken); outline: none; }
+.golden-row:hover { background: var(--ds-surface-sunken); }
+.golden-row:focus-visible { background: var(--ds-surface-sunken); outline: 2px solid var(--ds-navy); outline-offset: -2px; }
 .golden-row.is-fail { background: #fdeceb; border-color: var(--ds-danger-border-soft); }
 .golden-chev {
   flex-shrink: 0; align-self: center;

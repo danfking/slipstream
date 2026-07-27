@@ -114,7 +114,7 @@ let goldenCases: ReturnType<typeof loadGoldenCases> = [];
 try {
   goldenCases = loadGoldenCases();
 } catch (err) {
-  console.warn('Golden cases unavailable, accuracy checks disabled:', String(err));
+  console.warn('Golden cases unavailable, golden batch disabled:', String(err));
 }
 const goldenBucket = new TokenBucket(3, 60_000);
 
@@ -160,7 +160,10 @@ app.get('/api/golden/run', async (req, res) => {
       emit({ type: 'case', id: c.id, question: c.question, ok: missing.length === 0, missing, ms: Date.now() - started, toolsCalled, reply: result.reply });
     } catch (err) {
       if (provider.source === 'server') providerHealth.recordError(String(err));
-      emit({ type: 'case', id: c.id, question: c.question, ok: false, missing: [String(err)], ms: Date.now() - started, toolsCalled: [], reply: '' });
+      // A case that never ran must not render its assertions as passed:
+      // checkReply against an empty reply fails every positive assertion, and
+      // the error string rides along as its own failure line.
+      emit({ type: 'case', id: c.id, question: c.question, ok: false, missing: [...checkReply('', [], c), String(err)], ms: Date.now() - started, toolsCalled: [], reply: '' });
     }
   }
   emit({ type: 'done', passed, total: goldenCases.length });

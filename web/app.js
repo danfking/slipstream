@@ -220,9 +220,12 @@ function goldenRow(c) {
   const chev = document.createElement('span');
   chev.className = 'golden-chev';
   chev.textContent = '⌄';
+  chev.setAttribute('aria-hidden', 'true');
   row.append(status, q, ms, chev);
   const detail = document.createElement('div');
   detail.className = 'golden-detail';
+  detail.id = `golden-detail-${c.id}`;
+  row.setAttribute('aria-controls', detail.id);
   detail.hidden = true;
   row.addEventListener('click', () => {
     const open = detail.hidden;
