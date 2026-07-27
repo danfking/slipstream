@@ -21,7 +21,7 @@ Anything below marked **approximate** was sampled by eye from a screenshot, not 
 
 ## CSS custom properties
 
-These are the brand-derived tokens as originally specified. The shipped `web/style.css` implements this set and has since grown app-specific additions; three tokens below (`--ds-gold-light`, `--ds-success`, `--ds-warning`) ended up unused in the shipped stylesheet, and the shipped sans stack adds "Segoe UI" and Roboto after Inter. This document remains the brand source of truth; `web/style.css` is the implementation.
+These are the brand-derived tokens as originally specified. The shipped `web/style.css` implements this set and has since grown app-specific additions; three tokens below (`--ds-gold-light`, `--ds-success`, `--ds-warning`) were omitted from the shipped stylesheet entirely, and the shipped sans stack adds "Segoe UI" and Roboto after Inter. This document remains the brand source of truth; `web/style.css` is the implementation.
 
 ```css
 :root {
@@ -83,7 +83,7 @@ These are the brand-derived tokens as originally specified. The shipped `web/sty
 | `--ds-navy-light` | `#1e1e5a` | Secondary navy surfaces, hover | Verbatim in `dockmaster.com/products/dockmaster-web` and `/blu-voice-agent` CSS |
 | `--ds-navy-dark` | `#0d0d2b` | Deep navy / near-black text | Verbatim across all three fetched marketing pages' CSS |
 | `--ds-gold` | `#ffc844` | Highlight/attention accent | Verbatim in shipped CSS; also the border/tint color on the "Pinned Note" card in `dm-customer-details.png` |
-| `--ds-gold-light` | `#ffe066` | Lighter gold fill (unused in shipped style.css so far) | Verbatim in shipped CSS |
+| `--ds-gold-light` | `#ffe066` | Lighter gold fill (omitted from shipped style.css) | Verbatim in shipped CSS |
 | `--ds-gold-soft` | `#ffd87a` | Softest gold tint | Verbatim in shipped CSS |
 | `--ds-gold-text` | `#b86614` (approx.) | Gold-on-light accessible text | Computed from `--gold-text: 30 80% 40%` HSL token, not visually confirmed |
 | `--ds-surface` | `#ffffff` | Card/page background | Obvious from both product screenshots |
@@ -91,8 +91,8 @@ These are the brand-derived tokens as originally specified. The shipped `web/sty
 | `--ds-surface-muted` | `#b7c6dc` (approx., eyeballed) | Inactive tab fill, image placeholder | Sampled by eye from `dm-customer-details.png` / `dm-customer-portal.png` |
 | `--ds-border` | `#e5e5e5` (approx.) | Card/input hairlines | Computed from shadcn `--border: 0 0% 89.8%` |
 | `--ds-text-muted` | `#666666` (approx.) | Secondary/label text | Computed from shadcn `--muted-foreground: 0 0% 40%` |
-| `--ds-success` | `#2f9e6e` (guessed default) | Success state (unused in shipped style.css so far) | **Not observed anywhere in public DockMaster surfaces.** Nearest plausible tone from their shadcn chart palette. Flagged as invented, not verified. |
-| `--ds-warning` | = gold | Warning/attention (unused in shipped style.css so far) | DockMaster's own convention: gold is the attention color, there's no separate warning hue |
+| `--ds-success` | `#2f9e6e` (guessed default) | Success state (omitted from shipped style.css) | **Not observed anywhere in public DockMaster surfaces.** Nearest plausible tone from their shadcn chart palette. Flagged as invented, not verified. |
+| `--ds-warning` | = gold | Warning/attention (omitted from shipped style.css) | DockMaster's own convention: gold is the attention color, there's no separate warning hue |
 | `--ds-danger` | `#ef4444` (approx.) | Error/destructive | Computed from shadcn `--destructive: 0 84.2% 60.2%` |
 | `--ds-danger-border-soft` | `#f3b4ac` (approx., eyeballed) | Outline-only danger box | Sampled by eye from the "Emergency Contact" box border in `dm-customer-details.png` |
 | Radii | 6 / 10 / 14 / pill (px) | see above | Eyeballed from card/button/tab corners in both screenshots; base `--radius: 0.5rem` (8px) confirmed in shadcn tokens as the design system's default unit |
