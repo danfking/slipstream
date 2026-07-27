@@ -6,6 +6,6 @@
 - A small team can ship a first version against the legacy platform
 - Portfolio leverage both ways: reuse what the group has, build what the group can reuse
 
-### Deliberately not a test
+### Deliberately not a test: whether it uses AI
 
-- "Uses AI". If a plain report is cheaper, the AI idea loses
+- An idea scores nothing for having AI in it. If a plain report solves the problem for less, the plain report wins

@@ -12,6 +12,6 @@ Before looking at ideas, I set the tests an idea would have to pass:
 
 5. **Portfolio leverage, both directions.** Inbound: which existing group AI capabilities can be reused here. Outbound: does what we build become something the group can use again across its ~170 software companies. Reuse before build, and build things that can be reused.
 
-### Deliberately not a test
+### Deliberately not a test: whether it uses AI
 
-"Uses AI." If a scheduling algorithm or a plain report solves the problem more cheaply, the AI idea loses. This keeps us from reaching for AI out of habit.
+An idea scores nothing for having AI in it. If a scheduling algorithm or a plain report solves the problem more cheaply, the AI idea loses. This keeps us from reaching for AI out of habit.
