@@ -1,7 +1,7 @@
 // Presenter deck: the written pack served from /pack, rendered through the
 // same markdown pipeline as chat replies (same repair transforms, same
 // sanitizer, same lint guarantees), navigated like slides. Print = every
-// slide stacked = the standalone pack Bhavina's team reviews.
+// slide stacked = the standalone pack for reading after the session.
 
 import { renderMarkdown } from './render.js';
 import { SLIDE_ICONS } from './deck-icons.js';
@@ -18,7 +18,7 @@ const counterEl = document.getElementById('slide-counter');
 
 // Two modes over one deck. Detail (full prose) is the default, so the bare
 // shared link always opens the pack the panel reads. Present (short bullets)
-// is what Dan speaks from, reached with ?mode=present, the header button, or
+// is what the presenter speaks from, reached with ?mode=present, the header button, or
 // the 'p' key. The mode is a body class; CSS swaps which variant shows.
 const modeFromUrl = () => (new URLSearchParams(location.search).get('mode') === 'present' ? 'present' : 'detail');
 function applyMode(mode) {
