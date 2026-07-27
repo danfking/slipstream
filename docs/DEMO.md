@@ -19,7 +19,7 @@ The arc is one morning at the marina: start the day, see what came in, check whe
    Use that exact re-ask phrasing. The approval outcome is not part of the model's conversation history, so repeating the step-5 question verbatim can echo the stale $16,419 from earlier in the chat instead of re-checking (verified twice on gpt-4o-mini; "check the record again" re-called the tool both times and answered $0).
 8. If provider/vendor risk comes up: stop the server, restart with the Ollama env vars, ask question 5 again offline. Provider swap as config, demonstrated. (Requires a local model actually pulled in Ollama on the demo machine; check before promising it.)
 
-After any practice run that approves invoices, restart the server to reset the record (hosted: the machine resets when it scales to zero while idle, or restart it deliberately with `fly apps restart slipstream-dk`). Until then the unbilled total stays $0 and the golden unbilled case fails.
+After any run that approves invoices, reset the record before showing the flow again: the **reset demo data** button on the synthetic-record page (`/data.html`, behind the "synthetic demo data" pill; needs the unlocked session) restores the seeded record including the invoice numbering, so a re-run is identical. A server restart does the same (hosted: scale-to-zero while idle, or `fly apps restart slipstream-dk`). Until reset, the unbilled total stays $0 and the golden unbilled case fails. This also covers reviewers exploring the shared link after the call: anyone with the passcode can rewind the demo themselves.
 
 ## Before you start
 

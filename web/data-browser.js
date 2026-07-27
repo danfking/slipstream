@@ -162,5 +162,47 @@ async function main() {
   }
 }
 
+// Demo reset: POST /api/reset restores the seeded record (undoes approved
+// invoices) so the approval flow can be shown more than once. The passcode
+// session cookie flows automatically; bring-your-own-key visitors send the
+// same headers the chat uses (mirrors BYO_STORE in app.js).
+function resetHeaders() {
+  try {
+    const byo = JSON.parse(localStorage.getItem('slipstream_byo') ?? 'null');
+    if (!byo?.key) return {};
+    const headers = { 'x-llm-key': byo.key, 'x-llm-provider': byo.provider };
+    if (byo.baseUrl) headers['x-llm-base-url'] = byo.baseUrl;
+    if (byo.model) headers['x-llm-model'] = byo.model;
+    return headers;
+  } catch {
+    return {};
+  }
+}
+
+async function resetDemo(btn) {
+  btn.disabled = true;
+  const meta = document.getElementById('record-meta');
+  try {
+    const resp = await fetch('/api/reset', { method: 'POST', headers: resetHeaders() });
+    if (resp.status === 401) {
+      meta.textContent = 'Reset needs the unlocked session: open the demo, enter the passcode (or your key), then come back.';
+      return;
+    }
+    if (!resp.ok) {
+      meta.textContent = `Reset failed (HTTP ${resp.status}).`;
+      return;
+    }
+    location.reload();
+  } catch {
+    meta.textContent = 'Reset failed (is the server running?)';
+  } finally {
+    btn.disabled = false;
+  }
+}
+
 // jsdom imports this module for the pure helpers; only run in a real page.
-if (document.getElementById('collections')) main();
+if (document.getElementById('collections')) {
+  main();
+  const resetBtn = document.getElementById('reset-demo');
+  resetBtn?.addEventListener('click', () => resetDemo(resetBtn));
+}
