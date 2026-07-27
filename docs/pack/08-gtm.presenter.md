@@ -8,6 +8,7 @@
 
 - The install base is the distribution: 650 marinas, an expansion conversation, no cold outreach
 - Beta at a few large full-service yards, general launch at the user conference
+- Yards are the entry point: the same product follows the record into yacht clubs, rentals, and service providers
 
 ### Pricing and the number
 
