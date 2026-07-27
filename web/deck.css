@@ -25,7 +25,7 @@
 
 /* Two variants live in every slide; the body class picks which one shows.
    Detail is the default (bare link opens the reading pack); present shows the
-   bullets Dan speaks from. A slide with no presenter version (diagram, demo
+   bullets the presenter speaks from. A slide with no presenter version (diagram, demo
    run sheet) keeps showing its detail in both modes via .no-presenter. */
 .slide .variant.presenter { display: none; }
 body.mode-present .slide:not(.no-presenter) .variant.detail { display: none; }

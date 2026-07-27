@@ -21,9 +21,9 @@ startTelemetry();
 const app = express();
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static('web'));
-// The written pack, served to the in-app deck (web/deck.html) so the whole
-// debrief — slides and live demo — happens in one browser tab. Public on
-// purpose: the deck is the pitch and burns no model credits.
+// The written pack, served to the in-app deck (web/deck.html) so slides and
+// live demo happen in one browser tab. Public on purpose: the deck is the
+// pitch and burns no model credits.
 app.use('/pack', express.static('docs/pack'));
 
 // --- credential gate (hosted mode; open locally when no passcode is set) -----
