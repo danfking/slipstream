@@ -7,7 +7,8 @@ An operations assistant for marina and boatyard businesses: it makes the marina'
 ```bash
 npm install
 npm run seed        # regenerate the deterministic demo dataset
-npm run test        # 22 unit tests, no network or key required
+npm run test        # 216 tests, no network or key required
+npm run typecheck   # TypeScript, no emit
 npm run dev         # http://localhost:3000
 ```
 
@@ -18,10 +19,20 @@ The assistant needs a model provider:
 | `SLIPSTREAM_PROVIDER` | `anthropic` | `anthropic` or `openai` (any OpenAI-compatible endpoint) |
 | `SLIPSTREAM_MODEL` | `claude-sonnet-5` / `qwen3:4b` | per provider |
 | `SLIPSTREAM_BASE_URL` | `http://localhost:11434/v1` | openai provider only (Ollama default) |
-| `SLIPSTREAM_PROVIDER_KEY` | — | openai provider only, if the endpoint needs one |
-| `ANTHROPIC_API_KEY` | — | anthropic provider |
+| `SLIPSTREAM_PROVIDER_KEY` | (none) | openai provider only, if the endpoint needs one |
+| `ANTHROPIC_API_KEY` | (none) | anthropic provider |
 
 Provider and model choice is deliberately configuration, not architecture. Example, fully local and offline: `SLIPSTREAM_PROVIDER=openai SLIPSTREAM_MODEL=gpt-oss:20b npm run dev`.
+
+## What the prototype does
+
+- **Ask anything the record can answer**, with streamed replies (SSE) and every number backed by a receipt.
+- **Morning briefing**: overnight activity, the week's biggest risk, and the number to act on today.
+- **Approval-gated writes**: the assistant can draft invoices, but nothing is created until a person clicks approve, and the approval gets its own receipt.
+- **Suggested next question** in the input placeholder (Tab to accept), with take-up measured per source at `/api/metrics`.
+- **Golden batch from the UI**: the "Golden batch" button streams the accuracy checks live, and each check expands to show what it asserts and why it passed.
+- **Service status** at `/status.html` (header dot links to it) and a **browsable synthetic record** at `/data.html`.
+- **The deck** at `/deck.html`: the written case pack as slides, in a reading view and a talk view.
 
 ### Telemetry
 
@@ -29,7 +40,7 @@ Each conversation is one OpenTelemetry trace: a `chat` root span, an `llm.turn` 
 
 | Env var | Default | Notes |
 |---|---|---|
-| `OTEL_EXPORTER_OTLP_ENDPOINT` | — | Ship spans to an OTLP collector. When unset, spans print to the console. |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | (none) | Ship spans to an OTLP collector. When unset, spans print to the console. |
 | `SLIPSTREAM_OTEL` | `on` | Set to `off` to disable tracing entirely. |
 
 ## Architecture
@@ -41,22 +52,22 @@ Each conversation is one OpenTelemetry trace: a `chat` root span, an `llm.turn` 
                     9 tested functions; every number computed in code
                      │                    │                     │
               assistant loop        golden batch          (future: MCP server,
-              (src/assistant)      (npm run golden)        partner integrations)
+              (src/assistant)    (CLI + in-app run)        partner integrations)
                      │
               web UI with receipts + approval gate (web/)
 ```
 
 ## Trust model
 
-1. Numbers come from deterministic tool functions, never from the model — the model chooses *which* question to ask, not *how* to compute the answer.
+1. Numbers come from deterministic tool functions, never from the model. The model chooses *which* question to ask, not *how* to compute the answer.
 2. Every answer ships with receipts: the raw tool calls and results, visible in the UI.
 3. The model's toolbox is read-only, plus one draft action; the apply function is not registered with the model and runs only behind a human approval gate.
-4. A golden batch (`npm run golden`) runs thirteen real questions with asserted answers end-to-end through the same HTTP stack the UI uses, three of them out-of-scope questions asserting a refusal; it gates releases.
+4. A golden batch runs thirteen real questions with asserted answers end-to-end through the same HTTP stack the UI uses, three of them out-of-scope questions asserting a refusal; it gates releases. `npm run golden` is the strict form (it adds a markdown lint gate on every reply); the in-app run checks figures and tool calls. The gate is a working practice, run before every merge; the deploy workflow itself does not run it.
 5. The dataset is synthetic and deterministic (fixed seed, fixed anchor date), so every demo run is reproducible.
 
-## Hosting (Fly.io, burnish pattern)
+## Hosting (Fly.io)
 
-The app deploys to Fly.io as `slipstream-dk` via `.github/workflows/deploy.yml` on every push to `main` (remote Docker build, no local Docker needed). One-time setup, run by Dan (keys never leave your terminal):
+The app runs at `https://slipstream-dk.fly.dev` on `gpt-4o-mini`, deployed via `.github/workflows/deploy.yml` on pushes to `main` that touch app code, data, the pack, or deploy config (remote Docker build, no local Docker needed). One-time setup, run once by the repo owner (keys never leave the terminal):
 
 ```bash
 fly apps create slipstream-dk
@@ -64,13 +75,11 @@ fly secrets set -a slipstream-dk SLIPSTREAM_PASSCODE="<choose one>" SLIPSTREAM_P
 fly tokens create deploy -a slipstream-dk   # → add as FLY_API_TOKEN repo secret on GitHub
 ```
 
-Check `SLIPSTREAM_MODEL` in `deploy/fly.toml` against the models your OpenAI account actually lists (`gpt-4o-mini` assumed) before the first deploy.
-
-Hosted behaviour: `/deck.html` and `/pack/*` are public (the pitch burns no credits); `/api/chat`, `/api/briefing`, and `/api/approve` require either the passcode session (server-held key, Dan's OpenAI credit) or bring-your-own-key headers (key stays in the visitor's browser, used per request, never stored or logged). A per-IP token bucket caps usage. Locally, with no `SLIPSTREAM_PASSCODE` set, everything stays open exactly as before.
+Hosted behaviour: `/deck.html` and `/pack/*` are public (the pitch burns no credits); `/api/chat`, `/api/chat/stream`, `/api/briefing`, `/api/approve`, and `/api/golden/run` require either the passcode session (server-held key) or bring-your-own-key headers (key stays in the visitor's browser, used per request, never stored or logged). A per-IP token bucket caps usage. Locally, with no `SLIPSTREAM_PASSCODE` set, everything stays open exactly as before.
 
 ## The deck
 
-`/deck.html` presents the written case pack (from `docs/pack/`) as slides through the same markdown pipeline as chat replies: arrow keys or edge-clicks to navigate, `#/n` deep links, and print-to-PDF produces the standalone pack document.
+`/deck.html` presents the written case pack (from `docs/pack/`) as slides through the same markdown pipeline as chat replies: arrow keys or edge-clicks to navigate, `#/n` deep links. Two modes over one deck: the default reading view is the full prose pack, and a talk view (`p` key, the header button, or `?mode=present`) shows the short bullets a presenter speaks from. Print-to-PDF always produces the full reading pack as the standalone document.
 
 ## Deliberately out of scope for the prototype
 

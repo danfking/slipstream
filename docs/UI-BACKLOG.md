@@ -1,12 +1,12 @@
 # UI backlog
 
-Findings from the agent critique rounds that were deliberately not fixed before
-the debrief. Recorded so they are decisions rather than oversights.
+Findings from the agent critique rounds that were deliberately not fixed.
+Recorded so they are decisions rather than oversights.
 
 ## Model behaviour, not UI
 
 These come out of the model's wording and vary run to run. A UI fix would mean
-templating the prose, which trades honesty for consistency — worth doing only if
+templating the prose, which trades honesty for consistency; worth doing only if
 a specific line has to be identical every run.
 
 - **Repeat questions get re-phrased.** Asking the same question twice produces
@@ -15,8 +15,8 @@ a specific line has to be identical every run.
   cached answer is a worse lie than an inconsistent one.
 - **Citation format is not guaranteed.** The system prompt asks for backticked
   tool names, which become chips. The model sometimes writes `[source: x]`
-  instead, which renders as plain text. The chip is an enhancement, not the
-  trust mechanism — the receipts panel is.
+  instead, which renders as plain text. The chip is a nicety; the receipts
+  panel is the trust mechanism.
 - **Number/unit spacing** ("16hrs", "5 days") is inconsistent in model output.
 
 ## Deferred polish
@@ -38,8 +38,8 @@ a specific line has to be identical every run.
 - **No journey forces a genuinely slow reply.** The pending indicator's
   elapsed-seconds counter only appears after 3s, and every captured turn now
   settles faster than that on a warm model. The counter is therefore untested
-  in a screenshot. It matters on a cold model, which is exactly the demo-day
-  risk — worth a manual check with a cold Ollama before presenting.
+  in a screenshot. It matters on a cold model, which is a real presentation
+  risk; worth a manual check with a cold model before presenting.
 - **Receipt dedup within a session is untested.** The approval journey reloads
   the page between the reject and approve passes, so two calls to the same tool
   in one session are never captured. If the panel collapses them by tool name,
@@ -49,9 +49,10 @@ a specific line has to be identical every run.
 
 ## Accepted as-is
 
-- The model badge in the header names `gpt-oss:20b` openly. Honest, and matches
-  the transparency the demo argues for, but it invites a "why that model"
-  tangent — a presenter question, not a UI defect.
+- The model badge in the header names the configured model openly (whatever
+  `SLIPSTREAM_MODEL` is set to; `gpt-4o-mini` on the hosted app). Honest, and
+  it matches the transparency the product argues for, though it invites a "why
+  that model" question. That is a question for the presenter, not a UI defect.
 - The gold "synthetic demo data" pill is permanent chrome rather than a
   transient highlight, which stretches the gold-is-for-attention rule. The
   disclosure is the one thing that must never be missed, so it keeps the gold.
