@@ -555,3 +555,38 @@ main {
 }
 #golden-run:hover { background: var(--ds-navy-light); }
 #golden-run:disabled { opacity: 0.55; cursor: default; }
+
+/* Charts drawn from tool results (web/charts.js). Light only, like the app.
+   Series and status steps from the validated reference palette; text stays
+   in the app's ink, never the series color. */
+.chart {
+  --chart-s1: #2a78d6;
+  --chart-track: #d9dde5;
+  --chart-critical: #d03b3b;
+  --chart-axis: #e5e5e5;
+  --chart-ink: var(--ds-navy);
+  --chart-ink-muted: var(--ds-text-muted);
+  margin: 14px 0 2px;
+  padding-top: 12px;
+  border-top: 1px solid var(--ds-border);
+}
+.chart figcaption { font-size: 13px; font-weight: 600; color: var(--chart-ink); margin-bottom: 6px; }
+.chart-svg { display: block; max-width: 560px; font-family: var(--ds-font-sans); }
+.chart-label { font-size: 12px; fill: var(--chart-ink); }
+.chart-value { font-size: 12px; fill: var(--chart-ink-muted); font-variant-numeric: tabular-nums; }
+.chart-axis { stroke: var(--chart-axis); stroke-width: 1; }
+.chart-hit { fill: transparent; }
+.chart-row:hover .chart-hit { fill: var(--ds-surface-sunken); }
+.chart-mark.s1, .chart-dot.s1 { fill: var(--chart-s1); }
+.chart-mark.track { fill: var(--chart-track); }
+.chart-mark.critical { fill: var(--chart-critical); }
+.chart-target { stroke: var(--chart-ink); stroke-width: 2; }
+.chart-line.s1 { fill: none; stroke: var(--chart-s1); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart-dot { stroke: var(--ds-surface); stroke-width: 2; }
+.chart-legend { display: flex; gap: 16px; font-size: 12px; color: var(--chart-ink-muted); margin-top: 4px; }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend .key { display: inline-block; width: 12px; height: 12px; border-radius: 3px; }
+.chart-legend .key.s1 { background: var(--chart-s1); }
+.chart-legend .key.track { background: var(--chart-track); }
+.chart-legend .key.critical { background: var(--chart-critical); }
+.chart-legend .key.target { width: 2px; height: 14px; border-radius: 0; background: var(--chart-ink); }

@@ -1,4 +1,5 @@
 import { channelLabel, collectSources, isPartnerChannel, renderMarkdown, summarizeInput } from './render.js';
+import { chartHtml, pickChart } from './charts.js';
 import remend from './vendor/remend.js';
 
 const messagesEl = document.getElementById('messages');
@@ -487,6 +488,24 @@ messagesEl.addEventListener('click', (e) => {
   target.classList.add('flash');
 });
 
+/**
+ * Charts are drawn from the turn's tool results, not from the reply text, so
+ * every bar is the same number the receipt shows. A tool called twice in one
+ * turn charts once, from its last result. A chart is an extra view: if one
+ * fails to draw, the reply, receipts and approval cards must still arrive.
+ */
+function appendCharts(bubble, toolEvents) {
+  const latest = new Map(toolEvents.map((ev) => [ev.name, ev]));
+  for (const ev of latest.values()) {
+    try {
+      const spec = pickChart(ev.name, ev.result);
+      if (spec) bubble.insertAdjacentHTML('beforeend', window.DOMPurify.sanitize(chartHtml(spec)));
+    } catch (err) {
+      console.warn(`chart for ${ev.name} skipped`, err);
+    }
+  }
+}
+
 function renderApprovalCards(toolEvents) {
   for (const ev of toolEvents) {
     const r = ev.result;
@@ -652,6 +671,7 @@ async function converse(payloadMessages, pendingLabel, question, extraHeaders = 
       bubble.classList.remove('streaming');
       history.push({ role: 'assistant', content: ev.reply });
       addReceiptGroup(question, toolEvents);
+      appendCharts(bubble, toolEvents);
       renderApprovalCards(toolEvents);
       messagesEl.scrollTop = messagesEl.scrollHeight;
       briefingBtn.disabled = false;
