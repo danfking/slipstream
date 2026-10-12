@@ -30,7 +30,7 @@ describe('pickChart', () => {
     const spec = pickChart('get_occupancy', r);
     expect(spec.kind).toBe('stacked');
     expect(spec.rows).toHaveLength(r.docks.length);
-    r.docks.forEach((d, i) => expect(spec.rows[i].parts).toEqual([d.occupied, d.vacant]));
+    r.docks.forEach((d, i) => expect(spec.rows[i].parts).toEqual([d.occupied, d.total - d.occupied]));
   });
 
   test('schedule load: bullet rows flag the haul shortfall', () => {
@@ -98,6 +98,47 @@ describe('chartHtml', () => {
     expect(chartHtml(pickChart('get_occupancy', result('get_occupancy')))).toContain('chart-legend');
     expect(chartHtml(pickChart('get_schedule_load', result('get_schedule_load')))).toContain('Over capacity');
     expect(chartHtml(pickChart('get_receivables', result('get_receivables')))).not.toContain('chart-legend');
+  });
+});
+
+describe('review fixes', () => {
+  test('occupancy: slips in maintenance keep the bar at the dock size', () => {
+    const spec = pickChart('get_occupancy', { docks: [
+      { dock: 'A', type: 'wet', total: 10, occupied: 4, vacant: 4 },
+      { dock: 'B', type: 'wet', total: 10, occupied: 10, vacant: 0 },
+    ] });
+    expect(spec.rows[0].parts).toEqual([4, 6]);
+    expect(spec.rows[0].note).toBe('4 vacant, 2 in maintenance');
+  });
+
+  test('schedule load: a long horizon is capped but keeps every shortfall', () => {
+    const weeks = Array.from({ length: 13 }, (_, w) => ({
+      weekStart: `2026-10-${String(1 + w).padStart(2, '0')}`,
+      weekEnd: `2026-10-${String(1 + w).padStart(2, '0')}`,
+      skills: ['haul', 'engine', 'rigging'].map((skill) => ({
+        skill, demandHrs: 10, capacityHrs: w === 12 && skill === 'rigging' ? 5 : 40, shortfallHrs: w === 12 && skill === 'rigging' ? 5 : 0,
+      })),
+    }));
+    const spec = pickChart('get_schedule_load', { weeks });
+    expect(spec.rows).toHaveLength(12);
+    expect(spec.rows.at(-1)).toMatchObject({ over: true });
+    expect(spec.title).toContain('12 of 39 rows');
+  });
+
+  test('receivables: many invoices are capped with a title that says so', () => {
+    const overdue = Array.from({ length: 11 }, (_, i) => ({ invoiceId: `I${i}`, customerName: `C${i}`, amount: i + 1, daysOverdue: 1 }));
+    const spec = pickChart('get_receivables', { overdue });
+    expect(spec.rows).toHaveLength(8);
+    expect(spec.title).toBe('Largest 8 of 11 overdue invoices');
+  });
+
+  test('missing or non-string fields never throw', () => {
+    const parts = pickChart('get_parts_blockers', { items: [
+      { workOrderId: 'WO-1', gapDays: 3, partDescription: 'x', poEta: '2026-10-20' },
+      { workOrderId: 'WO-2', title: 'A — B', gapDays: 2, partDescription: 'y', poEta: '2026-10-21' },
+    ] });
+    expect(() => chartHtml(parts)).not.toThrow();
+    expect(() => chartHtml({ kind: 'bar', title: 't', rows: [{ label: 42, value: 1, valueLabel: '1' }, { label: null, value: 2, valueLabel: '2' }] })).not.toThrow();
   });
 });
 

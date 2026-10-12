@@ -12,6 +12,7 @@
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const MAX_BARS = 8;
+const MAX_BULLET_ROWS = 12;
 
 // Lists of records and single actions read better as the reply's own table.
 const NO_CHART = new Set(['search_customers', 'get_work_orders', 'get_overnight_activity', 'draft_invoices']);
@@ -61,10 +62,12 @@ function groupTop(items, keyFn, valueFn) {
 
 const PICKERS = {
   get_receivables(r) {
-    const rows = (r?.overdue ?? [])
+    const all = (r?.overdue ?? [])
       .map((i) => ({ label: i.customerName, value: i.amount, valueLabel: money(i.amount), note: `${i.invoiceId}, ${i.daysOverdue} days overdue` }))
       .sort((a, b) => b.value - a.value);
-    return { kind: 'bar', title: 'Overdue invoices by amount', rows };
+    const rows = all.slice(0, MAX_BARS);
+    const title = all.length > MAX_BARS ? `Largest ${MAX_BARS} of ${all.length} overdue invoices` : 'Overdue invoices by amount';
+    return { kind: 'bar', title, rows };
   },
 
   get_unbilled_work(r) {
@@ -78,12 +81,19 @@ const PICKERS = {
   },
 
   get_occupancy(r) {
-    const rows = (r?.docks ?? []).map((d) => ({
-      label: `Dock ${d.dock} (${d.type === 'dry_stack' ? 'dry stack' : d.type})`,
-      parts: [d.occupied, d.vacant],
-      valueLabel: `${d.occupied} of ${d.total}`,
-    }));
-    return { kind: 'stacked', title: 'Slips occupied by dock', legend: ['Occupied', 'Vacant'], rows };
+    // The second segment is total minus occupied, so slips in maintenance keep
+    // the bar at the dock's true size; the tooltip splits vacant from maintenance.
+    const rows = (r?.docks ?? []).map((d) => {
+      const idle = d.total - d.occupied;
+      const maintenance = idle - d.vacant;
+      return {
+        label: `Dock ${d.dock} (${d.type === 'dry_stack' ? 'dry stack' : d.type})`,
+        parts: [d.occupied, idle],
+        valueLabel: `${d.occupied} of ${d.total}`,
+        note: maintenance > 0 ? `${d.vacant} vacant, ${maintenance} in maintenance` : undefined,
+      };
+    });
+    return { kind: 'stacked', title: 'Slips occupied by dock', legend: ['Occupied', 'Not occupied'], rows };
   },
 
   get_schedule_load(r) {
@@ -101,13 +111,18 @@ const PICKERS = {
         });
       }
     }
-    return { kind: 'bullet', title: 'Booked hours against technician capacity', rows };
+    // A long horizon can mean dozens of rows: keep every shortfall, fill the
+    // rest in date order, and say when rows were left out.
+    if (rows.length <= MAX_BULLET_ROWS) return { kind: 'bullet', title: 'Booked hours against technician capacity', rows };
+    let room = MAX_BULLET_ROWS - rows.filter((x) => x.over).length;
+    const kept = rows.filter((x) => x.over || room-- > 0);
+    return { kind: 'bullet', title: `Booked hours against capacity (${kept.length} of ${rows.length} rows, all shortfalls shown)`, rows: kept };
   },
 
   get_parts_blockers(r) {
     const rows = (r?.items ?? [])
       .map((i) => ({
-        label: `${i.workOrderId} ${i.title.split(' — ').pop()}`,
+        label: `${i.workOrderId} ${String(i.title ?? '').split(' — ').pop()}`.trim(),
         value: i.gapDays,
         valueLabel: `${i.gapDays} days`,
         note: `${i.partDescription}, ETA ${shortDate(i.poEta)}`,
@@ -178,7 +193,8 @@ function esc(s) {
 }
 
 /** Truncate a label to fit the label column; the full text stays in the tooltip. */
-function fit(s, max = 26) {
+function fit(value, max = 26) {
+  const s = String(value);
   return s.length > max ? s.slice(0, max - 1) + '…' : s;
 }
 
@@ -238,7 +254,7 @@ function drawStacked(spec) {
     const wa = (a / max) * plotW;
     const wb = (b / max) * plotW;
     const gap = wa > 0 && wb > 0 ? GAP : 0;
-    return `${tooltip([row.label, `${spec.legend[0]}: ${a}`, `${spec.legend[1]}: ${b}`])}<rect class="chart-hit" x="0" y="${y - (ROW_H - BAR_H) / 2}" width="${W}" height="${ROW_H}"/>`
+    return `${tooltip([row.label, `${spec.legend[0]}: ${a}`, `${spec.legend[1]}: ${b}`, row.note])}<rect class="chart-hit" x="0" y="${y - (ROW_H - BAR_H) / 2}" width="${W}" height="${ROW_H}"/>`
       + rowLabel(y, row.label)
       + `<path class="chart-mark s1" d="${barPath(LABEL_W, y, wa, BAR_H, wb === 0)}"/>`
       + `<path class="chart-mark track" d="${barPath(LABEL_W + wa + gap, y, wb - gap, BAR_H)}"/>`
